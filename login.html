@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dream OS — Login</title>
+
+  <style>
+    :root{
+      --bg: #07080b;
+      --panel: rgba(255,255,255,0.06);
+      --panel-2: rgba(255,255,255,0.04);
+      --stroke: rgba(255,255,255,0.10);
+      --stroke-2: rgba(255,255,255,0.14);
+      --text: rgba(255,255,255,0.88);
+      --muted: rgba(255,255,255,0.58);
+      --muted2: rgba(255,255,255,0.40);
+      --accent: #b4cf6a;
+      --accent-2: rgba(180,207,106,0.20);
+      --shadow: 0 24px 70px rgba(0,0,0,0.45);
+      --radius: 18px;
+      --radius-lg: 22px;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color: var(--text);
+      background:
+        radial-gradient(900px 520px at 60% 18%, rgba(180,207,106,0.12), transparent 55%),
+        radial-gradient(820px 560px at 18% 30%, rgba(255,255,255,0.05), transparent 60%),
+        radial-gradient(1100px 720px at 55% 78%, rgba(255,255,255,0.03), transparent 60%),
+        var(--bg);
+      overflow:hidden;
+    }
+
+    /* subtle speckle/grain */
+    .speckle{
+      position: fixed;
+      inset: 0;
+      pointer-events:none;
+      background-image:
+        radial-gradient(circle at 12% 18%, rgba(255,255,255,0.08) 0 1px, transparent 2px),
+        radial-gradient(circle at 28% 82%, rgba(255,255,255,0.06) 0 1px, transparent 2px),
+        radial-gradient(circle at 58% 32%, rgba(255,255,255,0.07) 0 1px, transparent 2px),
+        radial-gradient(circle at 86% 56%, rgba(255,255,255,0.05) 0 1px, transparent 2px),
+        radial-gradient(circle at 52% 90%, rgba(255,255,255,0.06) 0 1px, transparent 2px);
+      opacity: 0.35;
+      filter: blur(0.2px);
+    }
+
+    .wrap{
+      min-height: 100vh;
+      display:grid;
+      place-items:center;
+      padding: 26px;
+      position:relative;
+    }
+
+    /* top-left brand mark (subtle, like OS chrome) */
+    .brand{
+      position: absolute;
+      top: 18px;
+      left: 18px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      color: var(--muted);
+      user-select:none;
+    }
+    .brand-badge{
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      background: radial-gradient(circle at 30% 30%, rgba(180,207,106,0.35), rgba(255,255,255,0.06));
+      border: 1px solid rgba(180,207,106,0.35);
+      box-shadow: 0 10px 28px rgba(0,0,0,0.35);
+      display:grid;
+      place-items:center;
+    }
+    .brand-name{
+      font-weight: 650;
+      letter-spacing: 0.2px;
+      color: rgba(255,255,255,0.75);
+    }
+
+    .card{
+      width: min(460px, 100%);
+      background: var(--panel);
+      border: 1px solid var(--stroke);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      overflow:hidden;
+      position:relative;
+    }
+    .card::before{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      background:
+        radial-gradient(560px 260px at 30% 18%, rgba(180,207,106,0.10), transparent 60%),
+        radial-gradient(620px 320px at 60% 80%, rgba(255,255,255,0.05), transparent 60%);
+      pointer-events:none;
+    }
+
+    .card-inner{
+      position:relative;
+      z-index:1;
+      padding: 22px;
+    }
+
+    .header{
+      padding: 22px 22px 0;
+      position:relative;
+      z-index:1;
+    }
+    .kicker{
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted2);
+      margin: 0 0 8px;
+    }
+    .title{
+      margin:0;
+      font-size: 24px;
+      letter-spacing: 0.2px;
+    }
+    .subtitle{
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .form{
+      margin-top: 16px;
+      display:grid;
+      gap: 12px;
+    }
+    .field{
+      display:grid;
+      gap: 8px;
+    }
+    label{
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+    }
+    .input{
+      width:100%;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.04);
+      color: var(--text);
+      padding: 12px 12px;
+      outline:none;
+      transition: 160ms ease;
+    }
+    .input:focus{
+      border-color: rgba(180,207,106,0.40);
+      box-shadow: 0 0 0 6px rgba(180,207,106,0.10);
+      background: rgba(255,255,255,0.05);
+    }
+    .row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      margin-top: 6px;
+    }
+
+    .check{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 12px;
+      user-select:none;
+    }
+    .check input{
+      width: 16px;
+      height: 16px;
+      accent-color: var(--accent);
+    }
+
+    .link{
+      color: rgba(180,207,106,0.95);
+      text-decoration:none;
+      font-size: 12px;
+    }
+    .link:hover{ text-decoration: underline; }
+
+    .actions{
+      display:grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .btn{
+      width: 100%;
+      border-radius: 14px;
+      padding: 12px 14px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.05);
+      color: var(--text);
+      cursor:pointer;
+      transition: 160ms ease;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap: 10px;
+      font-weight: 650;
+      letter-spacing: 0.2px;
+      user-select:none;
+    }
+    .btn:hover{
+      transform: translateY(-1px);
+      border-color: rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.07);
+    }
+    .btn.primary{
+      border-color: rgba(180,207,106,0.40);
+      background: linear-gradient(180deg, rgba(180,207,106,0.22), rgba(180,207,106,0.10));
+    }
+
+    .divider{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      margin: 8px 0 0;
+      color: var(--muted2);
+      font-size: 12px;
+    }
+    .divider::before, .divider::after{
+      content:"";
+      height:1px;
+      flex:1;
+      background: rgba(255,255,255,0.10);
+    }
+
+    .btn.ghost{
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.10);
+      font-weight: 600;
+      color: rgba(255,255,255,0.82);
+    }
+    .btn.ghost:hover{
+      background: rgba(255,255,255,0.05);
+      border-color: rgba(255,255,255,0.14);
+    }
+
+    .footer{
+      margin-top: 14px;
+      color: var(--muted2);
+      font-size: 12px;
+      text-align:center;
+    }
+
+    /* Thin-air reveal */
+    .reveal{
+      opacity: 0;
+      transform: translateY(14px);
+      filter: blur(6px);
+      will-change: transform, opacity, filter;
+    }
+    .reveal.is-in{
+      animation: riseIn 680ms cubic-bezier(.2,.9,.2,1) forwards;
+    }
+    @keyframes riseIn{
+      0%{ opacity:0; transform: translateY(14px); filter: blur(8px); }
+      55%{ opacity:1; filter: blur(1px); }
+      100%{ opacity:1; transform: translateY(0); filter: blur(0); }
+    }
+    .d1{ animation-delay: 80ms; }
+    .d2{ animation-delay: 160ms; }
+    .d3{ animation-delay: 240ms; }
+    .d4{ animation-delay: 320ms; }
+
+    @media (max-width: 520px){
+      .header{ padding: 18px 18px 0; }
+      .card-inner{ padding: 18px; }
+      .brand-name{ display:none; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="speckle"></div>
+
+  <div class="wrap">
+    <div class="brand">
+      <div class="brand-badge" aria-hidden="true">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <path d="M12 2l1.7 6.1L20 10l-6.3 1.9L12 18l-1.7-6.1L4 10l6.3-1.9L12 2z"
+            stroke="rgba(255,255,255,0.9)" stroke-width="1.6" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="brand-name">Dream OS</div>
+    </div>
+
+    <section class="card reveal d2" aria-label="Login">
+      <div class="header reveal d1">
+        <p class="kicker">Access</p>
+        <h1 class="title">Sign in to Dream OS</h1>
+        <p class="subtitle">Enter your credentials to return to your command center.</p>
+      </div>
+
+      <div class="card-inner reveal d3">
+        <form class="form" onsubmit="return false;">
+          <div class="field">
+            <label for="email">Email</label>
+            <input class="input" id="email" type="email" placeholder="you@domain.com" autocomplete="email" required>
+          </div>
+
+          <div class="field">
+            <label for="password">Password</label>
+            <input class="input" id="password" type="password" placeholder="••••••••••" autocomplete="current-password" required>
+          </div>
+
+          <div class="row">
+            <label class="check">
+              <input type="checkbox" checked>
+              Remember me
+            </label>
+            <a class="link" href="#">Forgot password</a>
+          </div>
+
+          <div class="actions">
+            <button class="btn primary" type="submit">
+                <a href="dashboard.html">Sign In</a>
+              <span aria-hidden="true">↗</span>
+            </button>
+
+            <div class="divider">or</div>
+
+            <button class="btn ghost" type="button">
+              Continue with passkey
+              <span aria-hidden="true">⌁</span>
+            </button>
+          </div>
+
+          <div class="footer reveal d4">
+            New here? <a class="link" href="#">Create an account</a>
+          </div>
+        </form>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    window.addEventListener("DOMContentLoaded", () => {
+      document.querySelectorAll(".reveal").forEach(el => el.classList.add("is-in"));
+    });
+  </script>
+</body>
+</html>
