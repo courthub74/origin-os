@@ -7,36 +7,56 @@
 
   <style>
     :root{
-      --bg: #07080b;
-      --panel: rgba(255,255,255,0.06);
+      --bg: #040406;
+      --panel: rgba(255,255,255,0.035);
+      --stroke: rgba(255,255,255,0.07);
+
+      --text: rgba(255,255,255,0.9);
+      --muted: rgba(255,255,255,0.48);
+
+      /* --accent: #B388FF;  */
+      --accent-soft: rgba(179,136,255,0.2);
+
+
+      /* --bg: #07080b; */
+      /* --panel: rgba(255,255,255,0.06); */
       --panel-2: rgba(255,255,255,0.04);
       --stroke: rgba(255,255,255,0.10);
       --stroke-2: rgba(255,255,255,0.14);
       --text: rgba(255,255,255,0.88);
-      --muted: rgba(255,255,255,0.58);
+      /* --muted: rgba(255,255,255,0.58); */
       --muted2: rgba(255,255,255,0.40);
-      --accent: #b4cf6a;         /* olive-green highlight */
+      --accent: #b4cf6a;        
       --accent-2: rgba(180,207,106,0.20);
       --shadow: 0 24px 70px rgba(0,0,0,0.45);
       --radius: 18px;
       --radius-lg: 22px;
       --sidebar-w: 268px;
       --gap: 18px;
+
+      --qicon: rgba(90, 154, 30, 0.1);
+      --lights: rgba(120, 229, 69, 0.85);
+      --brand-badge: rgba(94, 176, 84, 0.423);
+      --accent: rgba(120, 170, 120, 0.9);
+      --accent-soft: rgba(120, 170, 120, 0.15);
+
+
     }
 
     *{ box-sizing:border-box; }
     html,body{ height:100%; }
     body{
-      margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
-      color: var(--text);
-      background:
-        radial-gradient(900px 500px at 62% 18%, rgba(180,207,106,0.10), transparent 55%),
-        radial-gradient(700px 520px at 15% 30%, rgba(255,255,255,0.05), transparent 60%),
-        radial-gradient(1000px 600px at 60% 70%, rgba(255,255,255,0.03), transparent 60%),
-        var(--bg);
-      overflow-x:hidden;
-    }
+  margin:0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+  color: var(--text);
+  background:
+    radial-gradient(900px 520px at 62% 18%, rgba(179,136,255,0.08), transparent 55%),
+    radial-gradient(700px 520px at 15% 30%, rgba(255,255,255,0.05), transparent 60%),
+    radial-gradient(1000px 600px at 60% 70%, rgba(255,255,255,0.03), transparent 60%),
+    var(--bg);
+  overflow-x:hidden;
+}
+
 
     /* subtle star/speckle */
     .speckle{
@@ -66,8 +86,9 @@
       height: 100vh;
       padding: 18px 16px;
       background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+      background-color: var(--bg);
       border-right: 1px solid var(--stroke);
-      backdrop-filter: blur(10px);
+      /* backdrop-filter: blur(10px); */
     }
 
     .brand{
@@ -76,17 +97,21 @@
       gap:10px;
       padding: 10px 10px 14px;
       margin-bottom: 8px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
     }
     .brand-badge{
       width: 34px;
       height: 34px;
       border-radius: 12px;
-      background: radial-gradient(circle at 30% 30%, rgba(180,207,106,0.35), rgba(255,255,255,0.06));
-      border: 1px solid rgba(180,207,106,0.35);
+      /* background: radial-gradient(circle at 30% 30%, rgba(22, 19, 213, 0.684), rgba(255,255,255,0.06)); */
+      /* background: radial-gradient(circle at 30% 30%, var(--qicon), rgba(255,255,255,0.06)); */
+      background: var(--brand-badge);
+      border: 1px solid rgba(179,136,255,0.30);
       box-shadow: 0 10px 28px rgba(0,0,0,0.35);
       display:grid;
       place-items:center;
     }
+
     .brand-badge svg{ opacity:0.92; }
     .brand-title{
       font-weight: 650;
@@ -94,7 +119,7 @@
     }
 
     .nav{
-      margin-top: 10px;
+      margin-top: 20px;
       display:flex;
       flex-direction:column;
       gap:6px;
@@ -240,10 +265,11 @@
       content:"";
       position:absolute;
       inset:-2px;
-      background: radial-gradient(480px 220px at 35% 20%, rgba(180,207,106,0.10), transparent 60%);
+      background: radial-gradient(480px 220px at 35% 20%, rgba(255,255,255,0.05), transparent 60%);
       opacity:0.9;
       pointer-events:none;
     }
+
     .kpi-top{
       display:flex;
       align-items:center;
@@ -262,6 +288,7 @@
     .dot{
       width:8px;height:8px;border-radius:99px;
       background: rgba(180,207,106,0.85);
+      background: var(--lights);
       box-shadow: 0 0 0 6px rgba(180,207,106,0.10);
     }
     .kpi-value{
@@ -304,9 +331,10 @@
       inset:-2px;
       background:
         radial-gradient(520px 220px at 50% 75%, rgba(255,255,255,0.04), transparent 60%),
-        radial-gradient(500px 240px at 30% 35%, rgba(180,207,106,0.06), transparent 60%);
+        radial-gradient(500px 240px at 30% 35%, rgba(179,136,255,0.06), transparent 60%);
       pointer-events:none;
     }
+
     .empty-icon{
       width: 52px;
       height: 52px;
@@ -396,11 +424,13 @@
       width: 38px;
       height: 38px;
       border-radius: 14px;
-      background: rgba(180,207,106,0.10);
-      border: 1px solid rgba(180,207,106,0.25);
+      background: var(--brand-badge);
+      /* background: radial-gradient(circle at 30% 30%, rgba(94, 176, 84, 0.423), rgba(255,255,255,0.06)); */
+      border: 1px solid rgba(179,136,255,0.22);
       display:grid;
       place-items:center;
     }
+
     .qtext .title{
       font-weight: 650;
       font-size: 14px;
@@ -427,6 +457,7 @@
     .status .led{
       width:7px;height:7px;border-radius:99px;
       background: rgba(180,207,106,0.85);
+      background: var(--lights);
       box-shadow: 0 0 0 6px rgba(180,207,106,0.10);
     }
 
@@ -486,6 +517,23 @@
     }
 
     @media (max-width: 980px){
+
+      :root {
+        --bg: #040406;
+        --panel: rgba(255,255,255,0.035);
+        --stroke: rgba(255,255,255,0.07);
+
+        --text: rgba(255,255,255,0.9);
+        --muted: rgba(255,255,255,0.48);
+
+        --accent: #B388FF;          /* soft ultraviolet */
+        --accent-soft: rgba(179,136,255,0.2);
+      }
+
+      body {
+        background:
+          var(--bg);
+      }
       /* Turn the app into a single column */
       .app{
         grid-template-columns: 1fr;
@@ -499,7 +547,7 @@
         height: auto;                  /* was 100vh */
         padding: 12px 12px;
         border-right: none;
-        border-bottom: 1px solid var(--stroke);
+        /* border-bottom: 1px solid var(--stroke); */
         background: rgba(10,10,12,0.72);
         backdrop-filter: blur(12px);
       }
@@ -586,6 +634,10 @@
       /* KPIs become 1 column (you already do this at 980px, keep it) */
       .kpis{
         grid-template-columns: 1fr;
+      }
+
+      .kpi-label{
+        font-size: 10px;
       }
 
       /* Reduce empty panel height for phones */
@@ -726,7 +778,7 @@
       width: 18px;
       height: 2px;
       background: rgba(255,255,255,0.82);
-      background-color:#b4cf6a88;
+      background:var(--brand-badge);
       border-radius: 999px;
     }
 
@@ -963,7 +1015,7 @@
           <p>Your creative command center</p>
         </div>
 
-        <div class="top-actions reveal d2">
+        <!-- <div class="top-actions reveal d2">
           <button class="btn" type="button" title="Search">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
               <path d="M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15z" stroke="currentColor" stroke-width="1.6"/>
@@ -979,7 +1031,7 @@
               <path d="M5 20h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
             </svg>
           </button>
-        </div>
+        </div> -->
       </div>
 
       <section class="layout">
@@ -1096,12 +1148,29 @@
                 </svg>
               </div>
               <div class="qtext">
-                <p class="title">Schedule Drop</p>
-                <p class="sub">Publish to the world</p>
+                <p class="title">Publish Artwork</p>
+                <p class="sub">Make this artwork live and viewable</p>
               </div>
             </div>
             <span class="go">↗</span>
           </button>
+
+          <button class="qbtn" type="button">
+            <div class="qleft">
+              <div class="qicon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 3l7 4v10l-7 4-7-4V7l7-4z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+                  <path d="M12 7v14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <div class="qtext">
+                <p class="title">Schedule Drop</p>
+                <p class="sub">Set the public release moment</p>
+              </div>
+            </div>
+            <span class="go">↗</span>
+          </button>
+
         </aside>
       </section>
     </main>
