@@ -12,9 +12,8 @@
     .tiles{ display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px; }
     @media (max-width: 520px){ .tiles{ grid-template-columns: 1fr; } }
 
-    .kpis{ display: flex; flex-direction: column; gap: 12px; }
-    @media (max-width: 520px){ .kpis{ flex-direction: row; } }
-    @media (max-width: 520px){ .kpis .panel.kpi { flex: 1; } }
+    .kpis{ display: flex; flex-direction: row; gap: 12px; }
+    .kpis .panel.kpi { flex: 1; }
 
     .tile{
       border: 1px solid rgba(255,255,255,0.10);
@@ -80,6 +79,13 @@
         <a href="collections.html">Collections <small>⌘3</small></a>
         <a href="#">Settings <small>⌘4</small></a>
       </nav>
+
+      <div class="sidebar-footer">
+        <button class="logout-btn" onclick="window.location.href='index.html'">
+        <span>Logout</span>
+        <small>⇥</small>
+        </button>
+    </div>
     </aside>
 
     <main class="main">

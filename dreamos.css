@@ -526,3 +526,49 @@ button{ font-family: inherit; }
     padding: 8px 10px;
   }
 }
+
+.sidebar{
+  display:flex;
+  flex-direction:column;
+}
+
+.nav{
+  flex:1; /* pushes footer down */
+}
+
+.sidebar-footer{
+  padding-top: 12px;
+}
+
+.logout-btn{
+  width:100%;
+  padding: 11px 12px;
+  border-radius:14px;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.02);
+  color: rgba(255,255,255,0.65);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 12px;
+  font-family: var(--sans);
+  font-size: 13px;
+  cursor:pointer;
+  transition: 
+    transform .12s ease,
+    border-color .12s ease,
+    background .12s ease,
+    color .12s ease;
+}
+
+.logout-btn:hover{
+  transform: translateY(-1px);
+  border-color: rgba(255,120,120,0.45);
+  background: rgba(255,120,120,0.08);
+  color: rgba(255,255,255,0.9);
+}
+
+.logout-btn small{
+  font-family: var(--mono);
+  opacity: .6;
+}
