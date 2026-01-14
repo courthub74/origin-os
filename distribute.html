@@ -289,7 +289,9 @@
         <a href="create.html"><span>Create</span><small>⌘2</small></a>
         <a href="collections.html"><span>Collections</span><small>⌘3</small></a>
         <a class="active" href="distribute.html"><span>Distribute</span><small>⌘4</small></a>
-        <a href="#">Settings <small>⌘5</small></a>
+        <a href="socials.html">Socials <small>⌘5</small></a>
+        <a href="website.html">Website <small>⌘6</small></a>
+        <a href="#">Settings <small>⌘7</small></a>
       </nav>
 
       <div class="sidebar-footer">
@@ -447,13 +449,37 @@
 
             <div class="body" style="display:flex; flex-direction:column; gap:12px;">
               <div class="field">
-                <div class="label">Artwork <span class="hint">Select draft</span></div>
-                <select id="artwork">
-                  <option>Dream Agent Distilleries (Draft)</option>
-                  <option>The Soap Wars (Draft)</option>
-                  <option>Temple of Openings (Draft)</option>
-                </select>
-              </div>
+            <div class="label">Image <span class="hint">Source asset</span></div>
+
+            <!-- Later: this becomes "Open Library" -->
+            <div class="two">
+                <button class="btn" type="button" id="chooseImageBtn" onclick="chooseImage()">
+                Choose image
+                </button>
+
+                <div class="pill" id="imageState">none selected</div>
+            </div>
+
+            <!-- Optional tiny preview row -->
+            <div id="imagePreviewRow" style="display:none; gap:10px; align-items:center;">
+                <img id="imageThumb" alt="" style="width:46px;height:46px;border-radius:14px;object-fit:cover;border:1px solid rgba(255,255,255,0.10);" />
+                <div style="min-width:0;">
+                <div style="font-weight:950;color:var(--text-2);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" id="imageName">—</div>
+                <div style="font-family:var(--mono);font-size:11px;color:rgba(255,255,255,0.45);" id="imageMeta">—</div>
+                </div>
+            </div>
+            </div>
+
+            <div class="field">
+            <div class="label">
+                Title
+                <span class="hint">
+                <button type="button" class="linkLike" onclick="openTitleSuggestions()">Need title ideas?</button>
+                </span>
+            </div>
+            <input id="title" type="text" placeholder="Enter title..." />
+            </div>
+
 
               <div class="two">
                 <div class="field">
