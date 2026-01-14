@@ -285,10 +285,11 @@
       </div>
 
       <nav class="nav" aria-label="Primary">
-        <a href="dashboard.html"><span>Dashboard</span><small>01</small></a>
-        <a href="new_artwork.html"><span>Create</span><small>02</small></a>
-        <a href="new_collection.html"><span>Collections</span><small>03</small></a>
-        <a class="active" href="distribute.html"><span>Distribute</span><small>04</small></a>
+        <a href="dashboard.html"><span>Dashboard</span><small>⌘1</small></a>
+        <a href="create.html"><span>Create</span><small>⌘2</small></a>
+        <a href="collections.html"><span>Collections</span><small>⌘3</small></a>
+        <a class="active" href="distribute.html"><span>Distribute</span><small>⌘4</small></a>
+        <a href="#">Settings <small>⌘5</small></a>
       </nav>
 
       <div class="sidebar-footer">
@@ -500,9 +501,13 @@
               </div>
 
               <div class="field">
-                <div class="label">Notes <span class="hint">Internal</span></div>
-                <textarea id="notes" placeholder="Collector text locked. Cover verified. Ready to mint."></textarea>
-              </div>
+                <div class="label">Description <span class="hint">Public listing</span></div>
+                <textarea
+                    id="description"
+                    placeholder="Public description shown on the marketplace listing..."
+                ></textarea>
+                </div>
+
 
               <div class="mintActions">
                 <button class="btn primary" type="button" onclick="queueMint()">
@@ -522,14 +527,22 @@
 
             <div class="body">
               <div class="queue" id="queue">
-                <div class="qItem">
+                <div class="qItem" data-title="The Soap Wars"
+                        data-meta="xrpcafe · edition 1 · fixed · 125 XRP"
+                        data-status="ready"
+                        data-market="xrpcafe"
+                        data-chain="XRPL"
+                        data-edition="1"
+                        data-royalties="10%"
+                        data-price="125 XRP"
+                        data-notes="Collector text locked. Cover verified. Ready to mint.">
                   <div class="qLeft">
                     <div class="qTitle">The Soap Wars</div>
                     <div class="qMeta">xrpcafe · edition 1 · fixed · 125 XRP</div>
                   </div>
                   <div class="qRight">
                     <div class="statusPill on">ready</div>
-                    <button class="iconBtn" type="button" onclick="alert('Open');" aria-label="Open">
+                    <button class="iconBtn" type="button" onclick="openMintModal(this)" aria-label="Open">
                       <svg viewBox="0 0 24 24" fill="none">
                         <path d="M9 18l6-6-6-6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
                       </svg>
@@ -537,14 +550,23 @@
                   </div>
                 </div>
 
-                <div class="qItem">
+                <div class="qItem"
+                                data-title="Dream Agent Distilleries"
+                                data-meta="opensea · edition 1 · fixed · 0.08 ETH"
+                                data-status="draft"
+                                data-market="opensea"
+                                data-chain="Ethereum"
+                                data-edition="1"
+                                data-royalties="10%"
+                                data-price="0.08 ETH"
+                                data-notes="Initial draft. Needs review before mint.">
                   <div class="qLeft">
                     <div class="qTitle">Dream Agent Distilleries</div>
                     <div class="qMeta">opensea · edition 1 · fixed · 0.08 ETH</div>
                   </div>
                   <div class="qRight">
                     <div class="statusPill">draft</div>
-                    <button class="iconBtn" type="button" onclick="alert('Open');" aria-label="Open">
+                    <button class="iconBtn" type="button" onclick="openMintModal(this)" aria-label="Open">
                       <svg viewBox="0 0 24 24" fill="none">
                         <path d="M9 18l6-6-6-6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
                       </svg>
@@ -552,14 +574,22 @@
                   </div>
                 </div>
 
-                <div class="qItem">
+                <div class="qItem" data-title="Temple of Openings"
+                                data-meta="xrpcafe · edition 1 · fixed · 150 XRP"
+                                data-status="pending"
+                                data-market="xrpcafe"
+                                data-chain="XRPL"
+                                data-edition="1"
+                                data-royalties="10%"
+                                data-price="125 XRP"
+                                data-notes="Collector text locked. Cover verified. Ready to mint.">
                   <div class="qLeft">
                     <div class="qTitle">Temple of Openings</div>
                     <div class="qMeta">xrpcafe · edition 10 · open edition</div>
                   </div>
                   <div class="qRight">
                     <div class="statusPill soon">pending</div>
-                    <button class="iconBtn" type="button" onclick="alert('Open');" aria-label="Open">
+                    <button class="iconBtn" type="button" onclick="openMintModal(this)" aria-label="Open">
                       <svg viewBox="0 0 24 24" fill="none">
                         <path d="M9 18l6-6-6-6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
                       </svg>
@@ -576,81 +606,156 @@
     </main>
   </div>
 
-  <script>
-    // Sidebar toggle (matches your burger/scrim pattern)
-    function toggleSidebar(force){
-      const sidebar = document.getElementById('sidebar');
-      const scrim = document.getElementById('scrim');
-      const burger = document.getElementById('burger');
+    <!-- Mint Details Modal / Drawer -->
+    <div class="modal" id="mintModal" aria-hidden="true">
+    <div class="modalScrim" onclick="closeMintModal()"></div>
 
-      const willOpen = (typeof force === 'boolean') ? force : !sidebar.classList.contains('open');
+    <div class="modalCard" role="dialog" aria-modal="true" aria-label="Mint details">
+        <div class="modalHead">
+        <div class="modalTitleWrap">
+            <div class="modalKicker">Mint details</div>
+            <div class="modalTitle" id="mTitle">—</div>
+            <div class="modalMeta" id="mMeta">—</div>
+        </div>
 
-      sidebar.classList.toggle('open', willOpen);
-      scrim.classList.toggle('show', willOpen);
-      burger.classList.toggle('active', willOpen);
-    }
+        <button class="iconBtn" type="button" onclick="closeMintModal()" aria-label="Close">
+            <svg viewBox="0 0 24 24" fill="none">
+            <path d="M6 6l12 12M18 6L6 18" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+        </button>
+        </div>
 
-    // Connector stubs
-    function connect(m){
-      document.getElementById('st-' + m).textContent = 'connected';
-      document.getElementById('st-' + m).classList.add('on');
-      alert('Hook: OAuth / wallet connect for ' + m);
-    }
-    function disconnect(m){
-      document.getElementById('st-' + m).textContent = 'not connected';
-      document.getElementById('st-' + m).classList.remove('on');
-      alert('Hook: revoke token for ' + m);
-    }
-    function manage(m){
-      alert('Hook: manage connection settings for ' + m);
-    }
+        <div class="modalBody">
+        <div class="modalGrid">
+            <!-- <div class="mBox"><div class="mK">Status</div><div class="mV" id="mStatus">—</div></div> -->
+            <div class="mBox" id="mStatusBox">
+                <div class="mK">Status</div>
+                <div class="mV statusText" id="mStatus">—</div>
+            </div>
 
-    // Mint stubs
-    function dryRun(){
-      const payload = readForm();
-      alert('Dry run (no mint)\n\n' + JSON.stringify(payload, null, 2));
-    }
+            <div class="mBox"><div class="mK">Marketplace</div><div class="mV" id="mMarket">—</div></div>
+            <div class="mBox"><div class="mK">Chain</div><div class="mV" id="mChain">—</div></div>
+            <div class="mBox"><div class="mK">Edition</div><div class="mV" id="mEdition">—</div></div>
+            <div class="mBox"><div class="mK">Royalties</div><div class="mV" id="mRoyalties">—</div></div>
+            <div class="mBox"><div class="mK">Price</div><div class="mV" id="mPrice">—</div></div>
+        </div>
 
-    function queueMint(){
-      const payload = readForm();
-      addQueueItem(payload);
-      alert('Hook: POST /api/mint/queue\n\n' + JSON.stringify(payload, null, 2));
-    }
+        <div class="mNotes">
+            <div class="mK">Description</div>
+            <div class="mNoteText" id="mDescription">—</div>
+        </div>
 
-    function readForm(){
-      return {
-        artwork: document.getElementById('artwork').value,
-        collection: document.getElementById('collection').value || null,
-        marketplace: document.getElementById('market').value,
-        edition: document.getElementById('edition').value,
-        royalties: document.getElementById('royalties').value,
-        price: document.getElementById('price').value,
-        saleType: document.getElementById('saleType').value,
-        notes: document.getElementById('notes').value
-      };
+
+        <div class="modalActions">
+            <button class="btn primary" type="button" onclick="alert('Hook: run mint');">
+            <span class="dot"></span>Run mint
+            </button>
+            <button class="btn" type="button" onclick="alert('Hook: edit queued item');">Edit</button>
+            <button class="btn" type="button" onclick="alert('Hook: remove from queue');">Remove</button>
+        </div>
+        </div>
+    </div>
+    </div>
+
+
+    <script>
+        // Sidebar toggle (matches your burger/scrim pattern)
+        function toggleSidebar(force){
+        const sidebar = document.getElementById('sidebar');
+        const scrim = document.getElementById('scrim');
+        const burger = document.getElementById('burger');
+
+        const willOpen = (typeof force === 'boolean') ? force : !sidebar.classList.contains('open');
+
+        sidebar.classList.toggle('open', willOpen);
+        scrim.classList.toggle('show', willOpen);
+        burger.classList.toggle('active', willOpen);
+        }
+
+        // Connector stubs
+        function connect(m){
+        document.getElementById('st-' + m).textContent = 'connected';
+        document.getElementById('st-' + m).classList.add('on');
+        alert('Hook: OAuth / wallet connect for ' + m);
+        }
+        function disconnect(m){
+        document.getElementById('st-' + m).textContent = 'not connected';
+        document.getElementById('st-' + m).classList.remove('on');
+        alert('Hook: revoke token for ' + m);
+        }
+        function manage(m){
+        alert('Hook: manage connection settings for ' + m);
+        }
+
+        // Mint stubs
+        function dryRun(){
+        const payload = readForm();
+        alert('Dry run (no mint)\n\n' + JSON.stringify(payload, null, 2));
+        }
+
+        function queueMint(){
+        const payload = readForm();
+        addQueueItem(payload);
+        alert('Hook: POST /api/mint/queue\n\n' + JSON.stringify(payload, null, 2));
+        }
+
+        function readForm(){
+            return {
+                artwork: document.getElementById('artwork').value,
+                collection: document.getElementById('collection').value || null,
+                marketplace: document.getElementById('market').value,
+                edition: document.getElementById('edition').value,
+                royalties: document.getElementById('royalties').value,
+                price: document.getElementById('price').value,
+                saleType: document.getElementById('saleType').value,
+                description: document.getElementById('description').value
+            };
+        }
+
+        function chainFor(market){
+    if (market === 'xrpcafe') return 'XRPL';
+    if (market === 'opensea') return 'EVM';
+    return '—';
     }
 
     function addQueueItem(p){
-      const queue = document.getElementById('queue');
+    const queue = document.getElementById('queue');
 
-      const item = document.createElement('div');
-      item.className = 'qItem';
-      item.innerHTML = `
+    const cleanTitle = (p.artwork || '—').replace(/\s*\(Draft\)\s*/i,'').trim();
+    const meta = `${p.marketplace} · edition ${p.edition} · ${p.saleType} · ${p.price || '—'}`;
+
+    const item = document.createElement('div');
+    item.className = 'qItem';
+
+    // Store details for modal
+    item.dataset.title = cleanTitle;
+    item.dataset.meta = meta;
+    item.dataset.status = 'draft';
+    item.dataset.market = p.marketplace;
+    item.dataset.chain = chainFor(p.marketplace);
+    item.dataset.edition = String(p.edition || '—');
+    item.dataset.royalties = (p.royalties !== '' ? `${p.royalties}%` : '—');
+    item.dataset.price = p.price || '—';
+    item.dataset.description = p.description || '—';
+
+    item.innerHTML = `
         <div class="qLeft">
-          <div class="qTitle">${escapeHtml(p.artwork)}</div>
-          <div class="qMeta">${escapeHtml(p.marketplace)} · edition ${escapeHtml(String(p.edition))} · ${escapeHtml(p.saleType)} · ${escapeHtml(p.price || '—')}</div>
+        <div class="qTitle">${escapeHtml(cleanTitle)}</div>
+        <div class="qMeta">${escapeHtml(meta)}</div>
         </div>
         <div class="qRight">
-          <div class="statusPill">draft</div>
-          <button class="iconBtn" type="button" aria-label="Open">
+        <div class="statusPill">draft</div>
+        <button class="iconBtn" type="button" onclick="openMintModal(this)" aria-label="Open mint details">
             <svg viewBox="0 0 24 24" fill="none">
-              <path d="M9 18l6-6-6-6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M9 18l6-6-6-6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
-          </button>
+        </button>
         </div>
-      `;
-      queue.prepend(item);
+    `;
+
+    queue.prepend(item);
     }
+
 
     function escapeHtml(str){
       return String(str)
@@ -660,6 +765,60 @@
         .replaceAll('"','&quot;')
         .replaceAll("'","&#039;");
     }
+
+    function openMintModal(btn){
+        const item = btn.closest('.qItem');
+        if (!item) return;
+
+        // Prefer dataset (you already set it). Fallback to visible text.
+        const title = item.dataset.title || item.querySelector('.qTitle')?.textContent?.trim() || '—';
+        const meta  = item.dataset.meta  || item.querySelector('.qMeta')?.textContent?.trim()  || '—';
+
+        document.getElementById('mTitle').textContent = title;
+        document.getElementById('mMeta').textContent  = meta;
+
+        // Fill detail fields
+        document.getElementById('mMarket').textContent    = item.dataset.market || '—';
+        document.getElementById('mChain').textContent     = item.dataset.chain || '—';
+        document.getElementById('mEdition').textContent   = item.dataset.edition || '—';
+        document.getElementById('mRoyalties').textContent = item.dataset.royalties || '—';
+        document.getElementById('mPrice').textContent     = item.dataset.price || '—';
+        document.getElementById('mDescription').textContent =item.dataset.description || '—';
+
+
+        // ✅ Status text + status-only color
+        const statusEl = document.getElementById('mStatus');
+        const status = (item.dataset.status || '').toLowerCase();
+
+        statusEl.textContent = status || '—';
+        statusEl.classList.remove('ready','pending','draft');
+        if (status) statusEl.classList.add(status);
+
+        // ✅ make ONLY the status box green-outlined when ready
+        const statusBox = document.getElementById('mStatusBox');
+        statusBox.classList.toggle('is-ready', status === 'ready');
+
+
+        // Open modal
+        const modal = document.getElementById('mintModal');
+        modal.classList.add('show');
+        modal.setAttribute('aria-hidden','false');
+        document.body.style.overflow = 'hidden';
+    }
+
+
+
+function closeMintModal(){
+  const modal = document.getElementById('mintModal');
+  modal.classList.remove('show');
+  modal.setAttribute('aria-hidden','true');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeMintModal();
+});
+
   </script>
 </body>
 </html>
