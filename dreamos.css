@@ -21,6 +21,10 @@
 
   --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, "Apple Color Emoji","Segoe UI Emoji";
   --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+  /* Modal surfaces */
+  --modal-surface: rgba(4,4,6,0.96);   /* matches --bg (#040406) */
+  --modal-surface-2: rgba(12,12,16,0.94);
 }
 
 *{ box-sizing:border-box; }
@@ -783,3 +787,173 @@ textarea.notes{
   outline: 2px solid rgba(180,207,106,0.40);
   outline-offset: 2px;
 }
+
+/* ===== Modal / Drawer (Mint Details) ===== */
+.modal{
+  position: fixed;
+  inset: 0;
+  display:none;
+  z-index: 999;
+}
+.modal.show{ display:block; }
+
+.modalScrim{
+  position:absolute;
+  inset:0;
+  background: rgba(0,0,0,0.62);
+  backdrop-filter: blur(6px);
+}
+
+.modalCard{
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(0.98);
+  width: min(720px, calc(100% - 24px));
+  border-radius: 22px;
+  border: 1px solid rgba(255,255,255,0.10);
+  /* background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)); */
+  /* background: linear-gradient(180deg, rgba(6,7,10,0.98), rgba(6,7,10,0.94)); */
+  background:
+    radial-gradient(900px 380px at 18% 0%, rgba(180,207,106,0.10), transparent 55%),
+    radial-gradient(700px 380px at 85% 10%, rgba(120,90,255,0.10), transparent 60%),
+    linear-gradient(180deg, var(--modal-surface), var(--modal-surface-2));
+  box-shadow: 0 30px 110px rgba(0,0,0,0.60);
+  overflow:hidden;
+  opacity: 0;
+  transition: opacity .14s ease, transform .14s ease;
+}
+.modal.show .modalCard{
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.modalHead{
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap: 12px;
+}
+.modalTitleWrap{ display:flex; flex-direction:column; gap: 4px; min-width:0; }
+.modalKicker{ font-size: 11px; letter-spacing:.16em; text-transform: uppercase; color: var(--muted); }
+.modalTitle{
+  font-size: 16px;
+  font-weight: 950;
+  color: var(--text-2);
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.modalMeta{ font-family: var(--mono); font-size: 12px; color: rgba(255,255,255,0.50); }
+
+.modalBody{ padding: 16px; display:flex; flex-direction:column; gap: 12px; }
+
+.modalGrid{
+  display:grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+@media (max-width: 720px){ .modalGrid{ grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px){ .modalGrid{ grid-template-columns: 1fr; } }
+
+.mBox{
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.02);
+  border-radius: 16px;
+  padding: 10px;
+}
+
+.mK{
+  font-size: 11px;
+  letter-spacing:.10em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.42);
+  margin-bottom: 6px;
+}
+.mV{ font-family: var(--mono); font-size: 12px; color: rgba(255,255,255,0.82); }
+
+.mNotes{
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.02);
+  border-radius: 16px;
+  padding: 12px;
+}
+.mNoteText{ font-size: 13px; color: var(--muted); line-height: 1.55; }
+
+.modalActions{ display:flex; gap: 10px; margin-top: 2px; }
+.modalActions .btn{ flex: 1; justify-content:center; }
+@media (max-width: 520px){
+  .modalActions{ flex-direction:column; }
+  .modalActions .btn{ width:100%; }
+}
+
+/* Mobile: bottom drawer behavior */
+@media (max-width: 640px){
+  .modalCard{
+    top: auto;
+    bottom: 10px;
+    transform: translateX(-50%) translateY(8px);
+    max-height: calc(100dvh - 20px);
+    overflow:auto;
+  }
+  .modal.show .modalCard{
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* Is Ready */
+/* ===== Ready surface (used by qItem + modal boxes) ===== */
+.is-ready{
+  border-color: rgba(180,207,106,0.45) !important;
+  background:
+    radial-gradient(600px 220px at 20% 0%, rgba(180,207,106,0.12), transparent 55%),
+    rgba(180,207,106,0.06) !important;
+}
+
+.is-ready .qTitle,
+.is-ready .mV{
+  color: rgba(255,255,255,0.95);
+}
+
+/* ===== Status text states (Modal) ===== */
+.statusText{
+  font-family: var(--mono);
+  font-size: 12px;
+  color: rgba(255,255,255,0.65);
+}
+
+.statusText.ready{
+  color: rgba(180,207,106,0.90);
+}
+
+.statusText.pending{
+  color: rgba(255,255,255,0.55);
+}
+
+.statusText.draft{
+  color: rgba(255,255,255,0.40);
+}
+
+/* Status text states */
+.statusText{
+  font-family: var(--mono);
+  font-size: 12px;
+  color: rgba(255,255,255,0.65);
+}
+.statusText.ready{ color: rgba(180,207,106,0.90); }
+.statusText.pending{ color: rgba(255,255,255,0.55); }
+.statusText.draft{ color: rgba(255,255,255,0.40); }
+
+
+/* Status box can “arm” itself without tinting the whole modal */
+.mBox.is-ready{
+  border-color: rgba(180,207,106,0.45);
+  background: rgba(180,207,106,0.08);
+}
+
+/* Optional: make it feel a touch more “active” */
+.mBox.is-ready .mK{
+  color: rgba(180,207,106,0.75);
+}
+
+
