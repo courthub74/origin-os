@@ -125,63 +125,98 @@
           <!-- Metadata -->
            <section class="panel">
               <div class="head"><h2>Metadata</h2><span class="pill">Draft</span></div>
-              <div class="body">
-                 <div class="field">
-                <div class="label">Output</div>
-                <select>
-                  <option value="square">Square · 1024 × 1024</option>
-                  <option value="portrait">Portrait · 1024 × 1536</option>
-                  <option value="landscape">Landscape · 1536 × 1024</option>
-                </select>
+              <!-- ------------------------------------------------------------------ -->
+              <!-- ------------------------------------------------------------------ -->
+              <!-- ------------------------------------------------------------------ -->
+              <!-- ------------------------------------------------------------------ -->
+              <!-- ------------------------------------------------------------------ -->
+              <!-- -------------UPDATED FIELDS FOR NEW GENERATION PAINTING----------- -->
+               <div class="body">
+
+                <!-- DETAILS (visible by default) -->
+                <div id="artworkDetails">
+                  <div class="field">
+                    <div class="label">Output</div>
+                    <select id="output">
+                      <option value="square">Square · 1024 × 1024</option>
+                      <option value="portrait">Portrait · 1024 × 1536</option>
+                      <option value="landscape">Landscape · 1536 × 1024</option>
+                    </select>
+                  </div>
+
+                  <div class="field">
+                    <div class="label">Description</div>
+                    <textarea id="description" placeholder="Describe the scene, the structure, the symbols, the rules...."></textarea>
+                  </div>
+
+                  <div class="field">
+                    <div class="label">Title</div>
+                    <input id="title" placeholder="Optional, can be created later" />
+                  </div>
+
+                  <div class="field">
+                    <div class="label">Year</div>
+                    <input id="year" placeholder="2026" />
+                  </div>
+
+                  <div class="field">
+                    <div class="label">Collection</div>
+                    <select id="collection">
+                      <option>The Dominion Archive</option>
+                      <option>War and Feast</option>
+                      <option>The Digital Unconscious</option>
+                      <option>Signals and Ascensions</option>
+                      <option>Industrial Myths</option>
+                      <option>Symbols in Motion</option>
+                    </select>
+                  </div>
+
+                  <div class="field">
+                    <div class="label">Internal Notes</div>
+                    <textarea id="notes" class="notes" placeholder="Private notes: intent, variations, prompt fragments, pricing logic…"></textarea>
+                  </div>
+
+                  <div class="field">
+                    <div class="label">Tags</div>
+                    <input id="tags" placeholder="e.g., crowned, archive, signal, ritual" />
+                  </div>
+
+                  <div class="meta-actions">
+                    <button class="btn" type="button" onclick="alert('Hook: save draft');">Save Draft</button>
+                    <button class="btn" type="button" onclick="alert('Hook: preview');">Preview</button>
+                    <button class="btn primary" type="button" id="generateBtn">
+                      <span class="dot"></span>Generate
+                    </button>
+                  </div>
+                </div>
+
+                <!-- GENERATING (hidden until Generate) -->
+                <div id="artworkGenerating" class="gen hidden">
+                  <div class="genTop">
+                    <div>
+                      <div class="genTitle">Generating artwork</div>
+                      <div class="genSub">Rendering draft based on your description + output settings.</div>
+                    </div>
+                    <span class="pill">In progress</span>
+                  </div>
+
+                  <div class="genBar">
+                    <span class="genFill" id="genFill"></span>
+                  </div>
+
+                  <div class="genMeta">
+                    <span class="mutedMono" id="genHint">Preparing canvas…</span>
+                    <button class="btn" type="button" onclick="cancelGenerate()">Cancel</button>
+                  </div>
+                </div>
+
               </div>
 
-               <div class="field">
-                <div class="label">Description</div>
-                <textarea placeholder="Describe the scene, the structure, the symbols, the rules...."></textarea>
-              </div>
-
-              <div class="field">
-                <div class="label">Title</div>
-                <input placeholder='Optional, can be created later' />
-              </div>
-
-              <div class="field">
-                <div class="label">Year</div>
-                <input placeholder="2026" />
-              </div>
-
-              <div class="field">
-                <div class="label">Collection</div>
-                <select>
-                  <option>The Dominion Archive</option>
-                  <option>War and Feast</option>
-                  <option>The Digital Unconscious</option>
-                  <option>Signals and Ascensions</option>
-                  <option>Industrial Myths</option>
-                  <option>Symbols in Motion</option>
-                </select>
-              </div>
-
-              <div class="field">
-                <div class="label">Internal Notes</div>
-                <textarea class="notes" placeholder="Private notes: intent, variations, prompt fragments, pricing logic…"></textarea>
-              </div>
-
-              <div class="field">
-                <div class="label">Tags</div>
-                <input placeholder="e.g., crowned, archive, signal, ritual" />
-              </div>
-
-              <!-- Action bar -->
-              <div class="meta-actions">
-                <button class="btn" type="button" onclick="alert('Hook: save draft');">Save Draft</button>
-                <button class="btn" type="button" onclick="alert('Hook: preview');">Preview</button>
-                <button class="btn primary" type="button" onclick="alert('Hook: generate');">
-                  <span class="dot"></span>Generate
-                </button>
-              </div>
-
-              </div>
+              <!-- ------------------------------------------------------------------ -->
+              <!-- ------------------------------------------------------------------ -->
+              <!-- ------------------------------------------------------------------ -->
+              <!-- ------------------------------------------------------------------ -->
+              <!-- ------------------------------------------------------------------ -->
           </section>
 
           <!-- <section class="panel">
@@ -231,8 +266,8 @@
           <!-- Artwork Preview -->
           <section class="panel">
             <div class="head"><h2>Artwork Preview</h2><span class="pill">PNG / JPG / MP4</span></div>
-            <div class="body">
-              <div class="stage">Drop artwork here</div>
+            <div class="stage" id="previewStage">
+              <span id="stageLabel">Drop artwork here</span>
             </div>
           </section>
 
