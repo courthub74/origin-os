@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dream OS — Socials</title>
+  <link rel="stylesheet" href="dreamos.css">
+
+  <style>
+    .content{ margin-top: 14px; }
+
+    .socialGrid{
+      display:grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 14px;
+      align-items:start;
+    }
+    @media (max-width: 980px){
+      .socialGrid{ grid-template-columns: 1fr; }
+    }
+
+    .stack{ display:flex; flex-direction:column; gap: 14px; }
+
+    /* ===== Field styling ===== */
+    .field{
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.03);
+      border-radius: 16px;
+      padding: 12px;
+      display:flex;
+      flex-direction:column;
+      gap: 8px;
+    }
+    .label{
+      font-size: 11px;
+      letter-spacing:.10em;
+      text-transform: uppercase;
+      color: var(--muted2);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+    }
+    .hint{
+      font-family: var(--mono);
+      font-size: 11px;
+      color: rgba(255,255,255,0.35);
+      letter-spacing: .02em;
+      text-transform:none;
+    }
+    input, textarea, select{
+      width:100%;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.02);
+      border-radius: 14px;
+      padding: 10px 12px;
+      color: var(--text);
+      outline:none;
+      font-size: 14px;
+      font-family: var(--sans);
+    }
+    textarea{ min-height: 110px; resize: vertical; }
+
+    .two{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 520px){
+      .two{ grid-template-columns: 1fr; }
+    }
+
+    /* ===== Cards ===== */
+    .cards{
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+    @media (max-width: 520px){
+      .cards{ grid-template-columns: 1fr; }
+    }
+
+    .card{
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.02);
+      border-radius: 18px;
+      padding: 14px;
+      box-shadow: 0 18px 60px rgba(0,0,0,0.28);
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+      transition: transform .12s ease, border-color .12s ease, background .12s ease;
+    }
+    .card:hover{
+      transform: translateY(-1px);
+      border-color: rgba(180,207,106,0.28);
+      background: rgba(180,207,106,0.05);
+    }
+
+    .cardTop{ display:flex; align-items:center; justify-content:space-between; gap: 12px; }
+    .cardBrand{ display:flex; align-items:center; gap: 10px; min-width:0; }
+
+    .cardIcon{
+      width: 40px; height: 40px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background:
+        radial-gradient(380px 160px at 35% 30%, rgba(180,207,106,0.16), transparent 65%),
+        rgba(255,255,255,0.03);
+      display:flex; align-items:center; justify-content:center;
+      color: rgba(255,255,255,0.82);
+    }
+    .cardIcon svg{ width: 18px; height: 18px; stroke: rgba(255,255,255,0.86); }
+
+    .cardName{ display:flex; flex-direction:column; gap: 2px; min-width:0; }
+    .cardName strong{
+      color: var(--text-2);
+      font-size: 13px;
+      font-weight: 950;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    .cardName span{
+      color: rgba(255,255,255,0.42);
+      font-size: 11px;
+      font-family: var(--mono);
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+
+    .statusPill{
+      font-family: var(--mono);
+      font-size: 11px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.02);
+      color: rgba(255,255,255,0.65);
+      flex: 0 0 auto;
+    }
+    .statusPill.on{
+      border-color: rgba(180,207,106,0.45);
+      background: rgba(180,207,106,0.10);
+      color: rgba(255,255,255,0.85);
+    }
+    .statusPill.soon{
+      border-color: rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.02);
+      color: rgba(255,255,255,0.45);
+    }
+
+    .cardBody{ color: var(--muted); font-size: 12px; line-height: 1.55; }
+
+    .cardActions{ display:flex; gap: 10px; margin-top: 2px; }
+    .cardActions .btn{ flex: 1; justify-content:center; width:auto; }
+    @media (max-width: 520px){
+      .cardActions{ flex-direction:column; }
+      .cardActions .btn{ width:100%; }
+    }
+
+    /* ===== Queue list ===== */
+    .queue{ display:flex; flex-direction:column; gap: 10px; }
+    .qItem{
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.02);
+      border-radius: 16px;
+      padding: 12px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      transition: transform .12s ease, border-color .12s ease, background .12s ease;
+    }
+    .qItem:hover{
+      transform: translateY(-1px);
+      border-color: rgba(180,207,106,0.28);
+      background: rgba(180,207,106,0.05);
+    }
+    .qLeft{ min-width:0; display:flex; flex-direction:column; gap: 4px; }
+    .qTitle{
+      font-weight: 950; color: var(--text-2);
+      font-size: 13px;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    .qMeta{
+      font-family: var(--mono);
+      font-size: 11px;
+      color: rgba(255,255,255,0.45);
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    .qRight{ display:flex; align-items:center; gap: 8px; flex: 0 0 auto; }
+
+    .iconBtn{
+      width: 38px; height: 38px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.03);
+      display:flex; align-items:center; justify-content:center;
+      cursor:pointer;
+      transition: transform .12s ease, border-color .12s ease, background .12s ease;
+    }
+    .iconBtn:hover{
+      transform: translateY(-1px);
+      border-color: var(--stroke-2);
+      background: rgba(255,255,255,0.05);
+    }
+    .iconBtn svg{ width: 18px; height: 18px; stroke: rgba(255,255,255,0.80); }
+
+    /* ===== small helper link ===== */
+    .ghostLink{
+      border: 0;
+      background: transparent;
+      color: rgba(180,207,106,0.90);
+      font-family: var(--mono);
+      font-size: 11px;
+      cursor:pointer;
+      padding: 0;
+      text-align:left;
+    }
+    .ghostLink:hover{ text-decoration: underline; }
+
+    /* file state pill */
+    .imageState{
+      cursor: pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+    }
+
+    /* ===== Modal ===== */
+    .modal{ position: fixed; inset: 0; z-index: 50; display:none; }
+    .modal.show{ display:block; }
+    .modalScrim{
+      position:absolute; inset:0;
+      background: rgba(0,0,0,0.60);
+      backdrop-filter: blur(6px);
+    }
+    .modalCard{
+      position:relative;
+      width:min(720px, calc(100% - 24px));
+      margin: 60px auto;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(4,4,6,0.96);
+      box-shadow: 0 24px 80px rgba(0,0,0,0.55);
+      overflow:hidden;
+    }
+    @media (max-width: 520px){
+      .modalCard{ margin: 18px auto; }
+    }
+    .modalHead{
+      padding: 12px;
+      display:flex; align-items:flex-start; justify-content:space-between; gap: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.02);
+    }
+    .modalTitleWrap{ min-width:0; }
+    .modalKicker{
+      font-size: 11px; letter-spacing:.10em; text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+    }
+    .modalTitle{
+      margin-top: 4px;
+      font-weight: 950; color: var(--text-2);
+      font-size: 14px;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    .modalMeta{
+      margin-top: 4px;
+      font-family: var(--mono);
+      color: rgba(255,255,255,0.45);
+      font-size: 11px;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    .modalBody{ padding: 12px; display:flex; flex-direction:column; gap: 12px; }
+
+    .modalGrid{ display:grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    @media (max-width: 520px){ .modalGrid{ grid-template-columns: 1fr; } }
+
+    .mBox{
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.02);
+      border-radius: 16px;
+      padding: 10px;
+    }
+    .mK{
+      font-size: 11px; letter-spacing:.10em; text-transform: uppercase;
+      color: rgba(255,255,255,0.42);
+      margin-bottom: 6px;
+    }
+    .mV{
+      font-family: var(--mono);
+      font-size: 12px;
+      color: rgba(255,255,255,0.82);
+      white-space: pre-wrap;
+    }
+
+    /* status-only color + optional box outline */
+    .statusText.ready{ color: rgba(180,207,106,0.92); }
+    .statusText.pending{ color: rgba(255,255,255,0.62); }
+    .statusText.draft{ color: rgba(255,255,255,0.62); }
+
+    .mBox.is-ready{
+      border-color: rgba(180,207,106,0.45);
+      background: rgba(180,207,106,0.08);
+    }
+
+    .modalActions{ display:flex; gap: 10px; }
+    .modalActions .btn{ flex:1; justify-content:center; }
+    @media (max-width: 520px){
+      .modalActions{ flex-direction:column; }
+      .modalActions .btn{ width:100%; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="orb"></div>
+        <div class="brandText">
+          <strong>Dream OS</strong>
+          <span>Internal studio console</span>
+        </div>
+      </div>
+
+      <nav class="nav" aria-label="Primary">
+        <a href="dashboard.html"><span>Dashboard</span><small>01</small></a>
+        <a href="new_artwork.html"><span>Create</span><small>02</small></a>
+        <a href="collections.html"><span>Collections</span><small>03</small></a>
+        <a href="distribute.html"><span>Distribute</span><small>04</small></a>
+        <a class="active" href="socials.html"><span>Socials</span><small>05</small></a>
+        <a href="website.html"><span>Website</span><small>06</small></a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button class="logout-btn" type="button" onclick="alert('Hook logout');">
+          <span>Logout</span><small>Esc</small>
+        </button>
+      </div>
+    </aside>
+
+    <div class="scrim" id="scrim" onclick="toggleSidebar(false)"></div>
+
+    <main class="main">
+      <div class="topbar">
+        <div class="topLeft">
+          <button class="burger" id="burger" aria-label="Open menu" onclick="toggleSidebar()">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M5 7h14M5 12h14M5 17h14" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+          </button>
+
+          <div class="crumbs">
+            <div class="kicker">Socials</div>
+            <div class="title">Compose · Schedule · Automate</div>
+          </div>
+        </div>
+
+        <div class="topRight">
+          <div class="pill">Build: v0.1</div>
+          <button class="btn primary" type="button" onclick="alert('Hook: open social queue');">
+            <span class="dot"></span>Queue
+          </button>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="socialGrid">
+
+          <!-- LEFT -->
+          <div class="stack">
+            <section class="panel">
+              <div class="head">
+                <h2>Accounts</h2>
+                <div class="pill">Connect once, post anywhere</div>
+              </div>
+
+              <div class="body">
+                <div class="cards">
+                  <div class="card">
+                    <div class="cardTop">
+                      <div class="cardBrand">
+                        <div class="cardIcon" aria-hidden="true">
+                          <svg viewBox="0 0 24 24" fill="none">
+                            <path d="M8 3h8a5 5 0 0 1 5 5v8a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5V8a5 5 0 0 1 5-5Z" stroke-width="1.8"/>
+                            <path d="M12 16a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" stroke-width="1.8"/>
+                            <path d="M17.5 6.5h.01" stroke-width="3" stroke-linecap="round"/>
+                          </svg>
+                        </div>
+                        <div class="cardName">
+                          <strong>Instagram</strong>
+                          <span>@dreamagent</span>
+                        </div>
+                      </div>
+                      <div class="statusPill on" id="st-instagram">connected</div>
+                    </div>
+                    <div class="cardBody">Reels + posts. Keep drop captions and archive captions here.</div>
+                    <div class="cardActions">
+                      <button class="btn" type="button" onclick="disconnectSocial('instagram')">Disconnect</button>
+                      <button class="btn primary" type="button" onclick="manageSocial('instagram')"><span class="dot"></span>Manage</button>
+                    </div>
+                  </div>
+
+                  <div class="card">
+                    <div class="cardTop">
+                      <div class="cardBrand">
+                        <div class="cardIcon" aria-hidden="true">
+                          <svg viewBox="0 0 24 24" fill="none">
+                            <path d="M6 18L18 6M8 6l10 12" stroke-width="1.8" stroke-linecap="round"/>
+                          </svg>
+                        </div>
+                        <div class="cardName">
+                          <strong>X</strong>
+                          <span>@dreamagent</span>
+                        </div>
+                      </div>
+                      <div class="statusPill" id="st-x">not connected</div>
+                    </div>
+                    <div class="cardBody">Threads + drop notices. (Stub UI)</div>
+                    <div class="cardActions">
+                      <button class="btn primary" type="button" onclick="connectSocial('x')"><span class="dot"></span>Connect</button>
+                      <button class="btn" type="button" onclick="alert('Docs placeholder')">Docs</button>
+                    </div>
+                  </div>
+
+                  <div class="card">
+                    <div class="cardTop">
+                      <div class="cardBrand">
+                        <div class="cardIcon" aria-hidden="true">
+                          <svg viewBox="0 0 24 24" fill="none">
+                            <path d="M14 6v9.5a3.5 3.5 0 1 1-3-3.45" stroke-width="1.8" stroke-linecap="round"/>
+                            <path d="M14 6c1.2 2.6 3.1 4 6 4" stroke-width="1.8" stroke-linecap="round"/>
+                          </svg>
+                        </div>
+                        <div class="cardName">
+                          <strong>TikTok</strong>
+                          <span>@dreamagent</span>
+                        </div>
+                      </div>
+                      <div class="statusPill soon" id="st-tiktok">coming soon</div>
+                    </div>
+                    <div class="cardBody">Short “transmissions”. Keep hooks and timing ready.</div>
+                    <div class="cardActions">
+                      <button class="btn" type="button" onclick="alert('Coming soon')">Notify</button>
+                      <button class="btn" type="button" onclick="alert('Coming soon')">Learn</button>
+                    </div>
+                  </div>
+
+                  <div class="card">
+                    <div class="cardTop">
+                      <div class="cardBrand">
+                        <div class="cardIcon" aria-hidden="true">
+                          <svg viewBox="0 0 24 24" fill="none">
+                            <path d="M12 3c4 0 9 3 9 8s-5 10-9 10S3 16 3 11s5-8 9-8Z" stroke-width="1.8"/>
+                            <path d="M8 12h8" stroke-width="1.8" stroke-linecap="round"/>
+                          </svg>
+                        </div>
+                        <div class="cardName">
+                          <strong>BlueSky</strong>
+                          <span>@dreamagent</span>
+                        </div>
+                      </div>
+                      <div class="statusPill soon" id="st-bluesky">coming soon</div>
+                    </div>
+                    <div class="cardBody">Archive two-liners + drop receipts. (Stub UI)</div>
+                    <div class="cardActions">
+                      <button class="btn" type="button" onclick="alert('Coming soon')">Notify</button>
+                      <button class="btn" type="button" onclick="alert('Coming soon')">Learn</button>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </section>
+
+            <section class="panel">
+              <div class="head">
+                <h2>Compose</h2>
+                <div class="pill">Draft → schedule → queue</div>
+              </div>
+
+              <div class="body" style="display:flex; flex-direction:column; gap:12px;">
+                <div class="two">
+                  <div class="field" style="padding:0; border:0; background:transparent;">
+                    <div class="label">Platform <span class="hint">Where to post</span></div>
+                    <select id="postPlatform">
+                      <option value="instagram">Instagram</option>
+                      <option value="x">X</option>
+                      <option value="tiktok">TikTok</option>
+                      <option value="bluesky">BlueSky</option>
+                    </select>
+                  </div>
+
+                  <div class="field" style="padding:0; border:0; background:transparent;">
+                    <div class="label">Post type <span class="hint">Format</span></div>
+                    <select id="postType">
+                      <option value="caption">Caption</option>
+                      <option value="reel">Reel/Video caption</option>
+                      <option value="thread">Thread</option>
+                      <option value="announcement">Drop announcement</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="two">
+                  <div class="field" style="padding:0; border:0; background:transparent;">
+                    <div class="label">Asset <span class="hint">Optional</span></div>
+                    <label class="pill imageState" for="postAsset" id="postAssetState">none selected</label>
+                    <input id="postAsset" type="file" accept="image/*,video/*" hidden />
+                  </div>
+
+                  <div class="field" style="padding:0; border:0; background:transparent;">
+                    <div class="label">Schedule <span class="hint">Optional</span></div>
+                    <input id="postWhen" type="datetime-local" />
+                    <button class="ghostLink" type="button" onclick="alert('Hook: suggest best posting window');">
+                      click here for suggested times
+                    </button>
+                  </div>
+                </div>
+
+                <div class="field">
+                  <div class="label">Copy <span class="hint">Public text</span></div>
+                  <textarea id="postCopy" placeholder="Write the post copy…"></textarea>
+                </div>
+
+                <div class="two">
+                  <button class="btn" type="button" onclick="saveDraftPost()">Save draft</button>
+                  <button class="btn primary" type="button" onclick="queuePost()"><span class="dot"></span>Add to Queue</button>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <!-- RIGHT -->
+          <div class="stack">
+            <section class="panel">
+              <div class="head">
+                <h2>Queue</h2>
+                <div class="pill">Social ops</div>
+              </div>
+
+              <div class="body">
+                <div class="queue" id="socialQueue">
+                  <div class="qItem"
+                       data-title="Instagram post"
+                       data-meta="caption · scheduled · Jan 15 09:00"
+                       data-status="ready"
+                       data-platform="instagram"
+                       data-when="2026-01-15 09:00"
+                       data-notes="Two-line archive caption draft.">
+                    <div class="qLeft">
+                      <div class="qTitle">Instagram post</div>
+                      <div class="qMeta">caption · scheduled · Jan 15 09:00</div>
+                    </div>
+                    <div class="qRight">
+                      <div class="statusPill on">ready</div>
+                      <button class="iconBtn" type="button" onclick="openSocialModal(this)" aria-label="Open details">
+                        <svg viewBox="0 0 24 24" fill="none">
+                          <path d="M9 18l6-6-6-6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="qItem"
+                       data-title="X thread"
+                       data-meta="draft · not scheduled"
+                       data-status="draft"
+                       data-platform="x"
+                       data-when="—"
+                       data-notes="Needs 4-part thread structure + link.">
+                    <div class="qLeft">
+                      <div class="qTitle">X thread</div>
+                      <div class="qMeta">draft · not scheduled</div>
+                    </div>
+                    <div class="qRight">
+                      <div class="statusPill">draft</div>
+                      <button class="iconBtn" type="button" onclick="openSocialModal(this)" aria-label="Open details">
+                        <svg viewBox="0 0 24 24" fill="none">
+                          <path d="M9 18l6-6-6-6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </section>
+          </div>
+
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Social Details Modal -->
+  <div class="modal" id="socialModal" aria-hidden="true">
+    <div class="modalScrim" onclick="closeSocialModal()"></div>
+
+    <div class="modalCard" role="dialog" aria-modal="true" aria-label="Social queue details">
+      <div class="modalHead">
+        <div class="modalTitleWrap">
+          <div class="modalKicker">Queue details</div>
+          <div class="modalTitle" id="sTitle">—</div>
+          <div class="modalMeta" id="sMeta">—</div>
+        </div>
+
+        <button class="iconBtn" type="button" onclick="closeSocialModal()" aria-label="Close">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M6 6l12 12M18 6L6 18" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="modalBody">
+        <div class="modalGrid">
+          <div class="mBox" id="sStatusBox">
+            <div class="mK">Status</div>
+            <div class="mV statusText" id="sStatus">—</div>
+          </div>
+          <div class="mBox">
+            <div class="mK">Platform</div>
+            <div class="mV" id="sPlatform">—</div>
+          </div>
+          <div class="mBox">
+            <div class="mK">Schedule</div>
+            <div class="mV" id="sWhen">—</div>
+          </div>
+          <div class="mBox">
+            <div class="mK">Notes</div>
+            <div class="mV" id="sNotes">—</div>
+          </div>
+        </div>
+
+        <div class="modalActions">
+          <button class="btn primary" type="button" onclick="alert('Hook: run now');"><span class="dot"></span>Run</button>
+          <button class="btn" type="button" onclick="alert('Hook: edit');">Edit</button>
+          <button class="btn" type="button" onclick="alert('Hook: remove');">Remove</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function toggleSidebar(force){
+      const sidebar = document.getElementById('sidebar');
+      const scrim = document.getElementById('scrim');
+      const burger = document.getElementById('burger');
+
+      const willOpen = (typeof force === 'boolean') ? force : !sidebar.classList.contains('open');
+      sidebar.classList.toggle('open', willOpen);
+      scrim.classList.toggle('show', willOpen);
+      burger.classList.toggle('active', willOpen);
+    }
+
+    function connectSocial(p){
+      const el = document.getElementById('st-' + p);
+      if (!el) return;
+      el.textContent = 'connected';
+      el.classList.add('on');
+      alert('Hook: OAuth connect for ' + p);
+    }
+    function disconnectSocial(p){
+      const el = document.getElementById('st-' + p);
+      if (!el) return;
+      el.textContent = 'not connected';
+      el.classList.remove('on');
+      alert('Hook: revoke token for ' + p);
+    }
+    function manageSocial(p){ alert('Hook: manage ' + p + ' settings'); }
+
+    // file state pill
+    (function wireFileState(){
+      const input = document.getElementById('postAsset');
+      const state = document.getElementById('postAssetState');
+      if (!input || !state) return;
+      input.addEventListener('change', () => {
+        const f = input.files && input.files[0];
+        state.textContent = f ? f.name : 'none selected';
+      });
+    })();
+
+    function saveDraftPost(){ alert('Hook: save draft'); }
+
+    function queuePost(){
+      const platform = document.getElementById('postPlatform').value;
+      const type = document.getElementById('postType').value;
+      const when = document.getElementById('postWhen').value || 'not scheduled';
+
+      addSocialQueueItem({
+        title: platform.charAt(0).toUpperCase() + platform.slice(1) + ' post',
+        meta: `${type} · ${when ? 'scheduled' : 'draft'} · ${when || 'not scheduled'}`,
+        status: 'draft',
+        platform,
+        when: when || '—',
+        notes: (document.getElementById('postCopy').value || '—').slice(0, 140)
+      });
+
+      alert('Hook: POST /api/social/queue');
+    }
+
+    function addSocialQueueItem(p){
+      const queue = document.getElementById('socialQueue');
+      if (!queue) return;
+
+      const item = document.createElement('div');
+      item.className = 'qItem';
+
+      item.dataset.title = p.title || '—';
+      item.dataset.meta = p.meta || '—';
+      item.dataset.status = p.status || 'draft';
+      item.dataset.platform = p.platform || '—';
+      item.dataset.when = p.when || '—';
+      item.dataset.notes = p.notes || '—';
+
+      item.innerHTML = `
+        <div class="qLeft">
+          <div class="qTitle">${escapeHtml(item.dataset.title)}</div>
+          <div class="qMeta">${escapeHtml(item.dataset.meta)}</div>
+        </div>
+        <div class="qRight">
+          <div class="statusPill">${escapeHtml(item.dataset.status)}</div>
+          <button class="iconBtn" type="button" onclick="openSocialModal(this)" aria-label="Open details">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M9 18l6-6-6-6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+      `;
+      queue.prepend(item);
+    }
+
+    function openSocialModal(btn){
+      const item = btn.closest('.qItem');
+      if (!item) return;
+
+      document.getElementById('sTitle').textContent = item.dataset.title || item.querySelector('.qTitle')?.textContent?.trim() || '—';
+      document.getElementById('sMeta').textContent  = item.dataset.meta  || item.querySelector('.qMeta')?.textContent?.trim()  || '—';
+
+      document.getElementById('sPlatform').textContent = item.dataset.platform || '—';
+      document.getElementById('sWhen').textContent = item.dataset.when || '—';
+      document.getElementById('sNotes').textContent = item.dataset.notes || '—';
+
+      const statusEl = document.getElementById('sStatus');
+      const status = (item.dataset.status || '').toLowerCase();
+      statusEl.textContent = status || '—';
+      statusEl.classList.remove('ready','pending','draft');
+      if (status) statusEl.classList.add(status);
+
+      const statusBox = document.getElementById('sStatusBox');
+      statusBox.classList.toggle('is-ready', status === 'ready');
+
+      const modal = document.getElementById('socialModal');
+      modal.classList.add('show');
+      modal.setAttribute('aria-hidden','false');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeSocialModal(){
+      const modal = document.getElementById('socialModal');
+      modal.classList.remove('show');
+      modal.setAttribute('aria-hidden','true');
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeSocialModal();
+    });
+
+    function escapeHtml(str){
+      return String(str)
+        .replaceAll('&','&amp;')
+        .replaceAll('<','&lt;')
+        .replaceAll('>','&gt;')
+        .replaceAll('"','&quot;')
+        .replaceAll("'","&#039;");
+    }
+  </script>
+</body>
+</html>
