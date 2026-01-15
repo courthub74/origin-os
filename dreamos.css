@@ -29,12 +29,23 @@
 
 *{ box-sizing:border-box; }
 
-html, body {
-  height: auto;
-  min-height: 100dvh; /* or 100vh */
+html{
+  min-height: 100%;
+  background:
+    radial-gradient(1200px 600px at 20% 0%, rgba(180,207,106,0.10), transparent 55%),
+    radial-gradient(900px 520px at 85% 10%, rgba(120,90,255,0.12), transparent 60%),
+    var(--bg);
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 body{
+  min-height: 100%;
+  background: transparent;
+  font-family: var(--sans);
+}
+
+/* body{
   margin:0;
   font-family: var(--sans);
   background:
@@ -43,7 +54,7 @@ body{
     var(--bg);
   color: var(--text);
   overflow-x:hidden;
-}
+} */
 
 a{ color:inherit; text-decoration:none; }
 button{ font-family: inherit; }
@@ -120,6 +131,30 @@ button{ font-family: inherit; }
 .crumbs .kicker{ font-size:11px; letter-spacing:.14em; text-transform:uppercase; color: var(--muted); }
 .crumbs .title{ font-size:15px; font-weight:900; color: var(--text-2); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .topRight{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+
+/* Already have flex-wrap:wrap; on .topRight 👍
+   Add a mobile compaction pass: */
+@media (max-width: 520px){
+  .topRight{
+    gap: 8px;
+    justify-content: flex-end;
+    max-width: 52vw;          /* keeps it from bullying the title */
+  }
+
+  .topRight .btn{
+    padding: 8px 10px;
+    font-size: 12px;
+    border-radius: 12px;
+    box-shadow: none;         /* optional: reduces visual noise */
+  }
+
+  /* If your buttons have icons + text, tighten the icon spacing */
+  .topRight .btn{ gap: 8px; }
+
+  /* Optional: hide any non-essential labels if you have spans */
+  .topRight .btn .label{ display:none; } /* only if your HTML supports it */
+}
+
 
 /* Buttons */
 .btn{
