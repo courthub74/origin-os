@@ -1,3 +1,6 @@
+const reviewEl = document.getElementById("artworkReview");
+
+
 (function initDreamOSShell(){
   const sidebar = document.getElementById("sidebar");
   const burger = document.getElementById("burger");
@@ -117,10 +120,25 @@
 
       if (pct >= 100) {
         clearInterval(genTimer);
-        genHint.textContent = "Complete. Ready to review.";
-        // Here is where you would swap in the generated image/video.
+
+        // Hide generating, show review
+        genEl.classList.add("hidden");
+        reviewEl.classList.remove("hidden");
+
+        // Swap stage to "generated" placeholder (later: real image/video)
         stage.classList.remove("is-generating");
-        stage.innerHTML = `<span style="opacity:.8; font-family:var(--mono);">Generated artwork will appear here</span>`;
+        stage.innerHTML = `
+          <div style="display:flex; flex-direction:column; gap:10px; width:100%; height:100%; padding: 16px;">
+            <div style="flex:1; border-radius: 16px; border: 1px solid rgba(255,255,255,0.10); background: rgba(255,255,255,0.03);
+                        display:flex; align-items:center; justify-content:center; color: rgba(255,255,255,0.55); font-family: var(--mono);">
+              GENERATED PREVIEW
+            </div>
+            <div style="display:flex; justify-content:space-between; gap:10px; color: rgba(255,255,255,0.55); font-family: var(--mono); font-size: 12px;">
+              <span>Output: ${document.getElementById("output").value}</span>
+              <span>Status: Ready</span>
+            </div>
+          </div>
+        `;
       }
     }, 700);
   });
@@ -140,3 +158,18 @@
     genFill.style.width = "20%";
     genHint.textContent = "Cancelled.";
   }
+
+  function editDetails(){
+  // Show details again, keep preview
+  reviewEl.classList.add("hidden");
+  detailsEl.classList.remove("hidden");
+}
+
+function regenerate(){
+  // Go back into generating mode
+  reviewEl.classList.add("hidden");
+  genEl.classList.remove("hidden");
+
+  // Trigger the same generate behavior
+  document.getElementById("generateBtn").click();
+}

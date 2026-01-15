@@ -210,6 +210,26 @@
                   </div>
                 </div>
 
+                <!-- REVIEW (hidden until generation completes) -->
+                <div id="artworkReview" class="review hidden">
+                  <div class="reviewTop">
+                    <div>
+                      <div class="reviewTitle">Ready to review</div>
+                      <div class="reviewSub">Check the preview. You can regenerate or edit details before publishing.</div>
+                    </div>
+                    <span class="pill">Generated</span>
+                  </div>
+
+                  <div class="reviewActions">
+                    <button class="btn" type="button" onclick="editDetails()">Edit Details</button>
+                    <button class="btn" type="button" onclick="regenerate()">Regenerate</button>
+                    <button class="btn primary" type="button" onclick="alert('Hook: publish');">
+                      <span class="dot"></span>Publish
+                    </button>
+                  </div>
+                </div>
+
+
               </div>
 
               <!-- ------------------------------------------------------------------ -->

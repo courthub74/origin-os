@@ -1061,4 +1061,49 @@ textarea.notes{
 }
 @keyframes spin{ to{ transform: rotate(360deg); } }
 
+.review{
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.03);
+  border-radius: 18px;
+  padding: 14px;
+  display:flex;
+  flex-direction:column;
+  gap: 12px;
+}
+
+.reviewTop{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap: 12px;
+}
+
+.reviewTitle{
+  font-weight: 950;
+  color: var(--text-2);
+  font-size: 14px;
+}
+
+.reviewSub{
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.reviewActions{
+  display:flex;
+  gap: 10px;
+}
+
+.reviewActions .btn{
+  flex: 1;
+  justify-content:center;
+}
+
+@media (max-width: 520px){
+  .reviewActions{ flex-direction:column; }
+  .reviewActions .btn{ width:100%; }
+}
+
 
