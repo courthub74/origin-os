@@ -277,6 +277,22 @@
       .modalActions .btn{ width:100%; }
     }
 
+        /* ===== Mobile stretch guards ===== */
+html, body{
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+body{
+  margin: 0;
+  color: var(--text);
+}
+
+.app:where(*){
+  max-width: 100%;
+}
+
     /* ===== Background re-anchor for mobile ===== */
 @media (max-width: 520px){
   html{
@@ -313,6 +329,9 @@
 .mV{
   overflow-wrap: anywhere;
 }
+
+/* *{ outline: 1px solid rgba(255,0,0,0.08); } */
+
   </style>
 </head>
 
@@ -419,7 +438,7 @@
 
                 <div class="field">
                   <div class="label">Headline <span class="hint">Optional</span></div>
-                  <input id="siteHeadline" type="text" placeholder="e.g. Transmissions from the Dream Agent archive" />
+                  <input id="siteHeadline" type="text" placeholder="e.g. Transmissions..." />
                   <button class="ghostLink" type="button" onclick="alert('Hook: headline suggestions');">
                     click here if you need headline suggestions
                   </button>
