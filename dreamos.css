@@ -49,6 +49,7 @@ html, body{
   width: 100%;
   overflow-x: clip;   /* better than hidden on iOS */
   overscroll-behavior-x: none;
+  overflow-x: hidden;
 }
 
 
@@ -301,6 +302,11 @@ button{ font-family: inherit; }
   color: var(--muted);
   letter-spacing: .10em;
   text-transform: uppercase;
+}
+@media (max-width: 520px){
+  .kpi-label{
+    font-size: 10px;
+  }
 }
 
 /* Work empty panel */
