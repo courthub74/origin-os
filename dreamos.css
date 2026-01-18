@@ -537,6 +537,54 @@ button{ font-family: inherit; }
 
 .qbtn svg{ display:block; }
 
+/* ===== Quick Actions: left-align text (override) ===== */
+.qbtn{ align-items: center; }
+
+.qbtn .qleft{
+  display:flex;
+  align-items:center;
+  gap: 12px;
+  min-width: 0;            /* iOS safety: prevents weird overflow/push */
+  flex: 1;                 /* lets text take space */
+}
+
+.qbtn .qtext{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:flex-start;  /* ✅ left */
+  text-align:left;         /* ✅ left */
+  min-width: 0;            /* ✅ ellipsis works */
+}
+
+.qbtn .qtitle,
+.qbtn .qsub{
+  width: 100%;
+  text-align:left;         /* ✅ bulletproof */
+}
+
+.qbtn .qtitle{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Icon color = accent */
+.qicon{
+  color: var(--accent);
+  color: white;
+  border-color: rgba(180,207,106,0.28);
+  background: rgba(180,207,106,0.06);
+}
+
+/* Optional: brighten on hover */
+.qbtn:hover .qicon{
+  color: rgba(180,207,106,0.98);
+  background: rgba(180,207,106,0.10);
+  border-color: rgba(180,207,106,0.40);
+}
+
+
 
 /* Mobile Nav Smaller text */
 @media (max-width: 768px) {
