@@ -61,6 +61,100 @@
       border-radius: 999px;
       white-space:nowrap;
     }
+
+    
+    /* Account footer wrapper */
+    .account-footer{ position: relative; }
+
+    /* Turn your account row into a proper button */
+    .account-btn{
+      width:100%;
+      padding: 11px 12px;
+      border-radius:14px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.02);
+      color: rgba(255,255,255,0.65);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      cursor:pointer;
+      transition: transform .12s ease, border-color .12s ease, background .12s ease, color .12s ease;
+    }
+
+    .account-btn:hover{
+      transform: translateY(-1px);
+      border-color: rgba(180,207,106,0.40);
+      background: rgba(180,207,106,0.08);
+      color: rgba(255,255,255,0.9);
+    }
+
+    .account-avatar{ display:flex; align-items:center; gap: 10px; min-width:0; }
+    .account-meta{ display:flex; flex-direction:column; line-height:1.1; min-width:0; }
+    .account-name{
+      margin:0;
+      font-weight:900;
+      font-size:13px;
+      color: var(--text-2);
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    .account-role{
+      margin:3px 0 0 0;
+      font-size:11px;
+      color: var(--muted);
+      font-family: var(--mono);
+    }
+
+    .account-chev{ font-family: var(--mono); opacity:.7; }
+
+    /* Popover menu */
+    .account-menu{
+      position:absolute;
+      left:0;
+      right:0;
+      bottom: calc(100% + 10px);
+      display:none;
+      padding: 10px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      box-shadow: 0 24px 70px rgba(0,0,0,0.55);
+      backdrop-filter: blur(14px);
+      z-index: 200;
+    }
+    .account-menu.show{ display:block; }
+
+    .menu-item{
+      width:100%;
+      text-align:left;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.02);
+      color: rgba(255,255,255,0.82);
+      padding: 10px 12px;
+      border-radius: 14px;
+      cursor:pointer;
+      font-size: 13px;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+    }
+    .menu-item + .menu-item{ margin-top: 8px; }
+
+    .menu-item:hover{
+      transform: translateY(-1px);
+      border-color: rgba(180,207,106,0.35);
+      background: rgba(180,207,106,0.08);
+    }
+
+    .menu-sep{
+      height:1px;
+      background: rgba(255,255,255,0.08);
+      margin: 10px 4px;
+    }
+
+    .menu-item.danger:hover{
+      border-color: rgba(255,120,120,0.45);
+      background: rgba(255,120,120,0.10);
+    }
+
   </style>
 </head>
 
@@ -84,25 +178,29 @@
         <a href="#">Settings <small>⌘7</small></a>
       </nav>
 
-      <!-- ACCOUNT ICON -->
-       <!-- This hover color adjusts to you avatar color -->
-       <div class="sidebar-footer">
-            <div class="account-btn">
-                <div class="account-avatar">
-                    <img src="./img/blue_user.png" class="user_avatar" alt="User Avatar" />
-                    <p>Account Info</p>
-                </div>
-                <small>+</small>
+      <!-- ACCOUNT / PROFILE (sidebar footer) -->
+      <div class="sidebar-footer account-footer">
+        <button class="account-btn" id="accountBtn" type="button" aria-haspopup="menu" aria-expanded="false">
+          <div class="account-avatar">
+            <img src="./img/blue_user.png" class="user_avatar" alt="User Avatar" />
+            <div class="account-meta">
+              <p class="account-name">Account Info</p>
+              <p class="account-role">Manager</p>
             </div>
-       </div>
-
-      <!-- SIDEBAR -->
-      <div class="sidebar-footer">
-        <button class="logout-btn" onclick="window.location.href='index.html'">
-        <span>Logout</span>
-        <small>⇥</small>
+          </div>
+          <small class="account-chev" aria-hidden="true">⌄</small>
         </button>
+
+        <!-- Account menu -->
+        <div class="account-menu" id="accountMenu" role="menu" aria-label="Account menu">
+          <button class="menu-item" role="menuitem" type="button" data-go="profile.html">Profile Details</button>
+          <button class="menu-item" role="menuitem" type="button" data-go="profile_settings.html">Profile Settings</button>
+          <button class="menu-item" role="menuitem" type="button" data-go="display_settings.html">Display Settings</button>
+          <div class="menu-sep" aria-hidden="true"></div>
+          <button class="menu-item danger" role="menuitem" type="button" data-go="index.html">Logout</button>
+        </div>
       </div>
+
 
     </aside>
 
@@ -320,5 +418,6 @@
   </div>
 
   <script src="dreamos-shell.js"></script>
+  <script src="profile-menu.js"></script>
 </body>
 </html>
