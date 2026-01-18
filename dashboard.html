@@ -61,100 +61,6 @@
       border-radius: 999px;
       white-space:nowrap;
     }
-
-    
-    /* Account footer wrapper */
-    .account-footer{ position: relative; }
-
-    /* Turn your account row into a proper button */
-    .account-btn{
-      width:100%;
-      padding: 11px 12px;
-      border-radius:14px;
-      border: 1px solid rgba(255,255,255,0.10);
-      background: rgba(255,255,255,0.02);
-      color: rgba(255,255,255,0.65);
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap: 12px;
-      cursor:pointer;
-      transition: transform .12s ease, border-color .12s ease, background .12s ease, color .12s ease;
-    }
-
-    .account-btn:hover{
-      transform: translateY(-1px);
-      border-color: rgba(180,207,106,0.40);
-      background: rgba(180,207,106,0.08);
-      color: rgba(255,255,255,0.9);
-    }
-
-    .account-avatar{ display:flex; align-items:center; gap: 10px; min-width:0; }
-    .account-meta{ display:flex; flex-direction:column; line-height:1.1; min-width:0; }
-    .account-name{
-      margin:0;
-      font-weight:900;
-      font-size:13px;
-      color: var(--text-2);
-      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-    }
-    .account-role{
-      margin:3px 0 0 0;
-      font-size:11px;
-      color: var(--muted);
-      font-family: var(--mono);
-    }
-
-    .account-chev{ font-family: var(--mono); opacity:.7; }
-
-    /* Popover menu */
-    .account-menu{
-      position:absolute;
-      left:0;
-      right:0;
-      bottom: calc(100% + 10px);
-      display:none;
-      padding: 10px;
-      border-radius: 18px;
-      border: 1px solid rgba(255,255,255,0.10);
-      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
-      box-shadow: 0 24px 70px rgba(0,0,0,0.55);
-      backdrop-filter: blur(14px);
-      z-index: 200;
-    }
-    .account-menu.show{ display:block; }
-
-    .menu-item{
-      width:100%;
-      text-align:left;
-      border: 1px solid rgba(255,255,255,0.08);
-      background: rgba(255,255,255,0.02);
-      color: rgba(255,255,255,0.82);
-      padding: 10px 12px;
-      border-radius: 14px;
-      cursor:pointer;
-      font-size: 13px;
-      transition: transform .12s ease, background .12s ease, border-color .12s ease;
-    }
-    .menu-item + .menu-item{ margin-top: 8px; }
-
-    .menu-item:hover{
-      transform: translateY(-1px);
-      border-color: rgba(180,207,106,0.35);
-      background: rgba(180,207,106,0.08);
-    }
-
-    .menu-sep{
-      height:1px;
-      background: rgba(255,255,255,0.08);
-      margin: 10px 4px;
-    }
-
-    .menu-item.danger:hover{
-      border-color: rgba(255,120,120,0.45);
-      background: rgba(255,120,120,0.10);
-    }
-
   </style>
 </head>
 
@@ -184,8 +90,8 @@
           <div class="account-avatar">
             <img src="./img/blue_user.png" class="user_avatar" alt="User Avatar" />
             <div class="account-meta">
-              <p class="account-name">Account Info</p>
-              <p class="account-role">Manager</p>
+              <p class="account-name">The Usersname</p>
+              <p class="account-role">Artist</p>
             </div>
           </div>
           <small class="account-chev" aria-hidden="true">⌄</small>
@@ -226,82 +132,82 @@
         <div class="grid">
 
          <!-- EMPTY STATE (when no works exist) -->
-<div class="empty-state">
-  <div class="empty-grid">
-    <!-- LEFT: KPIs + No works panel -->
-    <div>
-      <div class="kpis">
-        <div class="panel kpi reveal d2">
-          <div class="kpi-top">
-            <div class="kpi-icon" aria-hidden="true">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                <path d="M4 5h16v14H4V5z" stroke="currentColor" stroke-width="1.6"/>
-                <path d="M8 9h8M8 13h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-              </svg>
+        <div class="empty-state">
+          <div class="empty-grid">
+            <!-- LEFT: KPIs + No works panel -->
+            <div>
+              <div class="kpis">
+                <div class="panel kpi reveal d2">
+                  <div class="kpi-top">
+                    <div class="kpi-icon" aria-hidden="true">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                        <path d="M4 5h16v14H4V5z" stroke="currentColor" stroke-width="1.6"/>
+                        <path d="M8 9h8M8 13h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                      </svg>
+                    </div>
+                    <div class="dot" aria-hidden="true"></div>
+                  </div>
+                  <div class="kpi-value">0</div>
+                  <div class="kpi-label">Works</div>
+                </div>
+
+                <div class="panel kpi reveal d3">
+                  <div class="kpi-top">
+                    <div class="kpi-icon" aria-hidden="true">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                        <path d="M4 7h7l2 2h7v10H4V7z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+                      </svg>
+                    </div>
+                    <div class="dot" aria-hidden="true"></div>
+                  </div>
+                  <div class="kpi-value">0</div>
+                  <div class="kpi-label">Collections</div>
+                </div>
+
+                <div class="panel kpi reveal d4">
+                  <div class="kpi-top">
+                    <div class="kpi-icon" aria-hidden="true">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 3l7 4v10l-7 4-7-4V7l7-4z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+                        <path d="M12 7v14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                      </svg>
+                    </div>
+                    <div class="dot" aria-hidden="true"></div>
+                  </div>
+                  <div class="kpi-value">0</div>
+                  <div class="kpi-label">Drops</div>
+                </div>
+              </div>
+
+              <div class="panel work-panel reveal d5">
+                <div class="work-inner">
+                  <div>
+                    <div class="empty-icon" aria-hidden="true">
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                        <path d="M4 5h16v14H4V5z" stroke="currentColor" stroke-width="1.6"/>
+                        <path d="M7 15l3-3 3 3 4-5 3 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </div>
+                    <h2>No works yet</h2>
+                    <p>Begin your first creation. Every masterpiece starts with a single prompt.</p>
+                    <button class="cta" type="button" onclick="window.location.href='create.html'">
+                      Create First Work <span class="arrow">↗</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="status reveal d6">
+                <span class="led" aria-hidden="true"></span>
+                <span>System operational</span>
+              </div>
             </div>
-            <div class="dot" aria-hidden="true"></div>
-          </div>
-          <div class="kpi-value">0</div>
-          <div class="kpi-label">Works</div>
-        </div>
 
-        <div class="panel kpi reveal d3">
-          <div class="kpi-top">
-            <div class="kpi-icon" aria-hidden="true">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                <path d="M4 7h7l2 2h7v10H4V7z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
-              </svg>
-            </div>
-            <div class="dot" aria-hidden="true"></div>
-          </div>
-          <div class="kpi-value">0</div>
-          <div class="kpi-label">Collections</div>
-        </div>
-
-        <div class="panel kpi reveal d4">
-          <div class="kpi-top">
-            <div class="kpi-icon" aria-hidden="true">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                <path d="M12 3l7 4v10l-7 4-7-4V7l7-4z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
-                <path d="M12 7v14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-              </svg>
-            </div>
-            <div class="dot" aria-hidden="true"></div>
-          </div>
-          <div class="kpi-value">0</div>
-          <div class="kpi-label">Drops</div>
-        </div>
-      </div>
-
-      <div class="panel work-panel reveal d5">
-        <div class="work-inner">
-          <div>
-            <div class="empty-icon" aria-hidden="true">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                <path d="M4 5h16v14H4V5z" stroke="currentColor" stroke-width="1.6"/>
-                <path d="M7 15l3-3 3 3 4-5 3 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
-            <h2>No works yet</h2>
-            <p>Begin your first creation. Every masterpiece starts with a single prompt.</p>
-            <button class="cta" type="button" onclick="window.location.href='create.html'">
-              Create First Work <span class="arrow">↗</span>
-            </button>
+            <!-- RIGHT: Quick Actions -->
+            <div id="emptyQuickActionsSlot"></div>
           </div>
         </div>
-      </div>
-
-      <div class="status reveal d6">
-        <span class="led" aria-hidden="true"></span>
-        <span>System operational</span>
-      </div>
-    </div>
-
-    <!-- RIGHT: Quick Actions -->
-    <div id="emptyQuickActionsSlot"></div>
-  </div>
-</div>
-<!-- END EMPTY STATE -->
+        <!-- END EMPTY STATE -->
 
           <section class="panel" id="quickActionsPanel">
             <div class="head"><h2>Quick Actions</h2><span class="pill">Today</span></div>
