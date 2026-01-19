@@ -1210,3 +1210,137 @@ textarea.notes{
     transform: translateZ(0); /* forces a more stable compositing layer on iOS */
   }
 }
+
+ /* Account footer wrapper */
+    .account-footer{ position: relative; }
+
+    /* Turn your account row into a proper button */
+    .account-btn{
+      width:100%;
+      padding: 11px 12px;
+      border-radius:14px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.02);
+      color: rgba(255,255,255,0.65);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      cursor:pointer;
+      transition: transform .12s ease, border-color .12s ease, background .12s ease, color .12s ease;
+    }
+
+    .account-btn:hover{
+      transform: translateY(-1px);
+      border-color: rgba(180,207,106,0.40);
+      background: rgba(180,207,106,0.08);
+      color: rgba(255,255,255,0.9);
+    }
+
+    .account-avatar{ display:flex; align-items:center; gap: 10px; min-width:0; }
+    .account-meta{ display:flex; flex-direction:column; line-height:1.1; min-width:0; }
+    .account-name{
+      margin:0;
+      font-weight:900;
+      font-size:13px;
+      color: var(--text-2);
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    .account-role{
+      margin:3px 0 0 0;
+      font-size:11px;
+      color: var(--muted);
+      font-family: var(--mono);
+    }
+
+    .account-chev{ font-family: var(--mono); opacity:.7; }
+
+    /* Popover menu */
+    .account-menu{
+      position:absolute;
+      left:0;
+      right:0;
+      bottom: calc(100% + 10px);
+
+      /* keep it in the layout so we can animate */
+      display:block;
+
+      padding: 10px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      box-shadow: 0 24px 70px rgba(0,0,0,0.55);
+      backdrop-filter: blur(14px);
+      z-index: 200;
+
+      /* animation states (closed) */
+      opacity: 0;
+      transform: translateY(10px) scale(0.98);
+      pointer-events: none;
+
+      transition:
+        opacity .18s ease,
+        transform .18s cubic-bezier(.2,.9,.2,1);
+    }
+
+    .account-menu.show{
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+
+
+    .menu-item{
+      width:100%;
+      text-align:left;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.02);
+      color: rgba(255,255,255,0.82);
+      padding: 10px 12px;
+      border-radius: 14px;
+      cursor:pointer;
+      font-size: 13px;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+    }
+    .menu-item + .menu-item{ margin-top: 8px; }
+
+    .menu-item:hover{
+      transform: translateY(-1px);
+      border-color: rgba(180,207,106,0.35);
+      background: rgba(180,207,106,0.08);
+    }
+
+    .menu-sep{
+      height:1px;
+      background: rgba(255,255,255,0.08);
+      margin: 10px 4px;
+    }
+
+    .menu-item.danger:hover{
+      border-color: rgba(255,120,120,0.45);
+      background: rgba(255,120,120,0.10);
+    }
+
+/* === Desktop: make sidebar behave like mobile (pinned/fixed) === */
+@media (min-width: 981px){
+  .sidebar{
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100dvh;          /* better on modern mobile/desktop */
+    width: var(--sidebar-w);
+    z-index: 120;
+  }
+
+  /* Let main content live to the right of the fixed sidebar */
+  .main{
+    margin-left: var(--sidebar-w);
+    width: calc(100% - var(--sidebar-w));
+  }
+
+  /* Since sidebar is fixed, the app grid no longer needs 2 columns */
+  .app{
+    grid-template-columns: 1fr;
+  }
+}
+

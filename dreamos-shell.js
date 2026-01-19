@@ -173,3 +173,4 @@ function regenerate(){
   // Trigger the same generate behavior
   document.getElementById("generateBtn").click();
 }
+
