@@ -1321,3 +1321,26 @@ textarea.notes{
       background: rgba(255,120,120,0.10);
     }
 
+/* === Desktop: make sidebar behave like mobile (pinned/fixed) === */
+@media (min-width: 981px){
+  .sidebar{
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100dvh;          /* better on modern mobile/desktop */
+    width: var(--sidebar-w);
+    z-index: 120;
+  }
+
+  /* Let main content live to the right of the fixed sidebar */
+  .main{
+    margin-left: var(--sidebar-w);
+    width: calc(100% - var(--sidebar-w));
+  }
+
+  /* Since sidebar is fixed, the app grid no longer needs 2 columns */
+  .app{
+    grid-template-columns: 1fr;
+  }
+}
+
