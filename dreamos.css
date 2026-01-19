@@ -110,7 +110,35 @@ button{ font-family: inherit; }
 }
 .nav small{ font-family: var(--mono); color: rgba(255,255,255,0.35); font-size: 11px; }
 
-.main{ padding: 18px; }
+/* === Page-load "pop" (main content) === */
+.main{
+  /* keep your existing padding */
+  padding: 18px;
+
+  /* entrance animation */
+  opacity: 0;
+  transform: translateY(10px) scale(0.985);
+  animation: mainPop .22s cubic-bezier(.2,.9,.2,1) forwards;
+  animation-delay: .05s; /* tiny delay feels premium */
+  will-change: transform, opacity;
+}
+
+@keyframes mainPop{
+  to{
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce){
+  .main{
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+}
+
 
 /* Topbar */
 .topbar{
