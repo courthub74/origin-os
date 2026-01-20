@@ -79,8 +79,9 @@ const reviewEl = document.getElementById("artworkReview");
   const genHint = document.getElementById("genHint");
 
   let genTimer = null;
-
-  genBtn.addEventListener("click", () => {
+  
+  if (genBtn && detailsEl && genEl && stage && genFill && genHint && reviewEl)  {
+    genBtn.addEventListener("click", () => {
     // 1) Hide details, show generating
     detailsEl.classList.add("hidden");
     genEl.classList.remove("hidden");
@@ -142,6 +143,8 @@ const reviewEl = document.getElementById("artworkReview");
       }
     }, 700);
   });
+  }
+  
 
   function cancelGenerate(){
     clearInterval(genTimer);
