@@ -47,7 +47,7 @@ body{
 
 html, body{
   width: 100%;
-  overflow-x: clip;   /* better than hidden on iOS */
+  /* overflow-x: clip; */
   overscroll-behavior-x: none;
   overflow-x: hidden;
 }
@@ -110,7 +110,35 @@ button{ font-family: inherit; }
 }
 .nav small{ font-family: var(--mono); color: rgba(255,255,255,0.35); font-size: 11px; }
 
-.main{ padding: 18px; }
+/* === Page-load "pop" (main content) === */
+.main{
+  /* keep your existing padding */
+  padding: 18px;
+
+  /* entrance animation */
+  opacity: 0;
+  transform: translateY(10px) scale(0.985);
+  animation: mainPop .22s cubic-bezier(.2,.9,.2,1) forwards;
+  animation-delay: .05s; /* tiny delay feels premium */
+  will-change: transform, opacity;
+}
+
+@keyframes mainPop{
+  to{
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce){
+  .main{
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+}
+
 
 /* Topbar */
 .topbar{
@@ -399,9 +427,6 @@ button{ font-family: inherit; }
 #hasData{ display:block; }
 #hasData.hide{ display:none; }
 
-
-.empty-state{ grid-column: 1 / -1; }
-
 /* Empty state spans the main grid */
 .empty-state{ grid-column: 1 / -1; }
 
@@ -671,7 +696,7 @@ button{ font-family: inherit; }
 }
 
 /* DROPDOWN BUTTON */
-.account-btn{
+/* .account-btn{
   width:100%;
   padding: 11px 12px;
   border-radius:14px;
@@ -690,7 +715,7 @@ button{ font-family: inherit; }
     border-color .12s ease,
     background .12s ease,
     color .12s ease;
-}
+} */
 
 .account-avatar {
     display: flex;
@@ -1002,24 +1027,6 @@ textarea.notes{
   color: rgba(255,255,255,0.95);
 }
 
-/* ===== Status text states (Modal) ===== */
-.statusText{
-  font-family: var(--mono);
-  font-size: 12px;
-  color: rgba(255,255,255,0.65);
-}
-
-.statusText.ready{
-  color: rgba(180,207,106,0.90);
-}
-
-.statusText.pending{
-  color: rgba(255,255,255,0.55);
-}
-
-.statusText.draft{
-  color: rgba(255,255,255,0.40);
-}
 
 /* Status text states */
 .statusText{
