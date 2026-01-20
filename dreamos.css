@@ -419,7 +419,7 @@ button{ font-family: inherit; }
 
 /* Reveal helpers (safe no-op if you’re not animating yet) */
 .reveal{ opacity: 1; transform: none; }
-.d2,.d3,.d4,.d5,.d6{}
+/* .d2,.d3,.d4,.d5,.d6{} */
 
 /* Wrapper toggles */
 #emptyState{ display:none; }
