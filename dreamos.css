@@ -420,8 +420,21 @@ button{ font-family: inherit; }
 }
 
 /* Wrapper toggles */
-#emptyState{ display:none; }
-#emptyState.show{ display:block; }
+/* #emptyState{ display:none; }
+#emptyState.show{ display:block; } */
+
+
+/* Only hide when the hidden attribute exists */
+.empty-state[hidden],
+.active-state[hidden]{
+  display:none !important;
+}
+
+.empty-state,
+.active-state{
+  grid-column: 1 / -1;
+}
+
 #hasData{ display:block; }
 #hasData.hide{ display:none; }
 
