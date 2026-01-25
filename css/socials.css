@@ -53,9 +53,15 @@
     textarea{ min-height: 110px; resize: vertical; }
 
     .two .btn{
-  justify-content: center;
-  text-align: center;
-}
+      justify-content: center;
+      text-align: center;
+    }
+
+    .two{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
 
     @media (max-width: 520px){
       .two{ grid-template-columns: 1fr; }
