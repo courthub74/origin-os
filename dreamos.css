@@ -1072,3 +1072,40 @@ textarea.notes{ min-height: 110px; }
 @supports (-webkit-touch-callout: none){
   .topbar{ transform: translateZ(0); }
 }
+
+/* For Logo */
+:root{
+  /* Dreamos core */
+  --dreamos-bg: #040406;
+  
+  --dreamos-white: rgba(255,255,255,0.92);
+  --dreamos-muted: rgba(255,255,255,0.55);
+
+  /* Accent (olive system color) */
+  --dreamos-accent: #b4cf6a;
+  --dreamos-accent-soft: rgba(180,207,106,0.45);
+}
+
+.dreamos-logo{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  color: var(--dreamos-white);
+  color: var(--dreamos-accent);
+  /* background: var(--dreamos-accent-soft); */
+  width: 48px;   /* default size */
+  height: auto;
+}
+
+/* Size presets */
+.dreamos-logo.sm{ width: 20px; }
+.dreamos-logo.md{ width: 36px; }
+.dreamos-logo.lg{ width: 56px; }
+.dreamos-logo.xl{ width: 96px; }
+
+.dreamos-logo svg{
+  width:100%;
+  height:auto;
+  display:block;
+}
+

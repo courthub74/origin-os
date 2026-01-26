@@ -69,6 +69,7 @@
 /* Next action styles (hero) */
 .nextActionBody .na-main{
   display:flex;
+  flex-direction: column;
   align-items:flex-start;
   justify-content:space-between;
   gap: 14px;
@@ -100,10 +101,17 @@
 
 .na-actions{
   display:flex;
-  flex-direction:column;
+  /* flex-direction:column; */
   gap: 10px;
   min-width: 220px;
 }
+
+@media (max-width: 980px){
+  .nextActionBody .na-main{
+    flex-direction: column;
+  }
+}
+
 
 @media (max-width: 520px){
   .nextActionBody .na-main{ flex-direction:column; }

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Dream OS — Dashboard</title>
+  <title>Origin OS — Dashboard</title>
   <link rel="stylesheet" href="dreamos.css">
   <link rel="stylesheet" href="./css/dashboard.css">
 </head>
@@ -14,8 +14,28 @@
   <div class="app">
     <aside class="sidebar" id="sidebar">
       <a class="brand" href="#">
-        <div class="orb"></div>
-        <div class="brandText"><strong>Dream Agent Studio</strong><span>Create. Shape. Release.</span></div>
+        <div class="dreamos-logo md">
+          <!-- SVG here -->
+            <svg width="120" height="138" viewBox="0 0 120 138" xmlns="http://www.w3.org/2000/svg">
+            <!-- Hex container -->
+            <polygon
+              points="60,2 114,34 114,104 60,136 6,104 6,34"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+
+            <!-- Engine blades -->
+            <g transform="translate(60 69)">
+              <polygon points="0,-28 6,-12 0,-6 -6,-12" fill="currentColor"/>
+              <polygon points="28,0 12,6 6,0 12,-6" fill="currentColor"/>
+              <polygon points="0,28 -6,12 0,6 6,12" fill="currentColor"/>
+              <polygon points="-28,0 -12,-6 -6,0 -12,6" fill="currentColor"/>
+            </g>
+          </svg>
+        </div>
+        <!-- <div class="orb"></div> -->
+        <div class="brandText"><strong>Origin</strong><span>Create. Shape. Release.</span></div>
       </a>
 
       <nav class="nav">
@@ -163,6 +183,64 @@
           <!-- LEFT COLUMN STACK -->
           <div class="active-left">
 
+            <!-- Active KPIs -->
+             <div class="kpis">
+                <div class="panel kpi reveal d2">
+                  <div class="kpi-top">
+                    <div class="kpi-icon" aria-hidden="true">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                        <path d="M4 5h16v14H4V5z" stroke="currentColor" stroke-width="1.6"/>
+                        <path d="M8 9h8M8 13h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                      </svg>
+                    </div>
+                    <div class="dot" aria-hidden="true"></div>
+                  </div>
+                  <div class="kpi-value">3</div>
+                  <div class="kpi-label">Works</div>
+                </div>
+
+                <div class="panel kpi reveal d3">
+                  <div class="kpi-top">
+                    <div class="kpi-icon" aria-hidden="true">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                        <path d="M4 7h7l2 2h7v10H4V7z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+                      </svg>
+                    </div>
+                    <div class="dot" aria-hidden="true"></div>
+                  </div>
+                  <div class="kpi-value">6</div>
+                  <div class="kpi-label">Collections</div>
+                </div>
+
+                <div class="panel kpi reveal d4">
+                  <div class="kpi-top">
+                    <div class="kpi-icon" aria-hidden="true">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 3l7 4v10l-7 4-7-4V7l7-4z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+                        <path d="M12 7v14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                      </svg>
+                    </div>
+                    <div class="dot" aria-hidden="true"></div>
+                  </div>
+                  <div class="kpi-value">2</div>
+                  <div class="kpi-label">Drops</div>
+                </div>
+              </div>
+            <!-- <div class="kpi-grid">
+              <div class="panel kpi reveal d1">
+                <div class="kpi-top">
+                  <div class="kpi-icon" aria-hidden="true">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                      <path d="M12 3l7 4v10l-7 4-7-4V7l7-4z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+                      <path d="M12 7v14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                    </svg>
+                  </div>
+                  <div class="dot" aria-hidden="true"></div>
+                </div>
+                <div class="kpi-value">0</div>
+                <div class="kpi-label">Works</div>
+              </div> -->
+
             <!-- 3) Next Recommended Action (Hero) -->
             <section class="panel" id="nextActionPanel">
               <div class="head">
@@ -211,7 +289,7 @@
                     <!-- Example row (JS will render real items) -->
                     <div class="item">
                       <div class="meta">
-                        <div class="name">“Discovery of the Indigenous”</div>
+                        <div class="name">“Temple of Openings”</div>
                         <div class="sub">Missing social post</div>
                       </div>
                       <div class="wm-right">
@@ -239,7 +317,7 @@
                     </div>
 
                     <div class="tile">
-                      <div class="t">“Temple of Openings”</div>
+                      <div class="t">“Revolutionary Balloon”</div>
                       <div class="d">Last edited · 2d ago</div>
                       <div class="go">
                         <span>Continue</span>
