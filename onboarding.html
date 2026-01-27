@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Origin OS — Onboarding</title>
+
+  <!-- Core CSS (adjust paths to your structure) -->
+  <link rel="stylesheet" href="/css/dreamos.css">
+  <!-- Optional: create onboarding.css later if you want specific tweaks -->
+  <!-- <link rel="stylesheet" href="./css/onboarding.css"> -->
+ 
+  <!-- JS -->
+  <script src="/js/onboarding.js" defer></script>
+</head>
+
+<body>
+  <div class="scrim" id="scrim"></div>
+
+  <div class="app">
+    <!-- Sidebar (keep consistent with your shell) -->
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="dashboard.html" aria-label="Origin OS Home">
+        <div class="dreamos-logo md">
+          <!-- Use your existing SVG logo here -->
+          <svg width="120" height="138" viewBox="0 0 120 138" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <polygon points="60,2 114,34 114,104 60,136 6,104 6,34" fill="none" stroke="currentColor" stroke-width="2"/>
+            <g transform="translate(60 69)">
+              <circle r="2.4" fill="currentColor"></circle>
+            </g>
+          </svg>
+        </div>
+        <div class="brandText">
+          <div class="t">Origin OS</div>
+          <div class="s">Onboarding</div>
+        </div>
+      </a>
+
+      <nav class="nav">
+        <a class="navItem active" href="#" onclick="return false;">Profile Signal</a>
+        <a class="navItem" href="#" onclick="return false;">Workspace Defaults</a>
+        <a class="navItem" href="#" onclick="return false;">Integrations</a>
+      </nav>
+
+      <div class="account-footer">
+        <button class="accountBtn" id="accountBtn" aria-expanded="false" type="button">
+          <span class="dot"></span>
+          <span class="accountText">
+            <span class="name" id="whoName">Signed in</span>
+            <span class="meta" id="whoEmail">—</span>
+          </span>
+          <span class="chev">▾</span>
+        </button>
+
+        <div class="accountMenu" id="accountMenu" role="menu">
+          <button type="button" data-go="dashboard.html">Dashboard</button>
+          <button type="button" data-go="index.html">Log out</button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <h1 class="h1">Profile Signal</h1>
+          <p class="sub">Tell Origin OS who you are, and it will shape the console around you.</p>
+        </div>
+
+        <!-- Progress -->
+        <div class="progress">
+          <div class="stepDots" aria-label="Onboarding progress">
+            <span class="dot on" id="dot1"></span>
+            <span class="dot" id="dot2"></span>
+          </div>
+          <div class="stepText"><span id="stepLabel">Step 1</span> of 2</div>
+        </div>
+      </header>
+
+      <!-- Inline message -->
+      <div class="notice" id="notice" hidden></div>
+
+      <!-- STEP 1 -->
+      <section class="panel" id="step1">
+        <div class="panelHead">
+          <h2 class="h2">Role & Intent</h2>
+          <p class="hint">This configures your dashboard defaults.</p>
+        </div>
+
+        <div class="panelBody">
+          <div class="block">
+            <div class="label">Primary role</div>
+            <div class="tileGrid" id="roleGrid">
+              <button class="tileBtn" type="button" data-role="artist">
+                <div class="k">Artist</div>
+                <div class="d">Create works + drops</div>
+              </button>
+              <button class="tileBtn" type="button" data-role="creator">
+                <div class="k">Creator</div>
+                <div class="d">Make content + assets</div>
+              </button>
+              <button class="tileBtn" type="button" data-role="marketer">
+                <div class="k">Marketer</div>
+                <div class="d">Campaigns + distribution</div>
+              </button>
+              <button class="tileBtn" type="button" data-role="manager">
+                <div class="k">Manager</div>
+                <div class="d">Operations + pipeline</div>
+              </button>
+              <button class="tileBtn" type="button" data-role="collector">
+                <div class="k">Collector</div>
+                <div class="d">Curation + tracking</div>
+              </button>
+            </div>
+          </div>
+
+          <div class="block" style="margin-top:16px;">
+            <div class="label">Focus</div>
+            <div class="seg" id="focusSeg" role="group" aria-label="Focus">
+              <button type="button" class="segBtn" data-focus="drops">Drops</button>
+              <button type="button" class="segBtn" data-focus="campaigns">Campaigns</button>
+              <button type="button" class="segBtn" data-focus="both">Both</button>
+            </div>
+          </div>
+
+          <div class="actions" style="margin-top:18px;">
+            <button class="btn primary" id="btnContinue" type="button">Continue</button>
+            <button class="btn ghost" id="btnSkip1" type="button">Skip for now</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- STEP 2 -->
+      <section class="panel" id="step2" hidden>
+        <div class="panelHead">
+          <h2 class="h2">Identity</h2>
+          <p class="hint">Optional, but it makes the console feel like yours.</p>
+        </div>
+
+        <div class="panelBody">
+          <div class="grid2">
+            <!-- Avatar -->
+            <div class="block">
+              <div class="label">Avatar / Icon</div>
+              <div class="avatarRow">
+                <div class="avatarPreview">
+                  <img id="avatarPreviewImg" alt="Avatar preview" />
+                  <div class="avatarFallback" id="avatarFallback">OS</div>
+                </div>
+                <div>
+                  <label class="pill" for="avatarInput">Choose image</label>
+                  <input id="avatarInput" type="file" accept="image/png,image/jpeg,image/webp,image/*" hidden />
+                  <div class="hint" style="margin-top:8px;">PNG/JPG/WebP. Max 2MB.</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Basic fields -->
+            <div class="block">
+              <div class="label">Display name</div>
+              <input id="displayName" type="text" placeholder="e.g., Dream Agent" />
+              <div class="label" style="margin-top:12px;">Brand / Studio</div>
+              <input id="brandName" type="text" placeholder="e.g., CourDevelops" />
+            </div>
+          </div>
+
+          <!-- Links (optional) -->
+          <details class="linksBox" style="margin-top:14px;">
+            <summary>Optional links</summary>
+            <div class="grid2" style="margin-top:10px;">
+              <div class="block">
+                <div class="label">Website</div>
+                <input id="linkWebsite" type="text" placeholder="https://..." />
+              </div>
+              <div class="block">
+                <div class="label">X (Twitter)</div>
+                <input id="linkX" type="text" placeholder="@handle or url" />
+              </div>
+              <div class="block">
+                <div class="label">Instagram</div>
+                <input id="linkIG" type="text" placeholder="@handle or url" />
+              </div>
+              <div class="block">
+                <div class="label">OpenSea</div>
+                <input id="linkOpenSea" type="text" placeholder="profile url" />
+              </div>
+              <div class="block">
+                <div class="label">XRP Café</div>
+                <input id="linkXRPCafe" type="text" placeholder="profile url" />
+              </div>
+            </div>
+          </details>
+
+          <div class="actions" style="margin-top:18px;">
+            <button class="btn ghost" id="btnBack" type="button">Back</button>
+            <button class="btn primary" id="btnFinish" type="button">Finish setup</button>
+            <button class="btn ghost" id="btnSkip2" type="button">Skip for now</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tiny style helpers (optional). Remove later if you make onboarding.css -->
+      <style>
+        .topbar{ display:flex; justify-content:space-between; align-items:flex-start; gap:16px; }
+        .h1{ margin:0; font-size:22px; color: white; }
+        .sub{ margin:6px 0 0; opacity:.8; }
+        .progress{ display:flex; flex-direction:column; align-items:flex-end; gap:8px; }
+        .stepDots{ display:flex; gap:8px; }
+        .stepDots .dot{ width:10px; height:10px; border-radius:999px; border:1px solid rgba(255,255,255,.25); opacity:.7; }
+        .stepDots .dot.on{ opacity:1; }
+        .stepText{ font-size:12px; opacity:.75; }
+        .notice{ margin:14px 0; padding:12px 14px; border-radius:14px; border:1px solid rgba(255,255,255,.14); background:rgba(255,255,255,.04); }
+        .panel{ margin-top:14px; }
+        .panelHead{ margin-bottom:10px; }
+        .h2{ margin:0; font-size:16px; }
+        .hint{ margin:6px 0 0; opacity:.75; font-size:12px; }
+        .tileGrid{ display:grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap:12px; }
+        @media (max-width: 980px){ .tileGrid{ grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+        @media (max-width: 560px){ .tileGrid{ grid-template-columns: 1fr; } }
+        .tileBtn{ text-align:left; padding:14px; border-radius:18px; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.03); cursor:pointer; }
+        .tileBtn.selected{ outline:2px solid rgba(180,207,106,.35); }
+        .tileBtn .k{ font-weight:800; }
+        .tileBtn .d{ font-size:12px; opacity:.75; margin-top:6px; }
+        .seg{ display:flex; gap:10px; flex-wrap:wrap; }
+        .segBtn{ padding:10px 12px; border-radius:999px; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.03); cursor:pointer; }
+        .segBtn.selected{ outline:2px solid rgba(180,207,106,.35); }
+        .actions{ display:flex; gap:10px; flex-wrap:wrap; }
+        .grid2{ display:grid; grid-template-columns: 1fr 1fr; gap:12px; }
+        @media (max-width: 980px){ .grid2{ grid-template-columns: 1fr; } }
+        .avatarRow{ display:flex; gap:12px; align-items:center; }
+        .avatarPreview{ width:58px; height:58px; border-radius:18px; border:1px solid rgba(255,255,255,.14); background:rgba(255,255,255,.03); position:relative; overflow:hidden; display:flex; align-items:center; justify-content:center; }
+        .avatarPreview img{ width:100%; height:100%; object-fit:cover; display:none; }
+        .avatarFallback{ opacity:.8; font-weight:900; letter-spacing:.04em; }
+        details.linksBox{ border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.03); border-radius:18px; padding:12px 14px; }
+        details.linksBox summary{ cursor:pointer; font-weight:700; opacity:.9; }
+        input{ width:100%; }
+      </style>
+    </main>
+  </div>
+
+  <!-- JS -->
+  <script src="/js/onboarding.js" defer></script>
+</body>
+</html>

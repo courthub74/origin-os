@@ -54,7 +54,9 @@ console.log("register.js loaded ✅");
     localStorage.setItem("origin_access", loginData.accessToken);
     localStorage.setItem("origin_user", JSON.stringify(loginData.user));
 
-    window.location.href = "dashboard.html";
+    // window.location.href = "dashboard.html";
+    // Link to onboarding instead
+    window.location.href = "onboarding.html";
 
   } catch(err){
     alert(typeof err === "string" ? err : "Network error.");
