@@ -63,11 +63,20 @@ router.post("/login", async (req, res) => {
 
   res.cookie("refreshToken", refreshToken, { ...cookieOptions(), maxAge: 7 * 24 * 60 * 60 * 1000 });
 
-  return res.json({
+    return res.json({
     ok: true,
     accessToken,
-    user: { id: user._id, email: user.email, displayName: user.displayName }
+    user: {
+      id: user._id,
+      email: user.email,
+      displayName: user.displayName,
+      avatarUrl: user.avatarUrl,
+      rolePrimary: user.rolePrimary,
+      focus: user.focus,
+      onboardingComplete: user.onboardingComplete
+    }
   });
+
 });
 
 /**

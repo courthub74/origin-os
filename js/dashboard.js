@@ -1,4 +1,13 @@
 document.addEventListener("DOMContentLoaded", async () => {
+
+  const user = JSON.parse(localStorage.getItem("origin_user") || "{}");
+
+  // If user hasn't completed onboarding, send them there
+  if (user && user.onboardingComplete === false) {
+    window.location.href = "onboarding.html";
+    return;
+  }
+
   const emptyWorks = document.getElementById("emptyState");
   const activeWorks = document.getElementById("activeState");
 
