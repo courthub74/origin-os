@@ -1,12 +1,37 @@
 document.addEventListener("DOMContentLoaded", async () => {
 
-  const user = JSON.parse(localStorage.getItem("origin_user") || "{}");
+  const userRaw = localStorage.getItem("origin_user");
+  const token = localStorage.getItem("origin_access");
 
-  // If user hasn't completed onboarding, send them there
-  if (user && user.onboardingComplete === false) {
+  // 🔒 Hard auth guard
+  if (!token || !userRaw) {
+    window.location.href = "login.html";
+    return;
+  }
+
+  let user;
+  try {
+    user = JSON.parse(userRaw);
+  } catch {
+    localStorage.removeItem("origin_user");
+    localStorage.removeItem("origin_access");
+    window.location.href = "login.html";
+    return;
+  }
+
+  // Onboarding gate
+  if (user.onboardingComplete === false) {
     window.location.href = "onboarding.html";
     return;
   }
+
+  // const user = JSON.parse(localStorage.getItem("origin_user") || "{}");
+
+  // // If user hasn't completed onboarding, send them there
+  // if (user && user.onboardingComplete === false) {
+  //   window.location.href = "onboarding.html";
+  //   return;
+  // }
 
   const emptyWorks = document.getElementById("emptyState");
   const activeWorks = document.getElementById("activeState");
