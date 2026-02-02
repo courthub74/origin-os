@@ -9,6 +9,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const API_BASE = "http://localhost:4000";
 
+   
+  // ✅ IMPORTANT: scoped selectors (only inside the account button)
+  const nameEl = accountBtn.querySelector(".account-name");
+  const roleEl = accountBtn.querySelector(".account-role");
+
+  function hydrateAccountMeta() {
+    try {
+      const raw = localStorage.getItem("origin_user");
+      if (!raw) return;
+
+      const user = JSON.parse(raw);
+
+      const displayName = user.displayName || user.name || user.email || "Account";
+      const role = user.rolePrimary || user.role || user.accountRole || "";
+
+      if (nameEl) nameEl.textContent = displayName;
+      if (roleEl) roleEl.textContent = role;
+    } catch {}
+  }
+
+  hydrateAccountMeta();
+
   function closeAccountMenu() {
     accountMenu.classList.remove("show");
     accountBtn.setAttribute("aria-expanded", "false");
