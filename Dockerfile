@@ -1,20 +1,12 @@
-# Use Node (pick your version)
 FROM node:18-alpine
-
-# Set working directory inside the container
 WORKDIR /app
 
-# Copy dependency files first (better caching)
-COPY package*.json ./
-
-# Install dependencies
+# Copy backend package files first for caching
+COPY origin-os-api/package*.json ./
 RUN npm install
 
-# Copy the rest of the app
-COPY . .
+# Copy the backend source
+COPY origin-os-api/ ./
 
-# Expose your app port
 EXPOSE 4000
-
-# Start the app
-CMD ["npm", "run", "dev"]
+CMD ["node", "src/server.js"]
