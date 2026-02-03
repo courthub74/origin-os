@@ -25,6 +25,35 @@ const uploadAvatar = multer({
 const ALLOWED_ROLES = ["artist", "creator", "marketer", "manager", "collector"];
 const ALLOWED_FOCUS = ["drops", "campaigns", "both"];
 
+// GET current user data
+router.get("/me", requireAuth, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.sub);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    return res.json({
+      ok: true,
+      user: {
+        id: user._id,
+        email: user.email,
+        displayName: user.displayName,
+        avatarUrl: user.avatarUrl,
+        rolePrimary: user.rolePrimary,
+        roles: user.roles,
+        brandName: user.brandName,
+        focus: user.focus,
+        links: user.links,
+        onboardingComplete: user.onboardingComplete
+      }
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: "Server error" });
+  }
+});
+
 router.post("/me/avatar", requireAuth, uploadAvatar.single("avatar"), async (req, res) => {
   try {
     // Check if file was provided by multer
