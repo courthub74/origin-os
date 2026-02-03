@@ -1,5 +1,7 @@
 // profile-menu.js
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
+  console.log("profile-menu.js loaded");
+
   const accountFooter = document.querySelector(".account-footer");
   if (!accountFooter) return;
 
@@ -13,23 +15,59 @@ document.addEventListener("DOMContentLoaded", () => {
   // ✅ IMPORTANT: scoped selectors (only inside the account button)
   const nameEl = accountBtn.querySelector(".account-name");
   const roleEl = accountBtn.querySelector(".account-role");
+  const avatarImg = accountBtn.querySelector(".user_avatar");
 
-  function hydrateAccountMeta() {
+  async function hydrateAccountMeta() {
     try {
-      const raw = localStorage.getItem("origin_user");
-      if (!raw) return;
+      const token = localStorage.getItem("origin_access");
+      if (!token) return;
 
-      const user = JSON.parse(raw);
+      // Fetch fresh user data from server to get latest avatarUrl
+      const res = await fetch(`${API_BASE}/users/me`, {
+        headers: { Authorization: `Bearer ${token}` },
+        credentials: "include"
+      });
+
+      if (!res.ok) throw new Error("Failed to fetch user data");
+
+      const data = await res.json();
+      const user = data.user || data;
+
+      console.log("USER FROM API:", user);
 
       const displayName = user.displayName || user.name || user.email || "Account";
       const role = user.rolePrimary || user.role || user.accountRole || "";
 
       if (nameEl) nameEl.textContent = displayName;
       if (roleEl) roleEl.textContent = role;
-    } catch {}
+
+      // Load avatar from database
+      // Load avatar from database (normalize URL)
+      if (avatarImg && user.avatarUrl) {
+        const raw = user.avatarUrl;
+
+        const resolved =
+        raw.startsWith("http://") ||
+        raw.startsWith("https://") ||
+        raw.startsWith("data:")          // ✅ ADD THIS
+          ? raw
+          : raw.startsWith("/")
+            ? `${API_BASE}${raw}`
+            : `${API_BASE}/${raw}`;
+            console.log("Resolved avatar URL:", resolved);
+
+            avatarImg.src = resolved;
+          }
+
+
+      // Update localStorage with latest user data
+      localStorage.setItem("origin_user", JSON.stringify(user));
+    } catch (err) {
+      console.error("Error hydrating account meta:", err);
+    }
   }
 
-  hydrateAccountMeta();
+  await hydrateAccountMeta();
 
   function closeAccountMenu() {
     accountMenu.classList.remove("show");
