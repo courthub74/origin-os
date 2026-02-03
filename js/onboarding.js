@@ -1,5 +1,4 @@
 // onboarding.js
-const API_BASE = "http://localhost:4000";
 
 const state = {
   rolePrimary: "",
@@ -92,11 +91,15 @@ function setAvatarPreview(file){
 }
 
 async function uploadAvatarIfAny(){
-  if (!state.avatarFile) return "";
+  if (!state.avatarFile) {
+    console.log("No avatar file to upload");
+    return "";
+  }
 
   const fd = new FormData();
   fd.append("avatar", state.avatarFile);
 
+  console.log("Uploading avatar to:", `${API_BASE}/users/me/avatar`);
   const res = await fetch(`${API_BASE}/users/me/avatar`, {
     method: "POST",
     credentials: "include",
@@ -106,7 +109,9 @@ async function uploadAvatarIfAny(){
     body: fd
   });
 
+  console.log("Avatar response status:", res.status);
   const data = await res.json().catch(() => ({}));
+  console.log("Avatar response data:", data);
   if (!res.ok) throw (data.error || "Avatar upload failed.");
 
   return data.avatarUrl || "";
@@ -122,6 +127,8 @@ async function saveOnboarding(){
     links: state.links
   };
 
+  console.log("Saving onboarding with payload:", payload);
+  console.log("API_BASE:", API_BASE);
   const res = await fetch(`${API_BASE}/users/me/onboarding`, {
     method: "PATCH",
     headers: {
@@ -132,7 +139,9 @@ async function saveOnboarding(){
     body: JSON.stringify(payload)
   });
 
+  console.log("Onboarding response status:", res.status);
   const data = await res.json().catch(() => ({}));
+  console.log("Onboarding response data:", data);
   if (!res.ok) throw (data.error || "Onboarding save failed.");
 
   return data.user;
@@ -199,15 +208,26 @@ document.addEventListener("DOMContentLoaded", () => {
   wireAccountMenu();
 
   // Step 1 interactions
-  document.querySelectorAll("[data-role]").forEach(btn => {
-    btn.addEventListener("click", () => pickRole(btn.dataset.role));
+  const roleButtons = document.querySelectorAll("[data-role]");
+  console.log("Found role buttons:", roleButtons.length);
+  roleButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      console.log("Role button clicked:", btn.dataset.role);
+      pickRole(btn.dataset.role);
+    });
   });
 
-  document.querySelectorAll("[data-focus]").forEach(btn => {
-    btn.addEventListener("click", () => pickFocus(btn.dataset.focus));
+  const focusButtons = document.querySelectorAll("[data-focus]");
+  console.log("Found focus buttons:", focusButtons.length);
+  focusButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      console.log("Focus button clicked:", btn.dataset.focus);
+      pickFocus(btn.dataset.focus);
+    });
   });
 
   $("btnContinue").addEventListener("click", () => {
+    console.log("Continue clicked. Role:", state.rolePrimary, "Focus:", state.focus);
     if (!state.rolePrimary) return showNotice("Choose a primary role to continue.");
     if (!state.focus) return showNotice("Choose a focus to continue.");
 
@@ -275,11 +295,17 @@ document.addEventListener("DOMContentLoaded", () => {
         throw "Role and Focus are required.";
       }
 
+      console.log("Starting finish. State:", state);
+      
       // 1) Upload avatar if chosen
+      console.log("Uploading avatar if any...");
       const avatarUrl = await uploadAvatarIfAny();
+      console.log("Avatar upload result:", avatarUrl);
 
       // 2) Save onboarding profile
+      console.log("Saving onboarding...");
       const user = await saveOnboarding();
+      console.log("Save result:", user);
 
       // If avatarUrl came back, merge it into local user cache too
       const cached = JSON.parse(localStorage.getItem("origin_user") || "{}");
