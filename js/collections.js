@@ -1,6 +1,5 @@
 // // // COLLECTIONS.JS
 
-// js/collections.js
 
 function visibleCardsCount(grid){
   // Count ONLY cards that are actually visible (not hidden/display:none)
