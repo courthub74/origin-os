@@ -136,3 +136,101 @@
       border-color: rgba(180,207,106,0.45);
       background: rgba(180,207,106,0.08);
     }
+
+    /* =========================
+   Auth Loading Overlay
+   ========================= */
+
+    .authOverlay{
+      position: fixed;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      background: rgba(5, 8, 20, 0.72);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 220ms ease;
+      z-index: 9999;
+    }
+
+    .authOverlay.show{
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .authOverlayCard{
+      width: min(520px, calc(100% - 36px));
+      border: 1px solid var(--stroke);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      padding: 18px;
+    }
+
+    .authOverlayTop{
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .authOverlayTitle{
+      color: var(--text-2);
+      font-size: 12px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    .authOverlayText{
+      font-family: var(--mono);
+      color: rgba(255,255,255,0.55);
+      font-size: 12px;
+      line-height: 1.5;
+      min-height: 18px;
+    }
+
+    .authOverlayHint{
+      margin-top: 10px;
+      font-size: 11px;
+      color: rgba(255,255,255,0.35);
+    }
+
+    .authOverlayBar{
+      margin-top: 12px;
+      height: 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.03);
+      overflow: hidden;
+    }
+
+    .authOverlayBarFill{
+      height: 100%;
+      width: 0%;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 30%, rgba(180,207,106,0.90), rgba(110,160,255,0.20) 62%, rgba(0,0,0,0) 90%);
+      transition: width 450ms ease;
+    }
+
+    /* Subtle spinner */
+    .authSpinner{
+      width: 14px;
+      height: 14px;
+      border-radius: 999px;
+      border: 2px solid rgba(255,255,255,0.22);
+      border-top-color: rgba(180,207,106,0.92);
+      animation: spin 800ms linear infinite;
+    }
+
+    @keyframes spin{
+      to { transform: rotate(360deg); }
+    }
+
+    /* Page fade */
+    body.fade-out{
+      opacity: 0;
+      transition: opacity 260ms ease;
+    }
+

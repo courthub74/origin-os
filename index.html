@@ -95,7 +95,7 @@
 
           <div class="registerPrompt">
             <!-- <span>New here?</span> -->
-            <button class="btn ghost" onclick="window.location.href='registration.html';">
+            <button class="btn ghost" type="button">
               Create an account
             </button>
           </div>
@@ -104,6 +104,26 @@
         </div>
       </section>
     </div>
+
+    <!-- Login Sequence -->
+       <!-- Loading Overlay -->
+  <div id="authLoading" class="authOverlay" aria-hidden="true">
+    <div class="authOverlayCard" role="status" aria-live="polite">
+      <div class="authOverlayTop">
+        <div class="authSpinner" aria-hidden="true"></div>
+        <div class="authOverlayTitle">Origin OS</div>
+      </div>
+
+      <div id="authLoadingText" class="authOverlayText">Initializing…</div>
+
+      <div class="authOverlayBar" aria-hidden="true">
+        <div id="authLoadingBar" class="authOverlayBarFill"></div>
+      </div>
+
+      <div class="authOverlayHint">Do not close this window.</div>
+    </div>
+  </div>
+
 
   <!-- JS -->
   <script src="/js/login.js"></script>
