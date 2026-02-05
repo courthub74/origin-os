@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Origin OS — Branding</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/img/favicon/origin-logo.png">
+  <link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/css/dreamos.css">
+  <link rel="stylesheet" href="/css/branding.css">
+</head>
+
+<body>
+  <div class="scrim" id="scrim"></div>
+
+  <div class="app">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#">
+        <div class="dreamos-logo md">
+          <!-- SVG here -->
+          <svg width="120" height="138" viewBox="0 0 120 138" xmlns="http://www.w3.org/2000/svg">
+            <polygon
+              points="60,2 114,34 114,104 60,136 6,104 6,34"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+            <g transform="translate(60 69)">
+              <polygon points="0,-28 6,-12 0,-6 -6,-12" fill="currentColor"/>
+              <polygon points="28,0 12,6 6,0 12,-6" fill="currentColor"/>
+              <polygon points="0,28 -6,12 0,6 6,12" fill="currentColor"/>
+              <polygon points="-28,0 -12,-6 -6,0 -12,6" fill="currentColor"/>
+            </g>
+          </svg>
+        </div>
+        <div class="brandText"><strong>Origin OS</strong><span>Create. Shape. Release.</span></div>
+      </a>
+
+      <nav class="nav">
+        <a href="dashboard.html">Dashboard <small>⌘1</small></a>
+        <a href="create.html">Create<small>⌘2</small></a>
+        <a href="collections.html">Collections <small>⌘3</small></a>
+        <a href="mint.html">Mint <small>⌘4</small></a>
+        <a href="drops.html">Drops <small>⌘5</small></a>
+        <a href="socials.html">Socials <small>⌘6</small></a>
+        <a href="website.html">Website <small>⌘7</small></a>
+        <a class="active" href="branding.html">Branding <small>⌘8</small></a>
+      </nav>
+
+      <!-- ACCOUNT / PROFILE (sidebar footer) -->
+      <div class="sidebar-footer account-footer">
+        <button class="account-btn" id="accountBtn" type="button" aria-haspopup="menu" aria-expanded="false">
+          <div class="account-avatar">
+            <img src="../img/blue_user.png" class="user_avatar" alt="User Avatar" />
+            <div class="account-meta">
+              <p class="account-name"></p>
+              <p class="account-role"></p>
+            </div>
+          </div>
+          <small class="account-chev" aria-hidden="true">⌄</small>
+        </button>
+
+        <div class="account-menu" id="accountMenu" role="menu" aria-label="Account menu">
+          <button class="menu-item" role="menuitem" type="button" data-go="profile.html">Profile Details</button>
+          <button class="menu-item" role="menuitem" type="button" data-go="profile_settings.html">Profile Settings</button>
+          <button class="menu-item" role="menuitem" type="button" data-go="display_settings.html">Display Settings</button>
+          <div class="menu-sep" aria-hidden="true"></div>
+          <button class="menu-item danger" role="menuitem" type="button" data-go="index.html">Logout</button>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div class="topLeft">
+          <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+          </button>
+          <div class="crumbs">
+            <div class="kicker">Mint Prep</div>
+            <div class="title">Branding</div>
+          </div>
+        </div>
+
+        <div class="topRight">
+          <span class="pill" id="brandStatus">Waiting · No export</span>
+        </div>
+      </header>
+
+      <section class="content">
+        <div class="layout">
+
+          <!-- Controls -->
+          <section class="panel">
+            <div class="head"><h2>Brand Controls</h2><span class="pill">Overlay</span></div>
+
+            <div class="body">
+              <div class="field">
+                <div class="label">Base Artwork</div>
+                <input id="baseFile" type="file" accept="image/*" />
+                <div class="miniRow">
+                  <button class="btn" type="button" id="loadFromCreateBtn">Load latest from Create</button>
+                  <button class="btn" type="button" id="clearBaseBtn">Clear</button>
+                </div>
+                <div class="hint">Tip: You can also drag and drop an image onto the preview stage.</div>
+              </div>
+
+              <div class="field">
+                <div class="label">Logo</div>
+                <input id="logoFile" type="file" accept="image/*" />
+                <div class="miniRow">
+                  <button class="btn" type="button" id="clearLogoBtn">Clear</button>
+                  <button class="btn" type="button" id="invertHintBtn" title="Purely visual helper">View Helper</button>
+                </div>
+                <div class="hint">Best: transparent PNG or SVG exported to PNG.</div>
+              </div>
+
+              <div class="field">
+                <div class="label">Placement</div>
+                <select id="placement">
+                  <option value="br">Bottom Right</option>
+                  <option value="bl">Bottom Left</option>
+                  <option value="tr">Top Right</option>
+                  <option value="tl">Top Left</option>
+                  <option value="c">Center</option>
+                  <option value="custom">Custom (drag logo)</option>
+                </select>
+              </div>
+
+              <div class="row">
+                <div class="field">
+                  <div class="label">Logo Size (%)</div>
+                  <input id="size" type="range" min="5" max="60" value="18" />
+                  <div class="sub" id="sizeVal">18%</div>
+                </div>
+
+                <div class="field">
+                  <div class="label">Opacity</div>
+                  <input id="opacity" type="range" min="10" max="100" value="82" />
+                  <div class="sub" id="opacityVal">82%</div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="field">
+                  <div class="label">Padding</div>
+                  <input id="pad" type="range" min="0" max="80" value="18" />
+                  <div class="sub" id="padVal">18px</div>
+                </div>
+
+                <div class="field">
+                  <div class="label">Blend</div>
+                  <select id="blend">
+                    <option value="source-over">Normal</option>
+                    <option value="multiply">Multiply</option>
+                    <option value="screen">Screen</option>
+                    <option value="overlay">Overlay</option>
+                    <option value="soft-light">Soft Light</option>
+                    <option value="hard-light">Hard Light</option>
+                    <option value="luminosity">Luminosity</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="field">
+                <div class="label">Export</div>
+                <div class="meta-actions">
+                  <button class="btn" type="button" id="exportPngBtn">Export PNG</button>
+                  <button class="btn" type="button" id="downloadBtn" disabled>Download</button>
+                  <button class="btn primary" type="button" id="sendToMintBtn" disabled>
+                    <span class="dot"></span>Send to Mint
+                  </button>
+                </div>
+                <div class="hint">Export creates a flattened image stored locally for Mint.</div>
+              </div>
+
+            </div>
+          </section>
+
+          <!-- Preview -->
+          <section class="panel">
+            <div class="head"><h2>Preview</h2><span class="pill">Canvas</span></div>
+            <div class="stage" id="previewStage">
+              <canvas id="brandCanvas" width="1024" height="1024" aria-label="Brand preview canvas"></canvas>
+              <div class="stageOverlay" id="stageOverlay">
+                <span class="stageLabel" id="stageLabel">Drop base artwork here</span>
+              </div>
+            </div>
+
+            <div class="underStage">
+              <div class="mutedMono" id="stageHint">Logo drag enabled only in Custom mode.</div>
+              <button class="btn" type="button" id="resetLogoPosBtn">Reset Logo Pos</button>
+            </div>
+          </section>
+
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- JS -->
+  <script src="/js/dreamos-shell.js"></script>
+  <script src="/js/profile-menu.js"></script>
+  <script src="/js/auth-guard.js"></script>
+  <script src="/js/branding.js"></script>
+</body>
+</html>
