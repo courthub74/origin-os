@@ -128,7 +128,7 @@
                   </div>
 
                   <!-- New Input Prompt fields -->
-                   <div class="field">
+                   <div class="field prompt-builder">
                     <div class="label">Prompt Builder</div>
 
                     <div class="grid2">
@@ -179,13 +179,13 @@
                       </div>
                       <div class="subfield">
                         <div class="sublabel">Camera / Framing</div>
-                        <input id="p_camera" placeholder="e.g., centered wide shot, symmetrical, 35mm" />
+                        <input id="p_camera" class="tech" placeholder="Centered wide shot, symmetrical" />
                       </div>
                     </div>
 
                     <div class="subfield">
                       <div class="sublabel">Avoid (Negative prompt)</div>
-                      <input id="p_avoid" placeholder="e.g., text, logos, blur, extra limbs, distortion" />
+                      <input id="p_avoid" class="tech" placeholder="e.g., text, logos, blur, extra limbs, distortion" />
                     </div>
 
                     <div class="meta-actions">
@@ -197,11 +197,11 @@
                   <!-- Optional: show compiled output -->
                   <div class="field">
                     <div class="label">Compiled Prompt</div>
-                    <textarea id="description" placeholder="Auto-generated from Prompt Builder"></textarea>
+                    <textarea id="compiledPrompt" class="compiled" placeholder="Auto-generated from Prompt Builder"></textarea>
                   </div>
 
 
-                  <div class="field">
+                  <div class="field hidden">
                     <div class="label">Description</div>
                     <textarea id="description" placeholder="Describe the scene, the structure, the symbols, the rules...."></textarea>
                   </div>
