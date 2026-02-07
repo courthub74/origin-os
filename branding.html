@@ -43,12 +43,13 @@
       <nav class="nav">
         <a href="dashboard.html">Dashboard <small>⌘1</small></a>
         <a href="create.html">Create<small>⌘2</small></a>
-        <a href="collections.html">Collections <small>⌘3</small></a>
-        <a href="mint.html">Mint <small>⌘4</small></a>
-        <a href="drops.html">Drops <small>⌘5</small></a>
-        <a href="socials.html">Socials <small>⌘6</small></a>
-        <a href="website.html">Website <small>⌘7</small></a>
-        <a class="active" href="branding.html">Branding <small>⌘8</small></a>
+        <a class="active" href="branding.html">Branding <small>⌘3</small></a>
+        <a href="collections.html">Collections <small>⌘4</small></a>
+        <a href="mint.html">Mint <small>⌘5</small></a>
+        <a href="drops.html">Drops <small>⌘6</small></a>
+        <a href="socials.html">Socials <small>⌘7</small></a>
+        <a href="website.html">Website <small>⌘8</small></a>
+      
       </nav>
 
       <!-- ACCOUNT / PROFILE (sidebar footer) -->
@@ -177,6 +178,130 @@
                 </div>
                 <div class="hint">Export creates a flattened image stored locally for Mint.</div>
               </div>
+
+              <!-- WATERMARK -->
+<div class="field">
+  <div class="label">Watermark (Optional)</div>
+
+  <div class="row">
+    <div class="field" style="margin-bottom:0; flex:1;">
+      <div class="label">Enabled</div>
+      <select id="wmEnabled">
+        <option value="off">Off</option>
+        <option value="on">On</option>
+      </select>
+    </div>
+
+    <div class="field" style="margin-bottom:0; flex:1;">
+      <div class="label">Mode</div>
+      <select id="wmMode">
+        <option value="tile">Tiled</option>
+        <option value="center">Center</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="field" style="margin-bottom:0;">
+    <div class="label">Watermark Text</div>
+    <input id="wmText" placeholder="e.g., Dream Agent · 2026" />
+  </div>
+
+  <div class="row">
+    <div class="field" style="margin-bottom:0; flex:1;">
+      <div class="label">Opacity</div>
+      <input id="wmOpacity" type="range" min="2" max="30" value="10" />
+      <div class="sub" id="wmOpacityVal">10%</div>
+    </div>
+
+    <div class="field" style="margin-bottom:0; flex:1;">
+      <div class="label">Size</div>
+      <input id="wmSize" type="range" min="18" max="110" value="44" />
+      <div class="sub" id="wmSizeVal">44px</div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="field" style="margin-bottom:0; flex:1;">
+      <div class="label">Rotation</div>
+      <input id="wmRotate" type="range" min="-45" max="45" value="-18" />
+      <div class="sub" id="wmRotateVal">-18°</div>
+    </div>
+
+    <div class="field" style="margin-bottom:0; flex:1;">
+      <div class="label">Spacing</div>
+      <input id="wmGap" type="range" min="140" max="520" value="300" />
+      <div class="sub" id="wmGapVal">300px</div>
+    </div>
+  </div>
+
+  <div class="hint">Tiled is best for “anti-screenshot” preview. Center is best for subtle branding.</div>
+</div>
+
+<!-- TEXT OVERLAY -->
+<div class="field">
+  <div class="label">Text Overlay (Optional)</div>
+
+  <div class="row">
+    <div class="field" style="margin-bottom:0; flex:1;">
+      <div class="label">Enabled</div>
+      <select id="txtEnabled">
+        <option value="off">Off</option>
+        <option value="on">On</option>
+      </select>
+    </div>
+
+    <div class="field" style="margin-bottom:0; flex:1;">
+      <div class="label">Position</div>
+      <select id="txtPos">
+        <option value="br">Bottom Right</option>
+        <option value="bl">Bottom Left</option>
+        <option value="tr">Top Right</option>
+        <option value="tl">Top Left</option>
+        <option value="c">Center</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="field" style="margin-bottom:0;">
+    <div class="label">Text</div>
+    <input id="txtText" placeholder="e.g., 2026" />
+  </div>
+
+  <div class="row">
+    <div class="field" style="margin-bottom:0; flex:1;">
+      <div class="label">Font Size</div>
+      <input id="txtSize" type="range" min="12" max="88" value="28" />
+      <div class="sub" id="txtSizeVal">28px</div>
+    </div>
+
+    <div class="field" style="margin-bottom:0; flex:1;">
+      <div class="label">Opacity</div>
+      <input id="txtOpacity" type="range" min="10" max="100" value="85" />
+      <div class="sub" id="txtOpacityVal">85%</div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="field" style="margin-bottom:0; flex:1;">
+      <div class="label">Color</div>
+      <select id="txtColor">
+        <option value="accent">Accent</option>
+        <option value="white">White</option>
+      </select>
+    </div>
+
+    <div class="field" style="margin-bottom:0; flex:1;">
+      <div class="label">Backdrop</div>
+      <select id="txtBackdrop">
+        <option value="on">On</option>
+        <option value="off">Off</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="hint">Use this for Year, Edition, or a short signature line.</div>
+</div>
+
 
             </div>
           </section>

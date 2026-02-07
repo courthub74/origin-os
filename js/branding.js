@@ -34,6 +34,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const invertHintBtn = document.getElementById("invertHintBtn");
 
+  // Watermark controls
+const wmEnabled = document.getElementById("wmEnabled");
+const wmMode = document.getElementById("wmMode");
+const wmText = document.getElementById("wmText");
+const wmOpacity = document.getElementById("wmOpacity");
+const wmSize = document.getElementById("wmSize");
+const wmRotate = document.getElementById("wmRotate");
+const wmGap = document.getElementById("wmGap");
+const wmOpacityVal = document.getElementById("wmOpacityVal");
+const wmSizeVal = document.getElementById("wmSizeVal");
+const wmRotateVal = document.getElementById("wmRotateVal");
+const wmGapVal = document.getElementById("wmGapVal");
+
+// Text overlay controls
+const txtEnabled = document.getElementById("txtEnabled");
+const txtPos = document.getElementById("txtPos");
+const txtText = document.getElementById("txtText");
+const txtSize = document.getElementById("txtSize");
+const txtOpacity = document.getElementById("txtOpacity");
+const txtColor = document.getElementById("txtColor");
+const txtBackdrop = document.getElementById("txtBackdrop");
+const txtSizeVal = document.getElementById("txtSizeVal");
+const txtOpacityVal = document.getElementById("txtOpacityVal");
+
+
   // LocalStorage keys (simple + consistent)
   const LS_CREATE_LATEST = "origin.latestArtworkDataUrl";   // optional: if you want Create to save here
   const LS_BRANDED_OUT = "origin.brandedArtworkDataUrl";    // what Mint can read
