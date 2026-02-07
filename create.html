@@ -127,6 +127,80 @@
                     </select>
                   </div>
 
+                  <!-- New Input Prompt fields -->
+                   <div class="field">
+                    <div class="label">Prompt Builder</div>
+
+                    <div class="grid2">
+                      <div class="subfield">
+                        <div class="sublabel">Subject</div>
+                        <textarea id="p_subject" placeholder="Main scene / characters / objects"></textarea>
+                      </div>
+
+                      <div class="subfield">
+                        <div class="sublabel">Mood</div>
+                        <input id="p_mood" placeholder="e.g., ceremonial, clinical, ominous, quiet" />
+                      </div>
+
+                      <div class="subfield">
+                        <div class="sublabel">Overall Hue / Palette</div>
+                        <input id="p_palette" placeholder="e.g., alabaster whites, deep blues, muted gold" />
+                      </div>
+
+                      <div class="subfield">
+                        <div class="sublabel">Medium / Style</div>
+                        <input id="p_style" placeholder="e.g., oil painting, museum-grade realism, surreal" />
+                      </div>
+                    </div>
+
+                    <div class="grid2">
+                      <div class="subfield">
+                        <div class="sublabel">Left</div>
+                        <textarea id="p_left" placeholder="What exists on the left side"></textarea>
+                      </div>
+                      <div class="subfield">
+                        <div class="sublabel">Right</div>
+                        <textarea id="p_right" placeholder="What exists on the right side"></textarea>
+                      </div>
+                      <div class="subfield">
+                        <div class="sublabel">Top</div>
+                        <textarea id="p_top" placeholder="Sky / ceiling / top elements"></textarea>
+                      </div>
+                      <div class="subfield">
+                        <div class="sublabel">Bottom</div>
+                        <textarea id="p_bottom" placeholder="Ground / base / bottom elements"></textarea>
+                      </div>
+                    </div>
+
+                    <div class="grid2">
+                      <div class="subfield">
+                        <div class="sublabel">Lighting</div>
+                        <input id="p_lighting" placeholder="e.g., soft diffuse, rim light, studio glow" />
+                      </div>
+                      <div class="subfield">
+                        <div class="sublabel">Camera / Framing</div>
+                        <input id="p_camera" placeholder="e.g., centered wide shot, symmetrical, 35mm" />
+                      </div>
+                    </div>
+
+                    <div class="subfield">
+                      <div class="sublabel">Avoid (Negative prompt)</div>
+                      <input id="p_avoid" placeholder="e.g., text, logos, blur, extra limbs, distortion" />
+                    </div>
+
+                    <div class="meta-actions">
+                      <button class="btn" type="button" id="compileBtn">Compile Prompt</button>
+                      <button class="btn" type="button" id="copyPromptBtn">Copy</button>
+                    </div>
+                  </div>
+
+                  <!-- Optional: show compiled output -->
+                  <div class="field">
+                    <div class="label">Compiled Prompt</div>
+                    <textarea id="description" placeholder="Auto-generated from Prompt Builder"></textarea>
+                  </div>
+
+
                   <div class="field">
                     <div class="label">Description</div>
                     <textarea id="description" placeholder="Describe the scene, the structure, the symbols, the rules...."></textarea>
