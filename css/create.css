@@ -47,3 +47,55 @@
 
     .row{ display:flex; gap: 12px; }
     @media (max-width: 520px){ .row{ flex-direction:column; } }
+
+    /* ---------------- Prompt Builder ---------------- */
+
+.grid2{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+@media (max-width: 720px){
+  .grid2{
+    grid-template-columns: 1fr;
+  }
+}
+
+.subfield{
+  display:flex;
+  flex-direction:column;
+  gap: 6px;
+}
+
+.sublabel{
+  font-size: 10px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.field.prompt-builder{
+  background:
+    radial-gradient(600px 260px at 20% 15%, rgba(180,207,106,0.05), transparent 55%),
+    rgba(255,255,255,0.03);
+}
+
+.prompt-builder textarea{
+  min-height: 88px;
+}
+
+input.tech{
+  font-family: var(--mono);
+  font-size: 13px;
+  letter-spacing: .02em;
+}
+
+textarea.compiled{
+  background: rgba(255,255,255,0.015);
+  border-style: dashed;
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.hidden{ display:none; }

@@ -108,3 +108,64 @@ document.addEventListener("DOMContentLoaded", () => {
   // If a draft exists, show saved state
   if (artworkId) setPill("Draft · Saved");
 });
+
+
+// Structured Prompt inputs
+function val(id) {
+  const el = document.getElementById(id);
+  return el ? el.value.trim() : "";
+}
+
+function compilePrompt() {
+  const blocks = [];
+
+  const subject = val("p_subject");
+  const mood = val("p_mood");
+  const palette = val("p_palette");
+  const style = val("p_style");
+
+  const left = val("p_left");
+  const right = val("p_right");
+  const top = val("p_top");
+  const bottom = val("p_bottom");
+
+  const lighting = val("p_lighting");
+  const camera = val("p_camera");
+
+  // Header / identity
+  if (style) blocks.push(`${style}.`);
+  if (subject) blocks.push(`Subject: ${subject}.`);
+  if (mood) blocks.push(`Mood: ${mood}.`);
+  if (palette) blocks.push(`Palette: ${palette}.`);
+
+  // Composition
+  const comp = [];
+  if (left) comp.push(`Left: ${left}.`);
+  if (right) comp.push(`Right: ${right}.`);
+  if (top) comp.push(`Top: ${top}.`);
+  if (bottom) comp.push(`Bottom: ${bottom}.`);
+  if (comp.length) blocks.push(`Composition: ${comp.join(" ")}`);
+
+  // Optics
+  const optics = [];
+  if (lighting) optics.push(`Lighting: ${lighting}.`);
+  if (camera) optics.push(`Camera: ${camera}.`);
+  if (optics.length) blocks.push(optics.join(" "));
+
+  // Quality defaults (optional)
+  blocks.push(`High detail, coherent geometry, clean edges, no artifacts.`);
+
+  return blocks.join("\n");
+}
+
+document.getElementById("compileBtn")?.addEventListener("click", () => {
+  const compiled = compilePrompt();
+  const desc = document.getElementById("description");
+  if (desc) desc.value = compiled;
+});
+
+document.getElementById("copyPromptBtn")?.addEventListener("click", async () => {
+  const text = document.getElementById("description")?.value || "";
+  if (!text) return;
+  await navigator.clipboard.writeText(text);
+});
