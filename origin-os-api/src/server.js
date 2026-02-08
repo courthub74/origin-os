@@ -1,15 +1,31 @@
-// SERVER JS
+// SERVER JS (ESM)
 
-require("dotenv").config();
-const express = require("express");
-const cookieParser = require("cookie-parser");
-const cors = require("cors");
-const { connectDB } = require("./db");
-const authRoutes = require("./routes/auth.routes");
+import dotenv from "dotenv";
+dotenv.config();
+
+import express from "express";
+import cookieParser from "cookie-parser";
+import cors from "cors";
+
+import { connectDB } from "./db.js";
+
+// Routes (ESM imports)
+import authRoutes from "./routes/auth.routes.js";
+import statsRoutes from "./routes/stats.routes.js";
+import artworksRoutes from "./routes/artworks.routes.js";
+import usersRoutes from "./routes/users.routes.js";
+import imagesRoutes from "./routes/images.routes.js";
+
+// Diagnostic log (keep temporarily)
+console.log("ENV CHECK:", {
+  cwd: process.cwd(),
+  hasKey: !!process.env.OPENAI_API_KEY
+});
 
 const app = express();
 
-app.use(express.json());
+// Put JSON limit once (remove the duplicate express.json call)
+app.use(express.json({ limit: "2mb" }));
 app.use(cookieParser());
 
 app.use(cors({
@@ -24,7 +40,12 @@ app.use(cors({
 
 app.get("/health", (req, res) => res.json({ ok: true }));
 
+// Mount routes
 app.use("/auth", authRoutes);
+app.use("/stats", statsRoutes);
+app.use("/artworks", artworksRoutes);
+app.use("/users", usersRoutes);
+app.use("/api/images", imagesRoutes);
 
 const port = process.env.PORT || 4000;
 
@@ -36,18 +57,3 @@ connectDB()
     console.error("❌ DB connection failed:", err.message);
     process.exit(1);
   });
-
-// Status Routes
-const statsRoutes = require("./routes/stats.routes");
-app.use("/stats", statsRoutes);
-
-// Artwork Routes
-const artworksRoutes = require("./routes/artworks.routes");
-app.use("/artworks", artworksRoutes);
-
-// User Routes
-const usersRoutes = require("./routes/users.routes");
-app.use("/users", usersRoutes);
-
-
-

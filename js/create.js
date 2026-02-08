@@ -1,6 +1,59 @@
 document.addEventListener("DOMContentLoaded", () => {
   const API_BASE = "http://localhost:4000";
 
+  function sizeFromOutput(output) {
+    if (output === "portrait") return "1024x1536";
+    if (output === "landscape") return "1536x1024";
+    return "1024x1024";
+  }
+
+  async function generateImageFromPrompt() {
+    const output = document.getElementById("output")?.value || "square";
+  const prompt = document.getElementById("description")?.value?.trim();
+
+  if (!prompt || prompt.length < 10) {
+    throw new Error("Compile a prompt before generating.");
+  }
+
+  // Optional: UI state
+  const stage = document.getElementById("previewStage");
+  stage.innerHTML = "<span>Generating…</span>";
+
+    const res = await fetch(`${API_BASE}/api/images/generate`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({
+        prompt,
+        size: sizeFromOutput(output),
+        format: "png"
+      })
+    });
+
+    const data = await res.json();
+    if (!res.ok) throw new Error(data?.error || "Generation failed");
+
+    // const stage = document.getElementById("previewStage");
+    stage.innerHTML = "";
+
+    const img = document.createElement("img");
+    img.alt = "Generated artwork";
+    img.src = `data:${data.mimeType};base64,${data.base64}`;
+    img.style.width = "100%";
+    img.style.height = "100%";
+    img.style.objectFit = "contain";
+
+    stage.appendChild(img);
+  }
+
+  document.getElementById("generateBtn")?.addEventListener("click", () => {
+    generateImageFromPrompt().catch(err => {
+      console.error(err);
+      alert(err.message);
+    });
+  });
+
+
   const saveBtn = document.getElementById("saveDraftBtn");
   const previewBtn = document.getElementById("previewBtn");
   const pill = document.querySelector(".topRight .pill"); // "Draft · Unsaved"
