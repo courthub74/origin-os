@@ -30,6 +30,9 @@ router.post("/generate", async (req, res) => {
       output_format: format
     });
 
+    // ✅ Validate response structure
+    console.log("OpenAI image generation response:", result);
+
     const img = result.data?.[0];
     if (!img?.b64_json) {
       return res.status(500).json({ error: "No image returned from model." });
