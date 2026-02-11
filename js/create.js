@@ -9,7 +9,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function generateImageFromPrompt() {
     const output = document.getElementById("output")?.value || "square";
-  const prompt = document.getElementById("description")?.value?.trim();
+  const prompt = document.getElementById("compiledPrompt")?.value?.trim() ||
+                 document.getElementById("description")?.value?.trim();
 
   if (!prompt || prompt.length < 10) {
     throw new Error("Compile a prompt before generating.");
@@ -211,14 +212,67 @@ function compilePrompt() {
   return blocks.join("\n");
 }
 
+
+//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+//COMPILE PROMPT & COPY
+
+// TEXTAREA TYPING EFFECT
+function typeIntoTextarea(el, text, speed = 12) {
+  el.value = "";
+  el.classList.add("revealing");
+
+  let i = 0;
+  const interval = setInterval(() => {
+    el.value += text[i];
+    i++;
+    if (i >= text.length) {
+      clearInterval(interval);
+      el.classList.remove("revealing");
+    }
+  }, speed);
+}
+
+// document.getElementById("compileBtn")?.addEventListener("click", () => {
+//   const compiled = compilePrompt();
+
+//   const compiledEl = document.getElementById("compiledPrompt");
+//   if (compiledEl) compiledEl.value = compiled;
+
+//   if (compiledEl) typeIntoTextarea(compiledEl, compiled, 10);
+//   // If you still want Generate to use #description, keep this too:
+//   const descEl = document.getElementById("description");
+
+//   if (descEl) descEl.value = compiled;
+// });
+
 document.getElementById("compileBtn")?.addEventListener("click", () => {
   const compiled = compilePrompt();
-  const desc = document.getElementById("description");
-  if (desc) desc.value = compiled;
+  const el = document.getElementById("compiledPrompt");
+
+  if (!el) return;
+
+  el.classList.remove("show");
+  el.value = compiled;
+
+  requestAnimationFrame(() => {
+    el.classList.add("show");
+  });
 });
 
+
+
 document.getElementById("copyPromptBtn")?.addEventListener("click", async () => {
-  const text = document.getElementById("description")?.value || "";
+  const compiledEl = document.getElementById("compiledPrompt");
+  const descEl = document.getElementById("description");
+
+  const text = (compiledEl?.value || descEl?.value || "").trim();
   if (!text) return;
+
   await navigator.clipboard.writeText(text);
 });
+
+
+
+

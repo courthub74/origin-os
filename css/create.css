@@ -99,3 +99,21 @@ textarea.compiled{
 }
 
 .hidden{ display:none; }
+
+/* Revealing Compiled Prompt */
+/* textarea.compiled.revealing {
+  caret-color: var(--accent);
+  transition: box-shadow 0.4s ease;
+  box-shadow: 0 0 0 1px rgba(180,207,106,0.15);
+} */
+
+textarea.compiled {
+  opacity: 0;
+  transform: translateY(2px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+textarea.compiled.show {
+  opacity: 1;
+  transform: translateY(0);
+}
