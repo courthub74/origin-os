@@ -20,16 +20,21 @@ document.addEventListener("DOMContentLoaded", () => {
   const stage = document.getElementById("previewStage");
   stage.innerHTML = "<span>Generating…</span>";
 
+    // make sure draft exists first
+    const id = await createDraftIfNeeded();
+
     const res = await fetch(`${API_BASE}/api/images/generate`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
       body: JSON.stringify({
+        artworkId: id,  
         prompt,
         size: sizeFromOutput(output),
         format: "png"
       })
     });
+
 
     const data = await res.json();
     if (!res.ok) throw new Error(data?.error || "Generation failed");
@@ -233,19 +238,6 @@ function typeIntoTextarea(el, text, speed = 12) {
     }
   }, speed);
 }
-
-// document.getElementById("compileBtn")?.addEventListener("click", () => {
-//   const compiled = compilePrompt();
-
-//   const compiledEl = document.getElementById("compiledPrompt");
-//   if (compiledEl) compiledEl.value = compiled;
-
-//   if (compiledEl) typeIntoTextarea(compiledEl, compiled, 10);
-//   // If you still want Generate to use #description, keep this too:
-//   const descEl = document.getElementById("description");
-
-//   if (descEl) descEl.value = compiled;
-// });
 
 document.getElementById("compileBtn")?.addEventListener("click", () => {
   const compiled = compilePrompt();
