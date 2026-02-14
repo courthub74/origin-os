@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function generateImageFromPrompt() {
     const output = document.getElementById("output")?.value || "square";
-  const prompt = document.getElementById("compiledPrompt")?.value?.trim() ||
+    const prompt = document.getElementById("compiledPrompt")?.value?.trim() ||
                  document.getElementById("description")?.value?.trim();
 
   if (!prompt || prompt.length < 10) {
@@ -113,6 +113,12 @@ document.addEventListener("DOMContentLoaded", () => {
     return artworkId;
   }
 
+  // Save draft: creates if needed, then PATCH updates
+  // HERE IS WHERE YOU UP DATE FOR GENERATION STATUS 
+  ////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////
   async function saveDraft() {
     setPill("Draft · Saving…");
 
@@ -167,7 +173,11 @@ document.addEventListener("DOMContentLoaded", () => {
   // If a draft exists, show saved state
   if (artworkId) setPill("Draft · Saved");
 });
-
+///////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
 
 // Structured Prompt inputs
 function val(id) {
