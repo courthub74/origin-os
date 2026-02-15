@@ -1,3 +1,12 @@
+# .gitignore for Origin OS API
+
+# Ignore node modules and environment variables
+node_modules/
+
+# Ignore environment variable files
 .env
 .env.*
+
+# Ignore the api 
 origin-os-api/.env
+

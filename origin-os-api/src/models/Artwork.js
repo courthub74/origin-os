@@ -21,7 +21,13 @@ const artworkSchema = new mongoose.Schema(
     thumbUrl: { type: String, default: "" },
 
     createdAt: { type: Date, default: Date.now },
-    updatedAt: { type: Date, default: Date.now }
+    updatedAt: { type: Date, default: Date.now },
+
+    // GridFS image fields stored in same DB for simplicity
+    imageFileId: { type: mongoose.Schema.Types.ObjectId, default: null },
+    imageMimeType: { type: String, default: "" },
+    imageFilename: { type: String, default: "" },
+    promptCompiled: { type: String, default: "" }, // optional but useful
   },
   { versionKey: false }
 );

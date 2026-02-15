@@ -49,19 +49,36 @@ document.addEventListener("DOMContentLoaded", async () => {
     return localStorage.getItem("origin_access");
   }
 
-  async function fetchStats(){
+  // REPLACE BELOW WITH REAL FETCH DASHBOARD STATS CALL
+  // async function fetchStats(){
+  //   const token = getAccessToken();
+  //   if (!token) throw new Error("Missing token");
+
+  //   const res = await fetch(`${API_BASE}/stats`, {
+  //     headers: { Authorization: `Bearer ${token}` },
+  //     credentials: "include"
+  //   });
+
+  //   const data = await res.json();
+  //   if (!res.ok) throw new Error(data.error || "Failed to load stats");
+  //   return data.stats;
+  // }
+
+  async function fetchDashboard(){
     const token = getAccessToken();
     if (!token) throw new Error("Missing token");
 
-    const res = await fetch(`${API_BASE}/stats`, {
+    const res = await fetch(`${API_BASE}/dashboard`, {
       headers: { Authorization: `Bearer ${token}` },
       credentials: "include"
     });
 
     const data = await res.json();
-    if (!res.ok) throw new Error(data.error || "Failed to load stats");
-    return data.stats;
-  }
+    if (!res.ok) throw new Error(data.error || "Failed to load dashboard");
+    return data;
+}
+
+
 
   function setKpiValue(label, value){
     // Finds the KPI by its label text ("Works", "Collections", "Drops") and updates the number above it
@@ -99,14 +116,20 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   try {
-    const stats = await fetchStats();
+    // const stats = await fetchStats();
+    const dash = await fetchDashboard();
+    const stats = dash.stats;
 
     // Update KPIs in BOTH empty + active layouts (your markup repeats KPI blocks)
     setKpiValue("Works", stats.works ?? 0);
     setKpiValue("Collections", stats.collections ?? 0);
     setKpiValue("Drops", stats.drops ?? 0);
-
     showState(stats.works ?? 0);
+    // render sections
+    renderNextAction(dash.nextAction);
+    renderAttention(dash.attention);
+    renderContinue(dash.continue);
+    renderRecent(dash.recent);
   } catch (err) {
     console.warn("[Dashboard] Stats load failed:", err.message);
 

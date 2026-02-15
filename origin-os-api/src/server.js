@@ -47,6 +47,13 @@ app.use("/artworks", artworksRoutes);
 app.use("/users", usersRoutes);
 app.use("/api/images", imagesRoutes);
 
+// Dashboard route (stats + recent activity + attention + continue tiles in one call for simplicity)
+import dashboardRoutes from "./routes/dashboard.routes.js";
+
+app.use("/dashboard", dashboardRoutes);
+
+
+
 const port = process.env.PORT || 4000;
 
 connectDB()

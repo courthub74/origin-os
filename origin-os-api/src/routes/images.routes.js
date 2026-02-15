@@ -1,27 +1,32 @@
 import express from "express";
 import OpenAI from "openai";
+import mongoose from "mongoose";
+import { GridFSBucket } from "mongodb";
+
+import Image from "../models/Artwork.js";
+import { requireAuth } from "../middleware/auth.js";
 
 const router = express.Router();
 
-router.post("/generate", async (req, res) => {
-  try {
-    // 🔐 Guard FIRST
-    if (!process.env.OPENAI_API_KEY) {
-      return res.status(500).json({
-        error: "OPENAI_API_KEY is not set on the server."
-      });
-    }
+// Helpers
+function getBucket() {
+  return new GridFSBucket(mongoose.connection.db, { bucketName: "images" });
+}
 
-    // ✅ Create client only when needed
-    const openai = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY
-    });
+// Routes
+router.post("/generate", requireAuth, async (req, res) => {
+  try {
+    if (!process.env.OPENAI_API_KEY) {
+      return res.status(500).json({ error: "OPENAI_API_KEY is not set on the server." });
+    }
 
     const { prompt, size = "1024x1024", format = "png" } = req.body;
 
     if (!prompt || typeof prompt !== "string" || prompt.trim().length < 10) {
       return res.status(400).json({ error: "Prompt is missing or too short." });
     }
+
+    const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
     const result = await openai.images.generate({
       model: "gpt-image-1",
@@ -30,27 +35,86 @@ router.post("/generate", async (req, res) => {
       output_format: format
     });
 
-    // ✅ Validate response structure
-    console.log("OpenAI image generation response:", result);
-
     const img = result.data?.[0];
     if (!img?.b64_json) {
       return res.status(500).json({ error: "No image returned from model." });
     }
+
+    const base64 = img.b64_json;
 
     const mimeType =
       format === "jpeg" ? "image/jpeg" :
       format === "webp" ? "image/webp" :
       "image/png";
 
-    return res.json({
-      mimeType,
-      base64: img.b64_json
+    // ✅ Save to GridFS
+    const buffer = Buffer.from(base64, "base64");
+    const bucket = getBucket();
+    const filename = `origin_${Date.now()}.${format}`;
+
+    const uploadStream = bucket.openUploadStream(filename, {
+      contentType: mimeType,
+      metadata: {
+        userId: req.user._id.toString(),
+        prompt: prompt.trim(),
+        size
+      }
     });
 
+    uploadStream.on("error", (err) => {
+      console.error("GridFS upload error:", err);
+      return res.status(500).json({ error: "Failed to store image" });
+    });
+
+    uploadStream.on("finish", async (file) => {
+      try {
+        // ✅ Save metadata to MongoDB
+        // const imageDoc = await Image.create({
+        //   userId: req.user._id,
+        //   prompt: prompt.trim(),
+        //   size,
+        //   mimeType,
+        //   fileId: file._id,
+        //   filename: file.filename
+        // });
+
+        const { artworkId } = req.body; // send from client
+
+        const updated = await Artwork.findOneAndUpdate(
+          { _id: artworkId, userId: req.user._id },
+          {
+            $set: {
+              status: "generated",
+              imageFileId: file._id,
+              imageMimeType: mimeType,
+              imageFilename: file.filename,
+              updatedAt: new Date()
+            }
+          },
+          { new: true }
+        );
+
+         // ✅ Respond once
+        return res.json({
+          ok: true,
+          artwork: updated,
+          mimeType,
+          base64
+        });
+
+      // Error handling for metadata save  
+      } catch (e) {
+        console.error("Image metadata save error:", e);
+        return res.status(500).json({ error: "Failed to save image metadata" });
+      }
+    });
+
+    uploadStream.end(buffer);
+
+  // Error handling for the whole try block
   } catch (err) {
     console.error("Image generate error:", err);
-    return res.status(500).json({ error: "Image generation failed." });
+    return res.status(500).json({ error: err.message || "Image generation failed." });
   }
 });
 
