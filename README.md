@@ -1,4 +1,4 @@
-<div align="center" style="display: flex; align-items: center; justify-content: center; gap: 12px;">
+<div style="display: flex; align-items: center; justify-content: center; gap: 12px;">
   <img src="./img/origin-os.png" width="100" alt="Origin OS logo">
   <h1 style="margin: 0;">Origin OS — START.md</h1>
 </div>
