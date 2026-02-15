@@ -25,15 +25,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const res = await fetch(`${API_BASE}/api/images/generate`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token()}`
+      },
       credentials: "include",
       body: JSON.stringify({
-        artworkId: id,  
+        artworkId: id,
         prompt,
         size: sizeFromOutput(output),
         format: "png"
       })
     });
+
 
 
     const data = await res.json();
