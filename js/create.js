@@ -22,6 +22,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // make sure draft exists first
     const id = await createDraftIfNeeded();
+    console.log("CLIENT DEBUG artworkId =", id);
+
 
     const res = await fetch(`${API_BASE}/api/images/generate`, {
       method: "POST",

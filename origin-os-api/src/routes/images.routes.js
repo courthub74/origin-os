@@ -3,7 +3,7 @@ import OpenAI from "openai";
 import mongoose from "mongoose";
 import { GridFSBucket } from "mongodb";
 
-import Image from "../models/Artwork.js";
+import Artwork from "../models/Artwork.js";
 import { requireAuth } from "../middleware/auth.js";
 
 const router = express.Router();
@@ -47,24 +47,41 @@ router.post("/generate", requireAuth, async (req, res) => {
       format === "webp" ? "image/webp" :
       "image/png";
 
+
     // ✅ Save to GridFS
     const buffer = Buffer.from(base64, "base64");
     const bucket = getBucket();
     const filename = `origin_${Date.now()}.${format}`;
 
+    console.log("AUTH DEBUG req.user =", req.user);
+
+    const userIdRaw = req.user?._id || req.user?.id || req.user?.sub;
+    console.log("AUTH DEBUG userIdRaw =", userIdRaw);
+
+    if (!userIdRaw)
+      return res.status(401).json({ error: "Auth user id missing" });
+
+    const userId = mongoose.Types.ObjectId.isValid(userIdRaw)
+      ? new mongoose.Types.ObjectId(userIdRaw)
+      : userIdRaw;
+
+
     const uploadStream = bucket.openUploadStream(filename, {
       contentType: mimeType,
       metadata: {
-        userId: req.user._id.toString(),
+        userId: String(userId),       // ✅ safe conversion
         prompt: prompt.trim(),
         size
       }
     });
 
+
+    
     uploadStream.on("error", (err) => {
       console.error("GridFS upload error:", err);
       return res.status(500).json({ error: "Failed to store image" });
     });
+
 
     uploadStream.on("finish", async (file) => {
       try {
@@ -78,21 +95,27 @@ router.post("/generate", requireAuth, async (req, res) => {
         //   filename: file.filename
         // });
 
-        const { artworkId } = req.body; // send from client
+       const { artworkId } = req.body;
+        if (!artworkId) return res.status(400).json({ error: "artworkId is required" });
+
+        console.log("FINISH DEBUG", {
+          artworkId,
+          userId: String(userId),
+          fileId: String(file._id)
+        });
+
 
         const updated = await Artwork.findOneAndUpdate(
-          { _id: artworkId, userId: req.user._id },
-          {
-            $set: {
-              status: "generated",
-              imageFileId: file._id,
-              imageMimeType: mimeType,
-              imageFilename: file.filename,
-              updatedAt: new Date()
-            }
-          },
+          { _id: artworkId, userId },  // ✅ use userId, not req.user._id
+          { $set: { status: "generated", imageFileId: file._id, imageMimeType: mimeType, imageFilename: file.filename, updatedAt: new Date() } },
           { new: true }
         );
+
+        console.log("FINISH DEBUG updated?", !!updated);
+
+        if (!updated) {
+          return res.status(404).json({ error: "Artwork not found for this user (userId mismatch)" });
+        }
 
          // ✅ Respond once
         return res.json({
@@ -103,6 +126,10 @@ router.post("/generate", requireAuth, async (req, res) => {
         });
 
       // Error handling for metadata save  
+      ////////////////////////////////////////////
+      ////////////////////////////////////////////
+      ////////////////////////////////////////////
+      // START HERE
       } catch (e) {
         console.error("Image metadata save error:", e);
         return res.status(500).json({ error: "Failed to save image metadata" });
