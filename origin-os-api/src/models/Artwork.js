@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const artworkSchema = new mongoose.Schema(
   {
@@ -16,20 +16,18 @@ const artworkSchema = new mongoose.Schema(
 
     status: { type: String, enum: ["draft", "generated", "published", "failed"], default: "draft" },
 
-    // later: storage urls
     originalUrl: { type: String, default: "" },
     thumbUrl: { type: String, default: "" },
 
-    // GridFS image fields stored in same DB for simplicity
-    imageFileId: { type: mongoose.Schema.Types.ObjectId, default: null, index: true },
+    imageFileId: { type: mongoose.Schema.Types.ObjectId, default: null },
     imageMimeType: { type: String, default: "" },
     imageFilename: { type: String, default: "" },
-    promptCompiled: { type: String, default: "" }, // optional but useful
+    promptCompiled: { type: String, default: "" },
 
     createdAt: { type: Date, default: Date.now },
-    updatedAt: { type: Date, default: Date.now },
+    updatedAt: { type: Date, default: Date.now }
   },
   { versionKey: false }
 );
 
-module.exports = mongoose.model("Artwork", artworkSchema);
+export default mongoose.model("Artwork", artworkSchema);
