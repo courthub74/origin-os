@@ -15,6 +15,9 @@ function getBucket() {
 
 // Routes
 router.post("/generate", requireAuth, async (req, res) => {
+
+  // debugging auth issues - check req.user early
+  console.log("TOP DEBUG req.user =", req.user);
   try {
     if (!process.env.OPENAI_API_KEY) {
       return res.status(500).json({ error: "OPENAI_API_KEY is not set on the server." });
@@ -55,27 +58,22 @@ router.post("/generate", requireAuth, async (req, res) => {
 
     console.log("AUTH DEBUG req.user =", req.user);
 
-    const userIdRaw = req.user?._id || req.user?.id || req.user?.sub;
-    console.log("AUTH DEBUG userIdRaw =", userIdRaw);
+    const userIdRaw = req.user?.sub;
+    if (!userIdRaw) return res.status(401).json({ error: "Auth user id missing" });
 
-    if (!userIdRaw)
-      return res.status(401).json({ error: "Auth user id missing" });
+    const userId = new mongoose.Types.ObjectId(userIdRaw);
 
-    const userId = mongoose.Types.ObjectId.isValid(userIdRaw)
-      ? new mongoose.Types.ObjectId(userIdRaw)
-      : userIdRaw;
-
+    const { artworkId } = req.body;
+    if (!artworkId) return res.status(400).json({ error: "artworkId is required" });
 
     const uploadStream = bucket.openUploadStream(filename, {
       contentType: mimeType,
       metadata: {
-        userId: String(userId),       // ✅ safe conversion
+        userId: userIdRaw,  // store string version
         prompt: prompt.trim(),
         size
       }
     });
-
-
     
     uploadStream.on("error", (err) => {
       console.error("GridFS upload error:", err);
@@ -84,55 +82,76 @@ router.post("/generate", requireAuth, async (req, res) => {
 
 
     uploadStream.on("finish", async (file) => {
-      try {
-        // ✅ Save metadata to MongoDB
-        // const imageDoc = await Image.create({
-        //   userId: req.user._id,
-        //   prompt: prompt.trim(),
-        //   size,
-        //   mimeType,
-        //   fileId: file._id,
-        //   filename: file.filename
-        // });
+        try {
+          // ✅ Save metadata to MongoDB
+          // const imageDoc = await Image.create({
+          //   userId: req.user._id,
+          //   prompt: prompt.trim(),
+          //   size,
+          //   mimeType,
+          //   fileId: file._id,
+          //   filename: file.filename
+          // });
 
-       const { artworkId } = req.body;
-        if (!artworkId) return res.status(400).json({ error: "artworkId is required" });
+          console.log("FINISH DEBUG types:", {
+            artworkId,
+            artworkIdType: typeof artworkId,
+            userId,
+            userIdType: typeof userId,
+            userIdRaw: String(userIdRaw),
+          });
 
-        console.log("FINISH DEBUG", {
-          artworkId,
-          userId: String(userId),
-          fileId: String(file._id)
-        });
+          // console.log("FINISH DEBUG", {
+          //   artworkId,
+          //   userId: String(userId),
+          //   fileId: String(file._id)
+          // });
 
 
-        const updated = await Artwork.findOneAndUpdate(
-          { _id: artworkId, userId },  // ✅ use userId, not req.user._id
-          { $set: { status: "generated", imageFileId: file._id, imageMimeType: mimeType, imageFilename: file.filename, updatedAt: new Date() } },
-          { new: true }
-        );
+          const updated = await Artwork.findOneAndUpdate(
+            { _id: artworkId, userId },
+            {
+              $set: {
+                status: "generated",
+                imageFileId: file._id,
+                imageMimeType: mimeType,
+                imageFilename: file.filename,
+                updatedAt: new Date()
+              }
+            },
+            { new: true }
+          );
 
-        console.log("FINISH DEBUG updated?", !!updated);
 
-        if (!updated) {
-          return res.status(404).json({ error: "Artwork not found for this user (userId mismatch)" });
-        }
+          console.log("FINISH DEBUG updated?", !!updated);
 
-         // ✅ Respond once
-        return res.json({
-          ok: true,
-          artwork: updated,
-          mimeType,
-          base64
-        });
+          // Testing if the userId returns back null
+          console.log("FINISH DEBUG: using", { artworkId, userId: String(userId) });
 
-      // Error handling for metadata save  
-      ////////////////////////////////////////////
-      ////////////////////////////////////////////
-      ////////////////////////////////////////////
-      // START HERE
-      } catch (e) {
+
+          if (!updated) {
+            return res.status(404).json({ error: "Artwork not found for this user (userId mismatch)" });
+          }
+
+          // ✅ Respond once
+          return res.json({
+            ok: true,
+            artwork: updated,
+            mimeType,
+            base64
+          });
+
+        // Error handling for metadata save  
+        ////////////////////////////////////////////
+        ////////////////////////////////////////////
+        ////////////////////////////////////////////
+        // START HERE
+        } catch (e) {
         console.error("Image metadata save error:", e);
-        return res.status(500).json({ error: "Failed to save image metadata" });
+        return res.status(500).json({
+          error: "Failed to save image metadata",
+          details: e.message
+        });
       }
     });
 

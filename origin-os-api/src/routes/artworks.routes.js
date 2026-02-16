@@ -60,18 +60,6 @@ router.patch("/:id", requireAuth, async (req, res) => {
   return res.json({ ok: true, artwork });
 });
 
-// Get single artwork
-router.get("/:id", requireAuth, async (req, res) => {
-  const userId = req.user.sub;
-  const { id } = req.params;
-
-  const artwork = await Artwork.findOne({ _id: id, userId });
-  if (!artwork) return res.status(404).json({ error: "Artwork not found" });
-
-  return res.json({ ok: true, artwork });
-});
-
-
 // Get recent activity
 router.get("/recent", requireAuth, async (req, res) => {
   const userId = req.user.sub;
@@ -84,5 +72,17 @@ router.get("/recent", requireAuth, async (req, res) => {
 
   return res.json({ ok: true, items });
 });
+
+// Get single artwork
+router.get("/:id", requireAuth, async (req, res) => {
+  const userId = req.user.sub;
+  const { id } = req.params;
+
+  const artwork = await Artwork.findOne({ _id: id, userId });
+  if (!artwork) return res.status(404).json({ error: "Artwork not found" });
+
+  return res.json({ ok: true, artwork });
+});
+
 
 module.exports = router;
