@@ -250,14 +250,14 @@ button{ font-family: inherit; }
   filter: drop-shadow(0 0 10px rgba(180,207,106,0.22));
 }
 
-.scrim{
+/* .scrim{
   display:none;
   position:fixed;
   inset:0;
   background: rgba(0,0,0,0.55);
   z-index: 90;
 }
-.scrim.show{ display:block; }
+.scrim.show{ display:block; } */
 
 /* Mobile: slide-in sidebar + reset main offset */
 @media (max-width: 980px){
@@ -1120,3 +1120,19 @@ textarea.notes{ min-height: 110px; }
 .sidebar .brand .dreamos-logo svg{
   color: inherit;
 }
+
+.scrim {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 200ms ease;
+  z-index: 100; /* keep it below menus if needed */
+}
+
+.scrim.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+

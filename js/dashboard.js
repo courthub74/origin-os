@@ -36,6 +36,157 @@ document.addEventListener("DOMContentLoaded", async () => {
   const emptyWorks = document.getElementById("emptyState");
   const activeWorks = document.getElementById("activeState");
 
+
+// Helper to navigate, optionally with a workId param for context
+  function navTo(go, workId) {
+  if (!go) return;
+  window.location.href = workId ? `${go}?workId=${workId}` : go;
+}
+
+function setBtnWithDot(btn, label) {
+  if (!btn) return;
+  btn.textContent = label + " ";
+  const dot = document.createElement("span");
+  dot.className = "dot";
+  btn.appendChild(dot);
+}
+
+function renderNextAction(next) {
+  const panel = document.getElementById("nextActionPanel");
+  if (!panel) return;
+
+  if (!next) {
+    panel.setAttribute("hidden", "");
+    return;
+  }
+
+  panel.removeAttribute("hidden");
+
+  document.getElementById("nextActionKicker")?.textContent = next.type === "continue" ? "Up next" : "Next";
+  document.getElementById("nextActionTitle")?.textContent = next.title || "Untitled";
+  document.getElementById("nextActionSub")?.textContent = next.subtitle || "";
+
+  const pill = document.getElementById("nextActionPill");
+  if (pill) pill.textContent = next.type === "continue" ? "Priority" : "Next";
+
+  const primary = document.getElementById("nextActionBtn");
+  if (primary) {
+    setBtnWithDot(primary, next.primaryCta?.label || "Continue");
+    primary.onclick = () => navTo(next.primaryCta?.go || "create.html", next.workId);
+  }
+
+  const secondary = document.getElementById("nextActionAltBtn");
+  if (secondary) {
+    secondary.textContent = next.secondaryCta?.label || "Assign Collection";
+    secondary.onclick = () => navTo(next.secondaryCta?.go || "collections.html", next.workId);
+  }
+}
+
+function renderAttention(items = []) {
+  const list = document.getElementById("attentionList");
+  const pill = document.getElementById("attentionCount");
+  if (!list) return;
+
+  list.innerHTML = "";
+  if (pill) pill.textContent = `Attention: ${items.length}`;
+
+  if (!items.length) {
+    list.innerHTML = `
+      <div class="item">
+        <div class="meta">
+          <div class="name">All clear</div>
+          <div class="sub">Nothing needs attention right now.</div>
+        </div>
+        <div class="tag">✅</div>
+      </div>
+    `;
+    return;
+  }
+
+  for (const it of items.slice(0, 5)) {
+    const row = document.createElement("div");
+    row.className = "item";
+    row.innerHTML = `
+      <div class="meta">
+        <div class="name">“${it.title || "Untitled"}”</div>
+        <div class="sub">${it.reason || ""}</div>
+      </div>
+      <div class="wm-right">
+        <div class="tag">${it.tag || ""}</div>
+        <button class="btn" type="button">${it.cta?.label || "Open"}</button>
+      </div>
+    `;
+    row.querySelector("button")?.addEventListener("click", () => navTo(it.cta?.go || "create.html", it.workId));
+    list.appendChild(row);
+  }
+}
+
+function renderContinue(items = []) {
+  const wrap = document.getElementById("continueTiles");
+  if (!wrap) return;
+
+  wrap.innerHTML = "";
+
+  if (!items.length) {
+    const tile = document.createElement("div");
+    tile.className = "tile";
+    tile.innerHTML = `
+      <div class="t">Start a new work</div>
+      <div class="d">No drafts to continue yet.</div>
+      <div class="go"><span>Create</span><span>↗</span></div>
+    `;
+    tile.addEventListener("click", () => navTo("create.html"));
+    wrap.appendChild(tile);
+    return;
+  }
+
+  for (const it of items) {
+    const tile = document.createElement("div");
+    tile.className = "tile";
+    tile.innerHTML = `
+      <div class="t">“${it.title || "Untitled"}”</div>
+      <div class="d">Last edited · ${it.lastEditedText || ""}</div>
+      <div class="go"><span>Continue</span><span>↗</span></div>
+    `;
+    tile.addEventListener("click", () => navTo("create.html", it.workId));
+    wrap.appendChild(tile);
+  }
+}
+
+function renderRecent(items = []) {
+  const list = document.getElementById("recentActivityList");
+  if (!list) return;
+
+  list.innerHTML = "";
+
+  if (!items.length) {
+    list.innerHTML = `
+      <div class="item">
+        <div class="meta">
+          <div class="name">No activity yet</div>
+          <div class="sub">Create or edit a work to see history here.</div>
+        </div>
+        <div class="tag">—</div>
+      </div>
+    `;
+    return;
+  }
+
+  for (const it of items) {
+    const row = document.createElement("div");
+    row.className = "item";
+    row.innerHTML = `
+      <div class="meta">
+        <div class="name">“${it.title || "Untitled"}”</div>
+        <div class="sub">${it.subtitle || ""}</div>
+      </div>
+      <div class="tag">${it.type || ""}</div>
+    `;
+    list.appendChild(row);
+  }
+}
+
+
   const quickActionsPanel = document.getElementById("quickActionsPanel");
   const recentActivityPanel = document.getElementById("recentActivityPanel");
   const emptyQuickActionsSlot = document.getElementById("emptyQuickActionsSlot");

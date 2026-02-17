@@ -1,4 +1,5 @@
 import express from "express";
+import mongoose from "mongoose";
 import { requireAuth } from "../middleware/auth.js";
 import Artwork from "../models/Artwork.js";
 
@@ -15,30 +16,39 @@ function timeAgo(date) {
 }
 
 router.get("/", requireAuth, async (req, res) => {
-  const userId = req.user.sub;
+  const sub = req.user.sub;
 
-  // Stats
+  // ✅ Normalize to ObjectId (and fail loudly if it's not valid)
+  if (!mongoose.Types.ObjectId.isValid(sub)) {
+    console.log("[/dashboard] INVALID sub (not ObjectId):", sub);
+    return res.status(400).json({ error: "Invalid user id (sub) in token" });
+  }
+
+  const userId = new mongoose.Types.ObjectId(sub);
+
+  console.log("[/dashboard] sub =", sub, "-> userId =", userId.toString());
+
+  const sampleAny = await Artwork.findOne({}).select("_id userId title").lean();
+  console.log("[/dashboard] sampleAny =", sampleAny);
+
+  const sampleMine = await Artwork.findOne({ userId }).select("_id userId title").lean();
+  console.log("[/dashboard] sampleMine =", sampleMine);
+
   const totalWorks = await Artwork.countDocuments({ userId });
+  console.log("[/dashboard] totalWorks for user =", totalWorks);
 
-  const stats = {
-    works: totalWorks,
-    collections: 0,
-    drops: 0
-  };
+  const stats = { works: totalWorks, collections: 0, drops: 0 };
 
-  // Recent items
   const recent = await Artwork.find({ userId })
     .sort({ updatedAt: -1 })
     .limit(7)
     .select("_id title status updatedAt createdAt collection");
 
-  // Continue tiles: most recently updated drafts
   const cont = await Artwork.find({ userId, status: "draft" })
     .sort({ updatedAt: -1 })
     .limit(4)
     .select("_id title updatedAt status collection");
 
-  // Attention list
   const attentionRaw = await Artwork.find({ userId })
     .sort({ updatedAt: -1 })
     .limit(25)
@@ -58,7 +68,6 @@ router.get("/", requireAuth, async (req, res) => {
     if (attention.length >= 5) break;
   }
 
-  // Next recommended action
   const next = cont[0]
     ? {
         type: "continue",
@@ -74,7 +83,6 @@ router.get("/", requireAuth, async (req, res) => {
       }
     : null;
 
-  // Shape recent activity into what your UI expects
   const recentItems = recent.map((a) => ({
     type: a.status || "Draft",
     title: a.title || "Untitled",
