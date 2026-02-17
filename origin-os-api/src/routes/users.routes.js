@@ -1,8 +1,8 @@
-const express = require("express");
-const User = require("../models/User");
-const { requireAuth } = require("../middleware/auth");
-const multer = require("multer");
-const path = require("path");
+import express from "express";
+import multer from "multer";
+
+import User from "../models/User.js";
+import { requireAuth } from "../middleware/auth.js";
 
 const router = express.Router();
 
@@ -12,13 +12,9 @@ const uploadAvatar = multer({
   storage,
   limits: { fileSize: 2 * 1024 * 1024 }, // 2MB max
   fileFilter: (req, file, cb) => {
-    // Only allow image files
     const allowedMimes = ["image/jpeg", "image/png", "image/webp"];
-    if (allowedMimes.includes(file.mimetype)) {
-      cb(null, true);
-    } else {
-      cb(new Error("Only JPEG, PNG, and WebP images allowed"));
-    }
+    if (allowedMimes.includes(file.mimetype)) cb(null, true);
+    else cb(new Error("Only JPEG, PNG, and WebP images allowed"));
   }
 });
 
@@ -29,9 +25,7 @@ const ALLOWED_FOCUS = ["drops", "campaigns", "both"];
 router.get("/me", requireAuth, async (req, res) => {
   try {
     const user = await User.findById(req.user.sub);
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
-    }
+    if (!user) return res.status(404).json({ error: "User not found" });
 
     return res.json({
       ok: true,
@@ -54,19 +48,14 @@ router.get("/me", requireAuth, async (req, res) => {
   }
 });
 
+// POST avatar upload
 router.post("/me/avatar", requireAuth, uploadAvatar.single("avatar"), async (req, res) => {
   try {
-    // Check if file was provided by multer
-    if (!req.file) {
-      return res.status(400).json({ error: "No avatar file provided" });
-    }
+    if (!req.file) return res.status(400).json({ error: "No avatar file provided" });
 
-    // Convert file buffer to base64 for storage
     const base64Data = req.file.buffer.toString("base64");
     const avatarDataUrl = `data:${req.file.mimetype};base64,${base64Data}`;
 
-    // Update user with avatar URL (store as data URL for now)
-    // In production, upload to cloud storage (S3, Cloudinary, etc.)
     const user = await User.findByIdAndUpdate(
       req.user.sub,
       { avatarUrl: avatarDataUrl },
@@ -89,17 +78,10 @@ router.post("/me/avatar", requireAuth, uploadAvatar.single("avatar"), async (req
   }
 });
 
+// PATCH onboarding
 router.patch("/me/onboarding", requireAuth, async (req, res) => {
   try {
-    const {
-      displayName,
-      rolePrimary,
-      roles,
-      brandName,
-      focus,
-      links
-    } = req.body || {};
-
+    const { displayName, rolePrimary, roles, brandName, focus, links } = req.body || {};
     const update = {};
 
     if (typeof displayName === "string") update.displayName = displayName.trim();
@@ -107,27 +89,19 @@ router.patch("/me/onboarding", requireAuth, async (req, res) => {
 
     if (typeof rolePrimary === "string") {
       const v = rolePrimary.trim().toLowerCase();
-      if (v && !ALLOWED_ROLES.includes(v)) {
-        return res.status(400).json({ error: "Invalid primary role" });
-      }
+      if (v && !ALLOWED_ROLES.includes(v)) return res.status(400).json({ error: "Invalid primary role" });
       update.rolePrimary = v;
     }
 
     if (Array.isArray(roles)) {
-      const cleaned = [...new Set(roles.map(r => String(r).trim().toLowerCase()))]
-        .filter(Boolean);
-
-      if (!cleaned.every(r => ALLOWED_ROLES.includes(r))) {
-        return res.status(400).json({ error: "Invalid roles" });
-      }
+      const cleaned = [...new Set(roles.map((r) => String(r).trim().toLowerCase()))].filter(Boolean);
+      if (!cleaned.every((r) => ALLOWED_ROLES.includes(r))) return res.status(400).json({ error: "Invalid roles" });
       update.roles = cleaned;
     }
 
     if (typeof focus === "string") {
       const v = focus.trim().toLowerCase();
-      if (v && !ALLOWED_FOCUS.includes(v)) {
-        return res.status(400).json({ error: "Invalid focus" });
-      }
+      if (v && !ALLOWED_FOCUS.includes(v)) return res.status(400).json({ error: "Invalid focus" });
       update.focus = v;
     }
 
@@ -141,12 +115,8 @@ router.patch("/me/onboarding", requireAuth, async (req, res) => {
       };
     }
 
-    // Decide if onboarding is "complete" (v1 rules)
-    // You can tighten/loosen this later.
-    const willComplete =
-      (update.rolePrimary || "") &&
-      (update.focus || "");
-
+    // v1 completion rule
+    const willComplete = (update.rolePrimary || "") && (update.focus || "");
     if (willComplete) update.onboardingComplete = true;
 
     const user = await User.findByIdAndUpdate(req.user.sub, update, { new: true });
@@ -172,4 +142,4 @@ router.patch("/me/onboarding", requireAuth, async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

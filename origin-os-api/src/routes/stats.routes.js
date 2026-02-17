@@ -1,6 +1,6 @@
-const express = require("express");
-const { requireAuth } = require("../middleware/auth");
-const Artwork = require("../models/Artwork");
+import express from "express";
+import { requireAuth } from "../middleware/auth.js";
+import Artwork from "../models/Artwork.js";
 
 const router = express.Router();
 
@@ -16,4 +16,4 @@ router.get("/", requireAuth, async (req, res) => {
   return res.json({ ok: true, stats: { works, collections, drops } });
 });
 
-module.exports = router;
+export default router;

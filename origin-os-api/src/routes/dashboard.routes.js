@@ -1,6 +1,6 @@
-const express = require("express");
-const { requireAuth } = require("../middleware/auth");
-const Artwork = require("../models/Artwork");
+import express from "express";
+import { requireAuth } from "../middleware/auth.js";
+import Artwork from "../models/Artwork.js";
 
 const router = express.Router();
 
@@ -20,15 +20,13 @@ router.get("/", requireAuth, async (req, res) => {
   // Stats
   const totalWorks = await Artwork.countDocuments({ userId });
 
-  // If you don't have real collection/drop models yet,
-  // keep these at 0 or compute from fields later.
   const stats = {
     works: totalWorks,
     collections: 0,
     drops: 0
   };
 
-  // Recent items (for recent activity panel)
+  // Recent items
   const recent = await Artwork.find({ userId })
     .sort({ updatedAt: -1 })
     .limit(7)
@@ -40,10 +38,7 @@ router.get("/", requireAuth, async (req, res) => {
     .limit(4)
     .select("_id title updatedAt status collection");
 
-  // Attention list rules (simple with your current schema):
-  // - Draft missing collection => "Needs Collection"
-  // - Non-draft missing title => "Missing title" (optional)
-  // Adjust rules as you add image/social/mint fields.
+  // Attention list
   const attentionRaw = await Artwork.find({ userId })
     .sort({ updatedAt: -1 })
     .limit(25)
@@ -63,8 +58,7 @@ router.get("/", requireAuth, async (req, res) => {
     if (attention.length >= 5) break;
   }
 
-  // Next recommended action:
-  // Prefer latest draft. If none, null.
+  // Next recommended action
   const next = cont[0]
     ? {
         type: "continue",
@@ -81,13 +75,13 @@ router.get("/", requireAuth, async (req, res) => {
     : null;
 
   // Shape recent activity into what your UI expects
-  const recentItems = recent.map(a => ({
+  const recentItems = recent.map((a) => ({
     type: a.status || "Draft",
     title: a.title || "Untitled",
-    subtitle: `${(a.status || "Draft")} updated · ${timeAgo(a.updatedAt || a.createdAt)}`
+    subtitle: `${a.status || "Draft"} updated · ${timeAgo(a.updatedAt || a.createdAt)}`
   }));
 
-  const continueItems = cont.map(a => ({
+  const continueItems = cont.map((a) => ({
     workId: a._id,
     title: a.title || "Untitled",
     lastEditedText: timeAgo(a.updatedAt)
@@ -103,4 +97,4 @@ router.get("/", requireAuth, async (req, res) => {
   });
 });
 
-module.exports = router;
+export default router;
