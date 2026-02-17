@@ -98,9 +98,35 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   }
 
+  // Creates a draft if none exists, returns the artworkId (existing or new)
+  /////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////
   async function createDraftIfNeeded() {
-    if (artworkId) return artworkId;
+    // If we have an artworkId cached, verify it belongs to THIS logged-in user
+    if (artworkId) {
+      try {
+        const check = await fetch(`${API_BASE}/artworks/${artworkId}`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token()}`
+          },
+          credentials: "include"
+        });
 
+        if (check.ok) return artworkId;
+
+        // Stale/foreign/deleted draft id
+        localStorage.removeItem("origin_current_artwork_id");
+        artworkId = null;
+      } catch (e) {
+        // If check fails (server down, etc.), wipe and recreate to avoid blocking
+        localStorage.removeItem("origin_current_artwork_id");
+        artworkId = null;
+      }
+    }
+
+    // Create a new draft
     const res = await fetch(`${API_BASE}/artworks`, {
       method: "POST",
       headers: {
@@ -118,6 +144,7 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.setItem("origin_current_artwork_id", artworkId);
     return artworkId;
   }
+
 
   // Save draft: creates if needed, then PATCH updates
   // HERE IS WHERE YOU UP DATE FOR GENERATION STATUS 
