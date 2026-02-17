@@ -27,18 +27,23 @@
       localStorage.setItem("origin_access", data.accessToken);
       localStorage.setItem("origin_user", JSON.stringify(data.user));
 
+      // Then navigate to dashboard (or onboarding if you have that)
       window.location.href = "dashboard.html";
+
     } catch(err){
       setError("Network error. Is the API running?");
     }
   }
 
-  document.getElementById("signInBtn").addEventListener("click", login);
+  // document.getElementById("signInBtn").addEventListener("click", login);
 
   // Optional: Enter key submits
   document.addEventListener("keydown", (e) => {
-    if(e.key === "Enter") login();
+    if (e.key === "Enter" && signInBtn && !signInBtn.disabled) {
+      signInBtn.click();
+    }
   });
+
 
 
   // /js/login.js
