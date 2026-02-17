@@ -80,82 +80,112 @@ router.post("/generate", requireAuth, async (req, res) => {
       return res.status(500).json({ error: "Failed to store image" });
     });
 
+    uploadStream.on("finish", async () => {
+  try {
+    const fileId = uploadStream.id; // ✅ this is the GridFS file _id
 
-    uploadStream.on("finish", async (file) => {
-        try {
-          // ✅ Save metadata to MongoDB
-          // const imageDoc = await Image.create({
-          //   userId: req.user._id,
-          //   prompt: prompt.trim(),
-          //   size,
-          //   mimeType,
-          //   fileId: file._id,
-          //   filename: file.filename
-          // });
+    const updated = await Artwork.findOneAndUpdate(
+      { _id: new mongoose.Types.ObjectId(artworkId), userId },
+      {
+        $set: {
+          status: "generated",
+          imageFileId: fileId,
+          imageMimeType: mimeType,
+          imageFilename: filename, // ✅ you already know this
+          updatedAt: new Date()
+        }
+      },
+      { new: true }
+    );
 
-          console.log("FINISH DEBUG types:", {
-            artworkId,
-            artworkIdType: typeof artworkId,
-            userId,
-            userIdType: typeof userId,
-            userIdRaw: String(userIdRaw),
-          });
+    if (!updated) {
+      return res.status(404).json({ error: "Artwork not found for this user (userId mismatch)" });
+    }
 
-          // console.log("FINISH DEBUG", {
-          //   artworkId,
-          //   userId: String(userId),
-          //   fileId: String(file._id)
-          // });
-
-
-          const updated = await Artwork.findOneAndUpdate(
-            { _id: artworkId, userId },
-            {
-              $set: {
-                status: "generated",
-                imageFileId: file._id,
-                imageMimeType: mimeType,
-                imageFilename: file.filename,
-                updatedAt: new Date()
-              }
-            },
-            { new: true }
-          );
+    return res.json({ ok: true, artwork: updated, mimeType, base64 });
+  } catch (e) {
+    console.error("Image metadata save error:", e);
+    return res.status(500).json({ error: "Failed to save image metadata", details: e.message });
+  }
+});
 
 
-          console.log("FINISH DEBUG updated?", !!updated);
+    // uploadStream.on("finish", async (file) => {
+    //     try {
+    //       // ✅ Save metadata to MongoDB
+    //       // const imageDoc = await Image.create({
+    //       //   userId: req.user._id,
+    //       //   prompt: prompt.trim(),
+    //       //   size,
+    //       //   mimeType,
+    //       //   fileId: file._id,
+    //       //   filename: file.filename
+    //       // });
 
-          // Testing if the userId returns back null
-          console.log("FINISH DEBUG: using", { artworkId, userId: String(userId) });
+    //       console.log("FINISH DEBUG types:", {
+    //         artworkId,
+    //         artworkIdType: typeof artworkId,
+    //         userId,
+    //         userIdType: typeof userId,
+    //         userIdRaw: String(userIdRaw),
+    //       });
+
+    //       // console.log("FINISH DEBUG", {
+    //       //   artworkId,
+    //       //   userId: String(userId),
+    //       //   fileId: String(file._id)
+    //       // });
 
 
-          if (!updated) {
-            return res.status(404).json({ error: "Artwork not found for this user (userId mismatch)" });
-          }
+    //       const updated = await Artwork.findOneAndUpdate(
+    //         { _id: artworkId, userId },
+    //         {
+    //           $set: {
+    //             status: "generated",
+    //             imageFileId: file._id,
+    //             imageMimeType: mimeType,
+    //             imageFilename: file.filename,
+    //             updatedAt: new Date()
+    //           }
+    //         },
+    //         { new: true }
+    //       );
 
-          // ✅ Respond once
-          return res.json({
-            ok: true,
-            artwork: updated,
-            mimeType,
-            base64
-          });
 
-        // Error handling for metadata save  
-        ////////////////////////////////////////////
-        ////////////////////////////////////////////
-        ////////////////////////////////////////////
-        // START HERE
-        } catch (e) {
-        console.error("Image metadata save error:", e);
-        return res.status(500).json({
-          error: "Failed to save image metadata",
-          details: e.message
-        });
-      }
-    });
+    //       console.log("FINISH DEBUG updated?", !!updated);
+
+    //       // Testing if the userId returns back null
+    //       console.log("FINISH DEBUG: using", { artworkId, userId: String(userId) });
+
+
+    //       if (!updated) {
+    //         return res.status(404).json({ error: "Artwork not found for this user (userId mismatch)" });
+    //       }
+
+    //       // ✅ Respond once
+    //       return res.json({
+    //         ok: true,
+    //         artwork: updated,
+    //         mimeType,
+    //         base64
+    //       });
+
+    //     // Error handling for metadata save  
+    //     ////////////////////////////////////////////
+    //     ////////////////////////////////////////////
+    //     ////////////////////////////////////////////
+    //     // START HERE
+    //     } catch (e) {
+    //     console.error("Image metadata save error:", e);
+    //     return res.status(500).json({
+    //       error: "Failed to save image metadata",
+    //       details: e.message
+    //     });
+    //   }
+    // });
 
     uploadStream.end(buffer);
+    return;
 
   // Error handling for the whole try block
   } catch (err) {
