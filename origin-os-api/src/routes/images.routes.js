@@ -14,6 +14,8 @@ function getBucket() {
 }
 
 // Routes
+
+// POST /api/images/generate
 router.post("/generate", requireAuth, async (req, res) => {
 
   // debugging auth issues - check req.user early
@@ -75,114 +77,48 @@ router.post("/generate", requireAuth, async (req, res) => {
       }
     });
     
+    // UploadStream ON ERROR - Handle upload errors
     uploadStream.on("error", (err) => {
       console.error("GridFS upload error:", err);
-      return res.status(500).json({ error: "Failed to store image" });
+      if (!res.headersSent) {
+        return res.status(500).json({ error: "Failed to store image" });
+      }
     });
 
+    // UploadStream ON FINISH - Save metadata to Artwork document and respond
     uploadStream.on("finish", async () => {
-  try {
-    const fileId = uploadStream.id; // ✅ this is the GridFS file _id
+      try {
+        const fileId = uploadStream.id; // ✅ this is the GridFS file _id
 
-    const updated = await Artwork.findOneAndUpdate(
-      { _id: new mongoose.Types.ObjectId(artworkId), userId },
-      {
-        $set: {
-          status: "generated",
-          imageFileId: fileId,
-          imageMimeType: mimeType,
-          imageFilename: filename, // ✅ you already know this
-          updatedAt: new Date()
+        const byIdOnly = await Artwork.findById(artworkId).select("_id userId title status").lean();
+        console.log("DEBUG artwork by id =", byIdOnly);
+        console.log("DEBUG auth sub =", userIdRaw);
+        console.log("DEBUG auth sub (ObjectId) =", String(userId));
+
+        const updated = await Artwork.findOneAndUpdate(
+          { _id: new mongoose.Types.ObjectId(artworkId), userId },
+          {
+            $set: {
+              status: "generated",
+              imageFileId: fileId,
+              imageMimeType: mimeType,
+              imageFilename: filename, // ✅ you already know this
+              updatedAt: new Date()
+            }
+          },
+          { new: true }
+        );
+
+        if (!updated) {
+          return res.status(404).json({ error: "Artwork not found for this user (userId mismatch)" });
         }
-      },
-      { new: true }
-    );
 
-    if (!updated) {
-      return res.status(404).json({ error: "Artwork not found for this user (userId mismatch)" });
-    }
-
-    return res.json({ ok: true, artwork: updated, mimeType, base64 });
-  } catch (e) {
-    console.error("Image metadata save error:", e);
-    return res.status(500).json({ error: "Failed to save image metadata", details: e.message });
-  }
-});
-
-
-    // uploadStream.on("finish", async (file) => {
-    //     try {
-    //       // ✅ Save metadata to MongoDB
-    //       // const imageDoc = await Image.create({
-    //       //   userId: req.user._id,
-    //       //   prompt: prompt.trim(),
-    //       //   size,
-    //       //   mimeType,
-    //       //   fileId: file._id,
-    //       //   filename: file.filename
-    //       // });
-
-    //       console.log("FINISH DEBUG types:", {
-    //         artworkId,
-    //         artworkIdType: typeof artworkId,
-    //         userId,
-    //         userIdType: typeof userId,
-    //         userIdRaw: String(userIdRaw),
-    //       });
-
-    //       // console.log("FINISH DEBUG", {
-    //       //   artworkId,
-    //       //   userId: String(userId),
-    //       //   fileId: String(file._id)
-    //       // });
-
-
-    //       const updated = await Artwork.findOneAndUpdate(
-    //         { _id: artworkId, userId },
-    //         {
-    //           $set: {
-    //             status: "generated",
-    //             imageFileId: file._id,
-    //             imageMimeType: mimeType,
-    //             imageFilename: file.filename,
-    //             updatedAt: new Date()
-    //           }
-    //         },
-    //         { new: true }
-    //       );
-
-
-    //       console.log("FINISH DEBUG updated?", !!updated);
-
-    //       // Testing if the userId returns back null
-    //       console.log("FINISH DEBUG: using", { artworkId, userId: String(userId) });
-
-
-    //       if (!updated) {
-    //         return res.status(404).json({ error: "Artwork not found for this user (userId mismatch)" });
-    //       }
-
-    //       // ✅ Respond once
-    //       return res.json({
-    //         ok: true,
-    //         artwork: updated,
-    //         mimeType,
-    //         base64
-    //       });
-
-    //     // Error handling for metadata save  
-    //     ////////////////////////////////////////////
-    //     ////////////////////////////////////////////
-    //     ////////////////////////////////////////////
-    //     // START HERE
-    //     } catch (e) {
-    //     console.error("Image metadata save error:", e);
-    //     return res.status(500).json({
-    //       error: "Failed to save image metadata",
-    //       details: e.message
-    //     });
-    //   }
-    // });
+        return res.json({ ok: true, artwork: updated, mimeType, base64 });
+      } catch (e) {
+        console.error("Image metadata save error:", e);
+        return res.status(500).json({ error: "Failed to save image metadata", details: e.message });
+      }
+  });
 
     uploadStream.end(buffer);
     return;
@@ -193,5 +129,39 @@ router.post("/generate", requireAuth, async (req, res) => {
     return res.status(500).json({ error: err.message || "Image generation failed." });
   }
 });
+
+// GET /api/images/:fileId - stream image by GridFS fileId with ownership check
+router.get("/:fileId", requireAuth, async (req, res) => {
+  try {
+    const { fileId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(fileId)) {
+      return res.status(400).json({ error: "Invalid fileId" });
+    }
+
+    const bucket = getBucket();
+    const _id = new mongoose.Types.ObjectId(fileId);
+
+    // Optional: ensure ownership by checking metadata.userId in images.files
+    const files = await bucket.find({ _id }).toArray();
+    const f = files?.[0];
+    if (!f) return res.status(404).json({ error: "File not found" });
+
+    // ownership check (because you stored metadata.userId as string)
+    if (String(f.metadata?.userId) !== String(req.user.sub)) {
+      return res.status(403).json({ error: "Not authorized to access this image" });
+    }
+
+    res.set("Content-Type", f.contentType || "image/png");
+
+    const downloadStream = bucket.openDownloadStream(_id);
+    downloadStream.on("error", () => res.status(404).end());
+    downloadStream.pipe(res);
+  } catch (e) {
+    console.error("Image fetch error:", e);
+    return res.status(500).json({ error: "Failed to fetch image" });
+  }
+});
+
 
 export default router;

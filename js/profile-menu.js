@@ -94,6 +94,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     localStorage.removeItem("origin_access");
     localStorage.removeItem("origin_user");
+    localStorage.removeItem("origin_current_artwork_id"); // ✅ clear stale draft
+
 
     // If your login file path differs, adjust:
     window.location.href = "index.html";

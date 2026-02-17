@@ -5,6 +5,7 @@
     alert(msg); // swap later for inline UI message
   }
 
+  // Simple login function (called on button click or Enter key)
   async function login(){
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value;
@@ -26,18 +27,23 @@
       localStorage.setItem("origin_access", data.accessToken);
       localStorage.setItem("origin_user", JSON.stringify(data.user));
 
+      // Then navigate to dashboard (or onboarding if you have that)
       window.location.href = "dashboard.html";
+
     } catch(err){
       setError("Network error. Is the API running?");
     }
   }
 
-  document.getElementById("signInBtn").addEventListener("click", login);
+  // document.getElementById("signInBtn").addEventListener("click", login);
 
   // Optional: Enter key submits
   document.addEventListener("keydown", (e) => {
-    if(e.key === "Enter") login();
+    if (e.key === "Enter" && signInBtn && !signInBtn.disabled) {
+      signInBtn.click();
+    }
   });
+
 
 
   // /js/login.js
@@ -152,11 +158,19 @@
 
           const data = await res.json().catch(() => ({}));
 
+          // Handle API errors (like invalid credentials) gracefully
           if (!res.ok){
             const msg = data?.error || "Login failed. Check credentials.";
             failSequence(msg);
             return;
           }
+
+          // ✅ Save auth session
+          localStorage.setItem("origin_access", data.accessToken);
+          localStorage.setItem("origin_user", JSON.stringify(data.user));
+
+          // ✅ Prevent cross-account draft mismatch
+          localStorage.removeItem("origin_current_artwork_id");
 
           // Optional: decide destination based on onboarding status if your API returns it
           // const dest = data?.needsOnboarding ? "onboarding.html" : "dashboard.html";
