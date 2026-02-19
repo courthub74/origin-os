@@ -265,29 +265,35 @@ function renderRecent(items = []) {
 
     console.log("[Dashboard] worksCount:", worksCount, "showEmpty:", showEmpty);
   }
+    let dash;
 
-  try {
-    // const stats = await fetchStats();
-    const dash = await fetchDashboard();
-    const stats = dash.stats;
+    try {
+      dash = await fetchDashboard();
+    } catch (err) {
+      console.warn("[Dashboard] Fetch failed:", err.message);
 
-    // Update KPIs in BOTH empty + active layouts (your markup repeats KPI blocks)
+      // Only fetch failures should zero everything
+      setKpiValue("Works", 0);
+      setKpiValue("Collections", 0);
+      setKpiValue("Drops", 0);
+      showState(0);
+      return;
+    }
+
+    // If we got here, we have data
+    console.log("[Dashboard] dash =", dash);
+
+    const stats = dash.stats || { works: 0, collections: 0, drops: 0 };
+
     setKpiValue("Works", stats.works ?? 0);
     setKpiValue("Collections", stats.collections ?? 0);
     setKpiValue("Drops", stats.drops ?? 0);
     showState(stats.works ?? 0);
-    // render sections
-    renderNextAction(dash.nextAction);
-    renderAttention(dash.attention);
-    renderContinue(dash.continue);
-    renderRecent(dash.recent);
-  } catch (err) {
-    console.warn("[Dashboard] Stats load failed:", err.message);
 
-    // If stats fails, safest UX: treat as empty (or you can show an error panel)
-    setKpiValue("Works", 0);
-    setKpiValue("Collections", 0);
-    setKpiValue("Drops", 0);
-    showState(0);
-  }
+    // Render sections, but don't allow ONE render bug to wipe the whole UI
+    try { renderNextAction(dash.nextAction); } catch(e){ console.warn("renderNextAction failed:", e); }
+    try { renderAttention(dash.attention); } catch(e){ console.warn("renderAttention failed:", e); }
+    try { renderContinue(dash.continue); } catch(e){ console.warn("renderContinue failed:", e); }
+    try { renderRecent(dash.recent); } catch(e){ console.warn("renderRecent failed:", e); }
+
 });
