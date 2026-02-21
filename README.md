@@ -20,8 +20,6 @@ Origin OS is a modular creative operating system built for artists, technologist
 
 ---
 
----
-
 ## ⚙️ Core Systems
 
 Origin OS currently operates on several foundational systems:
