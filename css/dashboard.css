@@ -267,4 +267,7 @@
   #recentActivityPanel{ grid-column: 1; grid-row: auto; }
 }
 
-
+/* Ensure the HTML hidden attribute actually hides elements */
+[hidden] {
+  display: none !important;
+}
