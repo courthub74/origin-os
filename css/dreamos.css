@@ -1136,3 +1136,10 @@ textarea.notes{ min-height: 110px; }
   pointer-events: auto;
 }
 
+
+/* must win against any layout rules */
+[hidden] { 
+  display: none !important; 
+}
+
+

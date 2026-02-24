@@ -55,9 +55,9 @@
     }
 
 /* Active state layout inside the existing .grid */
-.active-state{
-  display: contents; /* lets children participate in parent grid columns */
-}
+/* .active-state{
+  display: contents; 
+} */
 
 /* Left column stack */
 .active-left{
@@ -213,6 +213,7 @@
   height: auto !important;
   overflow: visible !important;
 }
+
 /* 
 .content, .grid {
   display: block !important;
@@ -231,12 +232,18 @@
   align-items:start;
 }
 
-/* Row 1: main dashboard left + quick actions right */
+/* Ensure hidden attribute ALWAYS hides */
+[hidden] { display: none !important; }
+
+/* Both states occupy the same grid slot */
 #emptyState,
-#activeState{
+#activeState {
   grid-column: 1;
   grid-row: 1;
 }
+
+/* Active state must NOT be display: contents */
+#activeState { display: block; } /* or display: grid; */
 
 #quickActionsPanel{
   grid-column: 2;

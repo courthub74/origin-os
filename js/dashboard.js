@@ -1,5 +1,7 @@
 document.addEventListener("DOMContentLoaded", async () => {
 
+  console.log("[Dashboard] DOMContentLoaded, initializing dashboard...");
+
   const userRaw = localStorage.getItem("origin_user");
   const token = localStorage.getItem("origin_access");
 
@@ -244,8 +246,14 @@ function renderRecent(items = []) {
     });
   }
 
+  // Initial state: show empty until we know otherwise
+  console.log("[Dashboard] stats =", stats);
+
   function showState(worksCount){
     const showEmpty = worksCount === 0;
+
+    // Debug logs to trace state changes
+    console.log("[Dashboard] showState called with:", worksCount);
 
     // Toggle the two states
     emptyWorks.toggleAttribute("hidden", !showEmpty);
