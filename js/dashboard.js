@@ -1,5 +1,12 @@
+// page checks for auth on load, then fetches dashboard data and renders the appropriate sections and states based on the response
+console.log("✅ dashboard.js LOADED", new Date().toISOString());
+window.__DASH_LOADED = true;
+
+
 document.addEventListener("DOMContentLoaded", async () => {
 
+  console.log("✅ dashboard DOMContentLoaded fired");
+  console.log("token?", !!localStorage.getItem("origin_access"), "userRaw?", !!localStorage.getItem("origin_user"));
   console.log("[Dashboard] DOMContentLoaded, initializing dashboard...");
 
   const userRaw = localStorage.getItem("origin_user");
@@ -64,9 +71,14 @@ function renderNextAction(next) {
 
   panel.removeAttribute("hidden");
 
-  document.getElementById("nextActionKicker")?.textContent = next.type === "continue" ? "Up next" : "Next";
-  document.getElementById("nextActionTitle")?.textContent = next.title || "Untitled";
-  document.getElementById("nextActionSub")?.textContent = next.subtitle || "";
+  const kickerEl = document.getElementById("nextActionKicker");
+  if (kickerEl) kickerEl.textContent = next.type === "continue" ? "Up next" : "Next";
+
+  const titleEl = document.getElementById("nextActionTitle");
+  if (titleEl) titleEl.textContent = next.title || "Untitled";
+
+  const subEl = document.getElementById("nextActionSub");
+  if (subEl) subEl.textContent = next.subtitle || "";
 
   const pill = document.getElementById("nextActionPill");
   if (pill) pill.textContent = next.type === "continue" ? "Priority" : "Next";
@@ -83,6 +95,37 @@ function renderNextAction(next) {
     secondary.onclick = () => navTo(next.secondaryCta?.go || "collections.html", next.workId);
   }
 }
+
+// function renderNextAction(next) {
+//   const panel = document.getElementById("nextActionPanel");
+//   if (!panel) return;
+
+//   if (!next) {
+//     panel.setAttribute("hidden", "");
+//     return;
+//   }
+
+//   panel.removeAttribute("hidden");
+
+//   document.getElementById("nextActionKicker")?.textContent = next.type === "continue" ? "Up next" : "Next";
+//   document.getElementById("nextActionTitle")?.textContent = next.title || "Untitled";
+//   document.getElementById("nextActionSub")?.textContent = next.subtitle || "";
+
+//   const pill = document.getElementById("nextActionPill");
+//   if (pill) pill.textContent = next.type === "continue" ? "Priority" : "Next";
+
+//   const primary = document.getElementById("nextActionBtn");
+//   if (primary) {
+//     setBtnWithDot(primary, next.primaryCta?.label || "Continue");
+//     primary.onclick = () => navTo(next.primaryCta?.go || "create.html", next.workId);
+//   }
+
+//   const secondary = document.getElementById("nextActionAltBtn");
+//   if (secondary) {
+//     secondary.textContent = next.secondaryCta?.label || "Assign Collection";
+//     secondary.onclick = () => navTo(next.secondaryCta?.go || "collections.html", next.workId);
+//   }
+// }
 
 function renderAttention(items = []) {
   const list = document.getElementById("attentionList");
@@ -193,6 +236,10 @@ function renderRecent(items = []) {
   const recentActivityPanel = document.getElementById("recentActivityPanel");
   const emptyQuickActionsSlot = document.getElementById("emptyQuickActionsSlot");
 
+  // Sanity check: ensure we have the main panels to toggle between
+  console.log("[Dashboard] emptyWorks?", !!emptyWorks, "activeWorks?", !!activeWorks);
+
+  // Initial state: show empty until we know otherwise
   if (!emptyWorks || !activeWorks) return;
 
   const API_BASE = "http://localhost:4000";
@@ -246,33 +293,59 @@ function renderRecent(items = []) {
     });
   }
 
-  // Initial state: show empty until we know otherwise
-  console.log("[Dashboard] stats =", stats);
-
+  // Explicit state handler to avoid toggle bugs and ensure consistent panel visibility rules
   function showState(worksCount){
-    const showEmpty = worksCount === 0;
+    const showEmpty = Number(worksCount) === 0;
 
-    // Debug logs to trace state changes
-    console.log("[Dashboard] showState called with:", worksCount);
+    console.log("[showState] worksCount =", worksCount, "showEmpty =", showEmpty);
 
-    // Toggle the two states
-    emptyWorks.toggleAttribute("hidden", !showEmpty);
-    activeWorks.toggleAttribute("hidden", showEmpty);
-
-    // Keep Quick Actions visible in both, hide Recent Activity when empty
-    if (quickActionsPanel) quickActionsPanel.toggleAttribute("hidden", false);
-    if (recentActivityPanel) recentActivityPanel.toggleAttribute("hidden", showEmpty);
-
-    // Move Quick Actions into empty right column when empty
-    if (showEmpty && quickActionsPanel && emptyQuickActionsSlot) {
-      emptyQuickActionsSlot.appendChild(quickActionsPanel);
+    if (showEmpty) {
+      emptyWorks.removeAttribute("hidden");
+      activeWorks.setAttribute("hidden", "");
     } else {
-      const grid = document.querySelector(".content .grid");
-      if (grid && quickActionsPanel) grid.appendChild(quickActionsPanel);
+      activeWorks.removeAttribute("hidden");
+      emptyWorks.setAttribute("hidden", "");
     }
 
-    console.log("[Dashboard] worksCount:", worksCount, "showEmpty:", showEmpty);
+    // Quick Actions always visible
+    if (quickActionsPanel) quickActionsPanel.removeAttribute("hidden");
+
+    // Recent Activity hidden only when empty
+    if (recentActivityPanel) {
+      if (showEmpty) recentActivityPanel.setAttribute("hidden", "");
+      else recentActivityPanel.removeAttribute("hidden");
+    }
+
+    console.log("[showState] after:", {
+      emptyHidden: emptyWorks.hasAttribute("hidden"),
+      activeHidden: activeWorks.hasAttribute("hidden"),
+    });
   }
+
+  // function showState(worksCount){
+  //   const showEmpty = worksCount === 0;
+
+  //   // Debug logs to trace state changes
+  //   console.log("[Dashboard] showState called with:", worksCount);
+
+  //   // Toggle the two states
+  //   emptyWorks.toggleAttribute("hidden", !showEmpty);
+  //   activeWorks.toggleAttribute("hidden", showEmpty);
+
+  //   // Keep Quick Actions visible in both, hide Recent Activity when empty
+  //   if (quickActionsPanel) quickActionsPanel.toggleAttribute("hidden", false);
+  //   if (recentActivityPanel) recentActivityPanel.toggleAttribute("hidden", showEmpty);
+
+  //   // Move Quick Actions into empty right column when empty
+  //   if (showEmpty && quickActionsPanel && emptyQuickActionsSlot) {
+  //     emptyQuickActionsSlot.appendChild(quickActionsPanel);
+  //   } else {
+  //     const grid = document.querySelector(".content .grid");
+  //     if (grid && quickActionsPanel) grid.appendChild(quickActionsPanel);
+  //   }
+
+  //   console.log("[Dashboard] worksCount:", worksCount, "showEmpty:", showEmpty);
+  // }
     let dash;
 
     try {
@@ -288,15 +361,18 @@ function renderRecent(items = []) {
       return;
     }
 
-    // If we got here, we have data
-    console.log("[Dashboard] dash =", dash);
-
     const stats = dash.stats || { works: 0, collections: 0, drops: 0 };
+    
+    // Initial state: show empty until we know otherwise
+    console.log("[Dashboard] stats =", stats);
 
     setKpiValue("Works", stats.works ?? 0);
     setKpiValue("Collections", stats.collections ?? 0);
     setKpiValue("Drops", stats.drops ?? 0);
     showState(stats.works ?? 0);
+
+    // Additional debug logs to verify data structure
+    console.log("[Dashboard] stats.works =", stats.works);
 
     // Render sections, but don't allow ONE render bug to wipe the whole UI
     try { renderNextAction(dash.nextAction); } catch(e){ console.warn("renderNextAction failed:", e); }
