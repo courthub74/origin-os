@@ -20,6 +20,24 @@ Origin OS is a modular creative operating system built for artists, technologist
 
 ---
 
+## ⚙️ Core Systems
+
+Origin OS currently operates on several foundational systems:
+
+- **JWT Authentication**  
+  Secure session handling using access + refresh tokens with HTTP-only cookies.
+
+- **Persistent Drafts**  
+  Artwork creation automatically maintains draft state across sessions.
+
+- **Media Storage Pipeline**  
+  Image generation, storage, and retrieval managed through the API and database layer.
+
+- **Dynamic Dashboard Rendering**  
+  User dashboards hydrate from live backend data rather than static placeholders.
+
+---
+
 ## 📁 Project Structure (High-Level)
 
 ```

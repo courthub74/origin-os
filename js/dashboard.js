@@ -1,4 +1,13 @@
+// page checks for auth on load, then fetches dashboard data and renders the appropriate sections and states based on the response
+console.log("✅ dashboard.js LOADED", new Date().toISOString());
+window.__DASH_LOADED = true;
+
+
 document.addEventListener("DOMContentLoaded", async () => {
+
+  console.log("✅ dashboard DOMContentLoaded fired");
+  console.log("token?", !!localStorage.getItem("origin_access"), "userRaw?", !!localStorage.getItem("origin_user"));
+  console.log("[Dashboard] DOMContentLoaded, initializing dashboard...");
 
   const userRaw = localStorage.getItem("origin_user");
   const token = localStorage.getItem("origin_access");
@@ -36,10 +45,201 @@ document.addEventListener("DOMContentLoaded", async () => {
   const emptyWorks = document.getElementById("emptyState");
   const activeWorks = document.getElementById("activeState");
 
+
+// Helper to navigate, optionally with a workId param for context
+  function navTo(go, workId) {
+  if (!go) return;
+  window.location.href = workId ? `${go}?workId=${workId}` : go;
+}
+
+function setBtnWithDot(btn, label) {
+  if (!btn) return;
+  btn.textContent = label + " ";
+  const dot = document.createElement("span");
+  dot.className = "dot";
+  btn.appendChild(dot);
+}
+
+function renderNextAction(next) {
+  const panel = document.getElementById("nextActionPanel");
+  if (!panel) return;
+
+  if (!next) {
+    panel.setAttribute("hidden", "");
+    return;
+  }
+
+  panel.removeAttribute("hidden");
+
+  const kickerEl = document.getElementById("nextActionKicker");
+  if (kickerEl) kickerEl.textContent = next.type === "continue" ? "Up next" : "Next";
+
+  const titleEl = document.getElementById("nextActionTitle");
+  if (titleEl) titleEl.textContent = next.title || "Untitled";
+
+  const subEl = document.getElementById("nextActionSub");
+  if (subEl) subEl.textContent = next.subtitle || "";
+
+  const pill = document.getElementById("nextActionPill");
+  if (pill) pill.textContent = next.type === "continue" ? "Priority" : "Next";
+
+  const primary = document.getElementById("nextActionBtn");
+  if (primary) {
+    setBtnWithDot(primary, next.primaryCta?.label || "Continue");
+    primary.onclick = () => navTo(next.primaryCta?.go || "create.html", next.workId);
+  }
+
+  const secondary = document.getElementById("nextActionAltBtn");
+  if (secondary) {
+    secondary.textContent = next.secondaryCta?.label || "Assign Collection";
+    secondary.onclick = () => navTo(next.secondaryCta?.go || "collections.html", next.workId);
+  }
+}
+
+// function renderNextAction(next) {
+//   const panel = document.getElementById("nextActionPanel");
+//   if (!panel) return;
+
+//   if (!next) {
+//     panel.setAttribute("hidden", "");
+//     return;
+//   }
+
+//   panel.removeAttribute("hidden");
+
+//   document.getElementById("nextActionKicker")?.textContent = next.type === "continue" ? "Up next" : "Next";
+//   document.getElementById("nextActionTitle")?.textContent = next.title || "Untitled";
+//   document.getElementById("nextActionSub")?.textContent = next.subtitle || "";
+
+//   const pill = document.getElementById("nextActionPill");
+//   if (pill) pill.textContent = next.type === "continue" ? "Priority" : "Next";
+
+//   const primary = document.getElementById("nextActionBtn");
+//   if (primary) {
+//     setBtnWithDot(primary, next.primaryCta?.label || "Continue");
+//     primary.onclick = () => navTo(next.primaryCta?.go || "create.html", next.workId);
+//   }
+
+//   const secondary = document.getElementById("nextActionAltBtn");
+//   if (secondary) {
+//     secondary.textContent = next.secondaryCta?.label || "Assign Collection";
+//     secondary.onclick = () => navTo(next.secondaryCta?.go || "collections.html", next.workId);
+//   }
+// }
+
+function renderAttention(items = []) {
+  const list = document.getElementById("attentionList");
+  const pill = document.getElementById("attentionCount");
+  if (!list) return;
+
+  list.innerHTML = "";
+  if (pill) pill.textContent = `Attention: ${items.length}`;
+
+  if (!items.length) {
+    list.innerHTML = `
+      <div class="item">
+        <div class="meta">
+          <div class="name">All clear</div>
+          <div class="sub">Nothing needs attention right now.</div>
+        </div>
+        <div class="tag">✅</div>
+      </div>
+    `;
+    return;
+  }
+
+  for (const it of items.slice(0, 5)) {
+    const row = document.createElement("div");
+    row.className = "item";
+    row.innerHTML = `
+      <div class="meta">
+        <div class="name">“${it.title || "Untitled"}”</div>
+        <div class="sub">${it.reason || ""}</div>
+      </div>
+      <div class="wm-right">
+        <div class="tag">${it.tag || ""}</div>
+        <button class="btn" type="button">${it.cta?.label || "Open"}</button>
+      </div>
+    `;
+    row.querySelector("button")?.addEventListener("click", () => navTo(it.cta?.go || "create.html", it.workId));
+    list.appendChild(row);
+  }
+}
+
+function renderContinue(items = []) {
+  const wrap = document.getElementById("continueTiles");
+  if (!wrap) return;
+
+  wrap.innerHTML = "";
+
+  if (!items.length) {
+    const tile = document.createElement("div");
+    tile.className = "tile";
+    tile.innerHTML = `
+      <div class="t">Start a new work</div>
+      <div class="d">No drafts to continue yet.</div>
+      <div class="go"><span>Create</span><span>↗</span></div>
+    `;
+    tile.addEventListener("click", () => navTo("create.html"));
+    wrap.appendChild(tile);
+    return;
+  }
+
+  for (const it of items) {
+    const tile = document.createElement("div");
+    tile.className = "tile";
+    tile.innerHTML = `
+      <div class="t">“${it.title || "Untitled"}”</div>
+      <div class="d">Last edited · ${it.lastEditedText || ""}</div>
+      <div class="go"><span>Continue</span><span>↗</span></div>
+    `;
+    tile.addEventListener("click", () => navTo("create.html", it.workId));
+    wrap.appendChild(tile);
+  }
+}
+
+function renderRecent(items = []) {
+  const list = document.getElementById("recentActivityList");
+  if (!list) return;
+
+  list.innerHTML = "";
+
+  if (!items.length) {
+    list.innerHTML = `
+      <div class="item">
+        <div class="meta">
+          <div class="name">No activity yet</div>
+          <div class="sub">Create or edit a work to see history here.</div>
+        </div>
+        <div class="tag">—</div>
+      </div>
+    `;
+    return;
+  }
+
+  for (const it of items) {
+    const row = document.createElement("div");
+    row.className = "item";
+    row.innerHTML = `
+      <div class="meta">
+        <div class="name">“${it.title || "Untitled"}”</div>
+        <div class="sub">${it.subtitle || ""}</div>
+      </div>
+      <div class="tag">${it.type || ""}</div>
+    `;
+    list.appendChild(row);
+  }
+}
+
+
   const quickActionsPanel = document.getElementById("quickActionsPanel");
   const recentActivityPanel = document.getElementById("recentActivityPanel");
   const emptyQuickActionsSlot = document.getElementById("emptyQuickActionsSlot");
 
+  // Sanity check: ensure we have the main panels to toggle between
+  console.log("[Dashboard] emptyWorks?", !!emptyWorks, "activeWorks?", !!activeWorks);
+
+  // Initial state: show empty until we know otherwise
   if (!emptyWorks || !activeWorks) return;
 
   const API_BASE = "http://localhost:4000";
@@ -93,50 +293,91 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
+  // Explicit state handler to avoid toggle bugs and ensure consistent panel visibility rules
   function showState(worksCount){
-    const showEmpty = worksCount === 0;
+    const showEmpty = Number(worksCount) === 0;
 
-    // Toggle the two states
-    emptyWorks.toggleAttribute("hidden", !showEmpty);
-    activeWorks.toggleAttribute("hidden", showEmpty);
+    console.log("[showState] worksCount =", worksCount, "showEmpty =", showEmpty);
 
-    // Keep Quick Actions visible in both, hide Recent Activity when empty
-    if (quickActionsPanel) quickActionsPanel.toggleAttribute("hidden", false);
-    if (recentActivityPanel) recentActivityPanel.toggleAttribute("hidden", showEmpty);
-
-    // Move Quick Actions into empty right column when empty
-    if (showEmpty && quickActionsPanel && emptyQuickActionsSlot) {
-      emptyQuickActionsSlot.appendChild(quickActionsPanel);
+    if (showEmpty) {
+      emptyWorks.removeAttribute("hidden");
+      activeWorks.setAttribute("hidden", "");
     } else {
-      const grid = document.querySelector(".content .grid");
-      if (grid && quickActionsPanel) grid.appendChild(quickActionsPanel);
+      activeWorks.removeAttribute("hidden");
+      emptyWorks.setAttribute("hidden", "");
     }
 
-    console.log("[Dashboard] worksCount:", worksCount, "showEmpty:", showEmpty);
+    // Quick Actions always visible
+    if (quickActionsPanel) quickActionsPanel.removeAttribute("hidden");
+
+    // Recent Activity hidden only when empty
+    if (recentActivityPanel) {
+      if (showEmpty) recentActivityPanel.setAttribute("hidden", "");
+      else recentActivityPanel.removeAttribute("hidden");
+    }
+
+    console.log("[showState] after:", {
+      emptyHidden: emptyWorks.hasAttribute("hidden"),
+      activeHidden: activeWorks.hasAttribute("hidden"),
+    });
   }
 
-  try {
-    // const stats = await fetchStats();
-    const dash = await fetchDashboard();
-    const stats = dash.stats;
+  // function showState(worksCount){
+  //   const showEmpty = worksCount === 0;
 
-    // Update KPIs in BOTH empty + active layouts (your markup repeats KPI blocks)
+  //   // Debug logs to trace state changes
+  //   console.log("[Dashboard] showState called with:", worksCount);
+
+  //   // Toggle the two states
+  //   emptyWorks.toggleAttribute("hidden", !showEmpty);
+  //   activeWorks.toggleAttribute("hidden", showEmpty);
+
+  //   // Keep Quick Actions visible in both, hide Recent Activity when empty
+  //   if (quickActionsPanel) quickActionsPanel.toggleAttribute("hidden", false);
+  //   if (recentActivityPanel) recentActivityPanel.toggleAttribute("hidden", showEmpty);
+
+  //   // Move Quick Actions into empty right column when empty
+  //   if (showEmpty && quickActionsPanel && emptyQuickActionsSlot) {
+  //     emptyQuickActionsSlot.appendChild(quickActionsPanel);
+  //   } else {
+  //     const grid = document.querySelector(".content .grid");
+  //     if (grid && quickActionsPanel) grid.appendChild(quickActionsPanel);
+  //   }
+
+  //   console.log("[Dashboard] worksCount:", worksCount, "showEmpty:", showEmpty);
+  // }
+    let dash;
+
+    try {
+      dash = await fetchDashboard();
+    } catch (err) {
+      console.warn("[Dashboard] Fetch failed:", err.message);
+
+      // Only fetch failures should zero everything
+      setKpiValue("Works", 0);
+      setKpiValue("Collections", 0);
+      setKpiValue("Drops", 0);
+      showState(0);
+      return;
+    }
+
+    const stats = dash.stats || { works: 0, collections: 0, drops: 0 };
+    
+    // Initial state: show empty until we know otherwise
+    console.log("[Dashboard] stats =", stats);
+
     setKpiValue("Works", stats.works ?? 0);
     setKpiValue("Collections", stats.collections ?? 0);
     setKpiValue("Drops", stats.drops ?? 0);
     showState(stats.works ?? 0);
-    // render sections
-    renderNextAction(dash.nextAction);
-    renderAttention(dash.attention);
-    renderContinue(dash.continue);
-    renderRecent(dash.recent);
-  } catch (err) {
-    console.warn("[Dashboard] Stats load failed:", err.message);
 
-    // If stats fails, safest UX: treat as empty (or you can show an error panel)
-    setKpiValue("Works", 0);
-    setKpiValue("Collections", 0);
-    setKpiValue("Drops", 0);
-    showState(0);
-  }
+    // Additional debug logs to verify data structure
+    console.log("[Dashboard] stats.works =", stats.works);
+
+    // Render sections, but don't allow ONE render bug to wipe the whole UI
+    try { renderNextAction(dash.nextAction); } catch(e){ console.warn("renderNextAction failed:", e); }
+    try { renderAttention(dash.attention); } catch(e){ console.warn("renderAttention failed:", e); }
+    try { renderContinue(dash.continue); } catch(e){ console.warn("renderContinue failed:", e); }
+    try { renderRecent(dash.recent); } catch(e){ console.warn("renderRecent failed:", e); }
+
 });
