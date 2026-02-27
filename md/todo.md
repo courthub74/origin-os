@@ -16,7 +16,7 @@
 
 \* ~Start AI Integration for Image generation~
 
-\* Update dashboard to match the actual account on the frontend
+\* ~Update dashboard to match the actual account on the frontend~
 
 \* ~Compile Prompt button needs to output to the compiled prompt field~
 
