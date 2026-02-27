@@ -1,9 +1,10 @@
 ## Quarter 1 (Now - June)
 
-auth fully reliable
-dashboard hydration solid
-image generation stable
-clean README + START.md
+/_ ~auth fully reliable~
+/_ ~dashboard hydration solid~
+/_ ~image generation stable~
+async image generation
+/_ ~clean README + START.md~
 Goal: looks like a real platform.
 
 ## Quarter 3 (June - Sept)
