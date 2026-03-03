@@ -96,37 +96,6 @@ function renderNextAction(next) {
   }
 }
 
-// function renderNextAction(next) {
-//   const panel = document.getElementById("nextActionPanel");
-//   if (!panel) return;
-
-//   if (!next) {
-//     panel.setAttribute("hidden", "");
-//     return;
-//   }
-
-//   panel.removeAttribute("hidden");
-
-//   document.getElementById("nextActionKicker")?.textContent = next.type === "continue" ? "Up next" : "Next";
-//   document.getElementById("nextActionTitle")?.textContent = next.title || "Untitled";
-//   document.getElementById("nextActionSub")?.textContent = next.subtitle || "";
-
-//   const pill = document.getElementById("nextActionPill");
-//   if (pill) pill.textContent = next.type === "continue" ? "Priority" : "Next";
-
-//   const primary = document.getElementById("nextActionBtn");
-//   if (primary) {
-//     setBtnWithDot(primary, next.primaryCta?.label || "Continue");
-//     primary.onclick = () => navTo(next.primaryCta?.go || "create.html", next.workId);
-//   }
-
-//   const secondary = document.getElementById("nextActionAltBtn");
-//   if (secondary) {
-//     secondary.textContent = next.secondaryCta?.label || "Assign Collection";
-//     secondary.onclick = () => navTo(next.secondaryCta?.go || "collections.html", next.workId);
-//   }
-// }
-
 function renderAttention(items = []) {
   const list = document.getElementById("attentionList");
   const pill = document.getElementById("attentionCount");
