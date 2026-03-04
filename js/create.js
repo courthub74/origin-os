@@ -60,6 +60,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.getElementById("generateBtn")?.addEventListener("click", () => {
     generateImageFromPrompt().catch(err => {
+
+      // Check for common auth issues no token, expired token, etc. and handle by redirecting to login
+      const t = token();
+      if (!t) {
+        alert("Session expired. Please log in again.");
+        window.location.href = "/login.html"; // or your route
+        return;
+      }
+      
       console.error(err);
       alert(err.message);
     });
