@@ -351,6 +351,6 @@ This file defines the current architecture and development expectations for Orig
 
 ## 🧠 Powered By
 
-<p align="center">
+<p>
   <img src="./img/neo_logo_white.png" width="120" alt="CourDevelops logo">
 </p>
