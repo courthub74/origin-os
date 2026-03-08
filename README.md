@@ -147,6 +147,37 @@ img.src = URL.createObjectURL(blob);
 
 ---
 
+---
+
+## 🌐 Dream Agent Website Content Management
+
+Origin OS functions as a **headless CMS** and **publishing engine** for Dream Agent.
+
+This means Dream Agent website content can be updated through Origin OS without directly editing the website codebase itself.
+
+### What this includes
+
+- Artwork publishing
+- Collection updates
+- Release descriptions
+- Website content updates
+- Future creative asset management
+
+### Technical role
+
+Origin OS serves as the **content management layer** between internal creator workflows and the external Dream Agent website.
+
+### Architecture
+
+````text
+Origin OS Admin / Dashboard
+        ↓
+Content Management Layer
+        ↓
+API / Data Delivery
+        ↓
+Dream Agent Website
+
 ## 🔧 Requirements
 
 Make sure these are installed **before starting**:
@@ -173,7 +204,7 @@ The backend powers:
 
 ```bash
 cd origin-os-api
-```
+````
 
 ### 2. Install dependencies (first time or after pulling)
 
