@@ -147,11 +147,9 @@ img.src = URL.createObjectURL(blob);
 
 ---
 
----
-
 ## 🌐 Dream Agent Website Content Management
 
-Origin OS functions as a **headless CMS** and **publishing engine** for Dream Agent.
+Origin OS functions as a **headless CMS** and **publishing engine** for creators like Dream Agent.
 
 This means Dream Agent website content can be updated through Origin OS without directly editing the website codebase itself.
 
