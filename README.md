@@ -1,6 +1,5 @@
 <div style="display: flex; align-items: center; justify-content: center; gap: 12px;">
   <img src="./img/origin-os.png" width="100" alt="Origin OS logo">
-  <h1 style="margin: 0;">Origin OS — START.md</h1>
 
 # Origin OS — START.md
 
@@ -8,13 +7,11 @@
 ![Commit Activity](https://img.shields.io/github/commit-activity/m/courthub74/origin-os)
 ![Repo Size](https://img.shields.io/github/repo-size/courthub74/origin-os)
 ![Top Language](https://img.shields.io/github/languages/top/courthub74/origin-os)
-![Stack](https://img.shields.io/badge/stack-Node.js%20%7C%20Express%20%7C%20MongoDB-green)
+![Stack](https://img.shields.io/badge/stack-Node.js%20%7C%20Express%20%7C%20MongoDB)
 
 </div>
 
 This file is the **single source of truth** for booting, running, and understanding the Origin OS development environment.
-
-If Origin OS feels like a machine, this is the ignition manual.
 
 ---
 
