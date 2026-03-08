@@ -1,6 +1,15 @@
 <div style="display: flex; align-items: center; justify-content: center; gap: 12px;">
   <img src="./img/origin-os.png" width="100" alt="Origin OS logo">
   <h1 style="margin: 0;">Origin OS — START.md</h1>
+
+# Origin OS — START.md
+
+![Last Commit](https://img.shields.io/github/last-commit/courthub74/origin-os)
+![Commit Activity](https://img.shields.io/github/commit-activity/m/courthub74/origin-os)
+![Repo Size](https://img.shields.io/github/repo-size/courthub74/origin-os)
+![Top Language](https://img.shields.io/github/languages/top/courthub74/origin-os)
+![Stack](https://img.shields.io/badge/stack-Node.js%20%7C%20Express%20%7C%20MongoDB-green)
+
 </div>
 
 This file is the **single source of truth** for booting, running, and understanding the Origin OS development environment.
@@ -61,6 +70,83 @@ origin_os/
 ├─ Dockerfile
 ├─ docker-compose.yml
 └─ package.json        # Root tooling / future scripts
+```
+
+---
+
+# 🏗 System Architecture
+
+Origin OS follows a layered architecture designed to keep the system modular, inspectable, and evolvable.
+
+            ┌──────────────────────────┐
+            │        Frontend          │
+            │  Origin OS Shell (HTML)  │
+            │  CSS + JavaScript UI     │
+            └────────────┬─────────────┘
+                         │
+                         │ HTTP Requests
+                         ▼
+            ┌──────────────────────────┐
+            │       Express API        │
+            │   origin-os-api server   │
+            │                          │
+            │  Auth Routes             │
+            │  Artwork Routes          │
+            │  Image Routes            │
+            │  Stats Routes            │
+            └────────────┬─────────────┘
+                         │
+                         │ Middleware Layer
+                         ▼
+            ┌──────────────────────────┐
+            │     Auth Middleware      │
+            │ JWT verification         │
+            │ Cookie handling          │
+            │ Request guards           │
+            └────────────┬─────────────┘
+                         │
+                         ▼
+            ┌──────────────────────────┐
+            │        Data Layer        │
+            │                          │
+            │ MongoDB Database         │
+            │ Artwork documents        │
+            │ User accounts            │
+            │ Media file references    │
+            └────────────┬─────────────┘
+                         │
+                         ▼
+            ┌──────────────────────────┐
+            │       Media Storage      │
+            │ Generated images         │
+            │ Stored assets            │
+            └──────────────────────────┘
+
+---
+
+# 🎨 Image Generation Pipeline
+
+Origin OS uses an asynchronous workflow for image generation and retrieval.
+
+### Generation Flow
+
+1. User requests image generation from the frontend
+2. API creates or updates a draft artwork record
+3. Image generation service produces the image
+4. Image is stored in the media layer
+5. Artwork record is updated with the image reference
+6. Frontend retrieves the image through the protected media API
+
+Example retrieval:
+
+```javascript
+const imgRes = await fetch(`${API_BASE}/api/images/${imageFileId}`, {
+  headers: { Authorization: `Bearer ${token()}` },
+  credentials: "include",
+});
+
+const blob = await imgRes.blob();
+img.src = URL.createObjectURL(blob);
 ```
 
 ---
