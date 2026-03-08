@@ -3,11 +3,11 @@
 
 # Origin OS — START.md
 
-![Last Commit](https://img.shields.io/github/last-commit/courthub74/origin-os)
-![Commit Activity](https://img.shields.io/github/commit-activity/m/courthub74/origin-os)
-![Repo Size](https://img.shields.io/github/repo-size/courthub74/origin-os)
-![Top Language](https://img.shields.io/github/languages/top/courthub74/origin-os)
-![Stack](https://img.shields.io/badge/stack-Node.js%20%7C%20Express%20%7C%20MongoDB-green)
+![Last Commit](https://img.shields.io/github/last-commit/courthub74/origin-os?color=3a9df7)
+![Commit Activity](https://img.shields.io/github/commit-activity/m/courthub74/origin-os?color=3a9df7)
+![Repo Size](https://img.shields.io/github/repo-size/courthub74/origin-os?color=3a9df7)
+![Top Language](https://img.shields.io/github/languages/top/courthub74/origin-os?color=3a9df7)
+![Stack](https://img.shields.io/badge/stack-Node.js%20%7C%20Express%20%7C%20MongoDB-3a9df7)
 
 </div>
 
