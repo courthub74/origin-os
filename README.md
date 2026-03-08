@@ -8,12 +8,6 @@
 ![Stack](https://img.shields.io/badge/stack-Node.js%20%7C%20Express%20%7C%20MongoDB-2c3e50)
 ![Issues](https://img.shields.io/github/issues/courthub74/origin-os?color=3a9df7)
 
-<!-- ![Repo Size](https://img.shields.io/github/repo-size/courthub74/origin-os?color=3a9df7) -->
-
-<!-- ![Top Language](https://img.shields.io/github/languages/top/courthub74/origin-os?color=3a9df7) -->
-
-<!-- ![Pull Requests](https://img.shields.io/github/issues-pr/courthub74/origin-os?color=3a9df7) -->
-
 </div>
 
 This file is the **single source of truth** for booting, running, and understanding the Origin OS development environment.
@@ -322,23 +316,41 @@ Origin OS is intentionally:
 - Inspectable
 - Evolvable
 
-No magic.
-No locked doors.
-Every system is legible.
+---
+
+## 🧭 Project Status
+
+Origin OS is currently in **active development**.
+
+Core authentication, image generation workflows, and modular dashboard architecture are functional.  
+Future iterations will expand the platform toward a full creative operating system for digital creators.
 
 ---
 
-## 🚀 Next Planned Evolutions
+## 🚀 Planned Evolutions
+
+Origin OS is designed as a modular system and will continue evolving.  
+Upcoming architecture improvements include:
 
 - React / Vite frontend
-- Cloudflare Pages hosting
-- API versioning
+- Cloudflare Pages deployment
+- API versioning strategy
 - Role-based dashboards
-- Plugin-style modules
+- Plugin-style module system
 
 ---
 
-If something breaks, **read this file first**.
-If something grows, **update this file**.
+## 📜 Project Contract
 
-This is the contract.
+If something breaks → **start with this README.**  
+If something grows → **update this README.**
+
+This file defines the current architecture and development expectations for Origin OS.
+
+---
+
+## 🧠 Powered By
+
+<p align="center">
+  <img src="./img/neo_logo_white.png" width="120" alt="CourDevelops logo">
+</p>
