@@ -12,6 +12,8 @@
 
 This file is the **single source of truth** for booting, running, and understanding the Origin OS development environment.
 
+See the [CHANGELOG](CHANGELOG.md) for release history.
+
 ---
 
 ## 🧭 What Is Origin OS?
