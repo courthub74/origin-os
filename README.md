@@ -7,7 +7,7 @@
 ![Commit Activity](https://img.shields.io/github/commit-activity/m/courthub74/origin-os)
 ![Repo Size](https://img.shields.io/github/repo-size/courthub74/origin-os)
 ![Top Language](https://img.shields.io/github/languages/top/courthub74/origin-os)
-![Stack](https://img.shields.io/badge/stack-Node.js%20%7C%20Express%20%7C%20MongoDB)
+![Stack](https://img.shields.io/badge/stack-Node.js%20%7C%20Express%20%7C%20MongoDB-green)
 
 </div>
 
