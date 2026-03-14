@@ -18,7 +18,7 @@ console.log("register.js loaded ✅");
 
   try {
     const name = document.getElementById("regName").value.trim();
-    const email = document.getElementById("regEmail").value.trim();
+    const email = document.getElementById("regEmail").value.trim().toLowerCase();
     const pass = document.getElementById("regPass").value;
     const pass2 = document.getElementById("regPass2").value;
     const agreed = document.getElementById("agreeTerms").checked;
