@@ -65,6 +65,21 @@ origin_os/
 
 ---
 
+## System Architecture
+
+User Dashboard (HTML / JS)
+        |
+        v
+Origin OS API (Node.js / Express)
+        |
+        v
+MongoDB Database
+        |
+        v
+AI Generation + Asset Pipeline
+
+---
+
 ## 🔧 Requirements
 
 Make sure these are installed **before starting**:
