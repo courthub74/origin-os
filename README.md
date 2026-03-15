@@ -18,30 +18,39 @@ See the [CHANGELOG](CHANGELOG.md) for release history.
 
 ## 🧭 What Is Origin OS?
 
-Origin OS is a modular creative operating system built for artists, technologists, and autonomous brands.
+## What is Origin OS?
 
-- **Frontend:** Static HTML / CSS / JavaScript (Origin OS Shell)
-- **Backend:** Node.js + Express API with MongoDB
-- **Auth:** JWT + HTTP-only cookies
-- **Current Mode:** Local development (non-Docker, Docker-ready)
+Origin OS is a modular platform for creating, managing, and publishing digital artwork through a structured creative pipeline.
+
+It combines a **dashboard-based creative interface**, a **Node.js + MongoDB backend**, and an **AI-powered generation system** to help creators produce and distribute digital work from a single environment.
+
+Origin OS is designed to function as a **creative operating system** rather than a single-purpose application.
 
 ---
 
-## ⚙️ Core Systems
+## ⚙️ Core Capabilities
 
-Origin OS currently operates on several foundational systems:
+Origin OS currently provides several foundational systems:
 
-- **JWT Authentication**  
-  Secure session handling using access + refresh tokens with HTTP-only cookies.
+### JWT Authentication
 
-- **Persistent Drafts**  
-  Artwork creation automatically maintains draft state across sessions.
+Secure session handling using access and refresh tokens with HTTP-only cookies.
 
-- **Media Storage Pipeline**  
-  Image generation, storage, and retrieval managed through the API and database layer.
+### Persistent Draft System
 
-- **Dynamic Dashboard Rendering**  
-  User dashboards hydrate from live backend data rather than static placeholders.
+Artwork creation automatically saves draft state so creative sessions can continue across logins.
+
+### AI Generation Pipeline
+
+Images are generated through the backend API and stored through the media pipeline.
+
+### Dynamic Dashboard
+
+User dashboards hydrate from live backend data rather than static placeholders.
+
+### Modular Creative Tools
+
+Origin OS is designed to support multiple creator workflows including artwork generation, collections, publishing, and branding.
 
 ---
 
@@ -122,6 +131,37 @@ Origin OS follows a layered architecture designed to keep the system modular, in
 
 ---
 
+## Technology Stack
+
+**Frontend**
+
+- HTML
+- CSS
+- JavaScript
+- Live Server (development)
+
+**Backend**
+
+- Node.js
+- Express
+
+**Database**
+
+- MongoDB
+
+**Authentication**
+
+- JWT
+- HTTP-only cookies
+
+**Future Platform**
+
+- React / Vite
+- Cloudflare Pages
+- Docker deployment
+
+---
+
 # 🎨 Image Generation Pipeline
 
 Origin OS uses an asynchronous workflow for image generation and retrieval.
@@ -167,175 +207,47 @@ This means Dream Agent website content can be updated through Origin OS without 
 
 Origin OS serves as the **content management layer** between internal creator workflows and the external Dream Agent website.
 
-### Architecture
+## Documentation
 
-````text
-Origin OS Admin / Dashboard
-        ↓
-Content Management Layer
-        ↓
-API / Data Delivery
-        ↓
-Dream Agent Website
+Project documentation is organized as follows:
 
-## 🔧 Requirements
-
-Make sure these are installed **before starting**:
-
-- **Node.js** (v18+ recommended)
-- **npm** (comes with Node)
-- **MongoDB** (local service or MongoDB Compass)
-- **VS Code** (recommended)
-- **Live Server extension** (VS Code)
+| File                | Purpose                                 |
+| ------------------- | --------------------------------------- |
+| **README.md**       | Project overview                        |
+| **DEVELOPMENT.md**  | Local development setup                 |
+| **ARCHITECTURE.md** | System architecture and internal design |
 
 ---
 
-## 🧠 Backend — API Startup
+## Current Development Focus
 
-The backend powers:
+Active development is currently focused on:
 
-- Authentication
-- User accounts
-- Artworks
-- Stats
-- Protected routes
-
-### 1. Navigate to the API folder
-
-```bash
-cd origin-os-api
-````
-
-### 2. Install dependencies (first time or after pulling)
-
-```bash
-npm install
-```
-
-### 3. Configure environment variables
-
-Ensure `origin-os-api/.env` exists:
-
-```env
-PORT=4000
-MONGO_URI=mongodb://127.0.0.1:27017/origin_os
-JWT_ACCESS_SECRET=your_secret_here
-JWT_REFRESH_SECRET=your_refresh_secret_here
-```
-
-### 4. Start the API server
-
-```bash
-npm run dev
-```
-
-Expected output:
-
-```
-✅ API running on http://localhost:4000
-✅ MongoDB connected
-```
-
-Leave this terminal running.
+• asynchronous AI artwork generation  
+• modular dashboard systems  
+• persistent creative workflows  
+• scalable media pipelines
 
 ---
 
-## 🖥️ Frontend — Origin OS Shell
+## Roadmap
 
-The frontend is **static HTML/CSS/JS**.
-No build step. No bundler (yet).
+Upcoming evolutions include:
 
-### Recommended Method: VS Code Live Server
-
-1. Open the **origin_os root folder** in VS Code
-2. Locate `index.html`
-3. Right-click → **Open with Live Server**
-
-The app opens at:
-
-```
-http://127.0.0.1:5500/
-```
-
-✔ Loads all CSS + JS correctly
-✔ Communicates with backend at `localhost:4000`
-✔ Supports auth cookies
+- React / Vite frontend
+- Async generation worker pipeline
+- Plugin-style module architecture
+- Cloud deployment
+- creator publishing workflows
+- collection systems
 
 ---
 
-## 🔁 Normal Development Workflow
+## Repository
 
-**Terminal 1 — Backend**
+GitHub
 
-```bash
-cd origin-os-api
-npm run dev
-```
-
-**Frontend**
-
-- Live Server → `index.html`
-- Refresh browser as needed
-
-Backend auto-restarts on change.
-Frontend reloads on save.
-
----
-
-## 🔐 Authentication Notes
-
-- Auth uses **HTTP-only cookies**
-- Tokens are issued by `/auth/login`
-- Protected pages rely on:
-  - `auth-guard.js`
-  - `/auth/me` validation
-
-⚠️ Always run frontend on a server (Live Server).
-Opening files directly (`file://`) will break auth.
-
----
-
-## ⚠️ Common Pitfalls
-
-### ❌ CSS Not Loading
-
-- Live Server started inside `/html` or another subfolder
-- Fix: Start Live Server from **project root**
-
-### ❌ MongoDB Connection Error
-
-```text
-ECONNREFUSED 127.0.0.1:27017
-```
-
-Fix:
-
-- Start MongoDB service
-- Or open MongoDB Compass → Connect
-
-### ❌ Auth Not Persisting
-
-- Frontend not served via HTTP
-- Cookies blocked
-
----
-
-## 🐳 Docker (Optional / Later Phase)
-
-Docker is **present but optional**.
-Not required for daily development.
-
-When ready:
-
-```bash
-docker compose up --build
-```
-
-Use Docker when:
-
-- Onboarding collaborators
-- Standardizing environments
-- Preparing production builds
+https://github.com/courthub74/origin-os
 
 ---
 
