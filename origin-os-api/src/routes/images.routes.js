@@ -15,115 +15,157 @@ function getBucket() {
 
 // Routes
 
-// POST /api/images/generate
+// POST ROUTE: /api/images/generate
 router.post("/generate", requireAuth, async (req, res) => {
-
-  // debugging auth issues - check req.user early
   console.log("TOP DEBUG req.user =", req.user);
+
   try {
     if (!process.env.OPENAI_API_KEY) {
       return res.status(500).json({ error: "OPENAI_API_KEY is not set on the server." });
     }
 
-    const { prompt, size = "1024x1024", format = "png" } = req.body;
+    const { prompt, size = "1024x1024", format = "png", artworkId } = req.body;
 
     if (!prompt || typeof prompt !== "string" || prompt.trim().length < 10) {
       return res.status(400).json({ error: "Prompt is missing or too short." });
     }
 
-    const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-
-    const result = await openai.images.generate({
-      model: "gpt-image-1",
-      prompt: prompt.trim(),
-      size,
-      output_format: format
-    });
-
-    const img = result.data?.[0];
-    if (!img?.b64_json) {
-      return res.status(500).json({ error: "No image returned from model." });
+    const userIdRaw = req.user?.sub;
+    if (!userIdRaw) {
+      return res.status(401).json({ error: "Auth user id missing" });
     }
 
-    const base64 = img.b64_json;
-
-    const mimeType =
-      format === "jpeg" ? "image/jpeg" :
-      format === "webp" ? "image/webp" :
-      "image/png";
-
-
-    // ✅ Save to GridFS
-    const buffer = Buffer.from(base64, "base64");
-    const bucket = getBucket();
-    const filename = `origin_${Date.now()}.${format}`;
-
-    console.log("AUTH DEBUG req.user =", req.user);
-
-    const userIdRaw = req.user?.sub;
-    if (!userIdRaw) return res.status(401).json({ error: "Auth user id missing" });
+    if (!artworkId) {
+      return res.status(400).json({ error: "artworkId is required" });
+    }
 
     const userId = new mongoose.Types.ObjectId(userIdRaw);
 
-    const { artworkId } = req.body;
-    if (!artworkId) return res.status(400).json({ error: "artworkId is required" });
+    const artwork = await Artwork.findOneAndUpdate(
+      { _id: new mongoose.Types.ObjectId(artworkId), userId },
+      {
+        $set: {
+          status: "queued",
+          promptCompiled: prompt.trim(),
+          generationError: "",
+          generationStartedAt: null,
+          generationCompletedAt: null,
+          updatedAt: new Date()
+        }
+      },
+      { new: true }
+    );
 
-    const uploadStream = bucket.openUploadStream(filename, {
-      contentType: mimeType,
-      metadata: {
-        userId: userIdRaw,  // store string version
-        prompt: prompt.trim(),
-        size
-      }
-    });
-    
-    // UploadStream ON ERROR - Handle upload errors
-    uploadStream.on("error", (err) => {
-      console.error("GridFS upload error:", err);
-      if (!res.headersSent) {
-        return res.status(500).json({ error: "Failed to store image" });
-      }
+    if (!artwork) {
+      return res.status(404).json({ error: "Artwork not found for this user" });
+    }
+
+    // respond immediately
+    res.status(202).json({
+      ok: true,
+      artworkId: artwork._id,
+      status: "queued"
     });
 
-    // UploadStream ON FINISH - Save metadata to Artwork document and respond
-    uploadStream.on("finish", async () => {
+    // continue in background
+    setImmediate(async () => {
       try {
-        const fileId = uploadStream.id; // ✅ this is the GridFS file _id
+        await Artwork.findByIdAndUpdate(artworkId, {
+          $set: {
+            status: "generating",
+            generationStartedAt: new Date(),
+            generationError: "",
+            updatedAt: new Date()
+          }
+        });
 
-        const byIdOnly = await Artwork.findById(artworkId).select("_id userId title status").lean();
-        console.log("DEBUG artwork by id =", byIdOnly);
-        console.log("DEBUG auth sub =", userIdRaw);
-        console.log("DEBUG auth sub (ObjectId) =", String(userId));
+        const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-        const updated = await Artwork.findOneAndUpdate(
-          { _id: new mongoose.Types.ObjectId(artworkId), userId },
-          {
-            $set: {
-              status: "generated",
-              imageFileId: fileId,
-              imageMimeType: mimeType,
-              imageFilename: filename, // ✅ you already know this
-              updatedAt: new Date()
-            }
-          },
-          { new: true }
-        );
+        const result = await openai.images.generate({
+          model: "gpt-image-1",
+          prompt: prompt.trim(),
+          size,
+          output_format: format
+        });
 
-        if (!updated) {
-          return res.status(404).json({ error: "Artwork not found for this user (userId mismatch)" });
+        const img = result.data?.[0];
+        if (!img?.b64_json) {
+          throw new Error("No image returned from model.");
         }
 
-        return res.json({ ok: true, artwork: updated, mimeType, base64 });
-      } catch (e) {
-        console.error("Image metadata save error:", e);
-        return res.status(500).json({ error: "Failed to save image metadata", details: e.message });
+        const base64 = img.b64_json;
+        const buffer = Buffer.from(base64, "base64");
+
+        const mimeType =
+          format === "jpeg" ? "image/jpeg" :
+          format === "webp" ? "image/webp" :
+          "image/png";
+
+        const bucket = getBucket();
+        const filename = `origin_${Date.now()}.${format}`;
+
+        const uploadStream = bucket.openUploadStream(filename, {
+          contentType: mimeType,
+          metadata: {
+            userId: userIdRaw,
+            prompt: prompt.trim(),
+            size
+          }
+        });
+
+        uploadStream.on("error", async (err) => {
+          console.error("GridFS upload error:", err);
+          await Artwork.findByIdAndUpdate(artworkId, {
+            $set: {
+              status: "failed",
+              generationError: "Failed to store image",
+              updatedAt: new Date()
+            }
+          });
+        });
+
+        uploadStream.on("finish", async () => {
+          try {
+            const fileId = uploadStream.id;
+
+            await Artwork.findOneAndUpdate(
+              { _id: new mongoose.Types.ObjectId(artworkId), userId },
+              {
+                $set: {
+                  status: "generated",
+                  imageFileId: fileId,
+                  imageMimeType: mimeType,
+                  imageFilename: filename,
+                  generationCompletedAt: new Date(),
+                  generationError: "",
+                  updatedAt: new Date()
+                }
+              }
+            );
+          } catch (e) {
+            console.error("Image metadata save error:", e);
+            await Artwork.findByIdAndUpdate(artworkId, {
+              $set: {
+                status: "failed",
+                generationError: e.message || "Failed to save image metadata",
+                updatedAt: new Date()
+              }
+            });
+          }
+        });
+
+        uploadStream.end(buffer);
+      } catch (err) {
+        console.error("Background image generate error:", err);
+        await Artwork.findByIdAndUpdate(artworkId, {
+          $set: {
+            status: "failed",
+            generationError: err.message || "Image generation failed.",
+            updatedAt: new Date()
+          }
+        });
       }
-  });
-
-    uploadStream.end(buffer);
-    return;
-
-  // Error handling for the whole try block
+    });
   } catch (err) {
     console.error("Image generate error:", err);
     return res.status(500).json({ error: err.message || "Image generation failed." });

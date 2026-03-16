@@ -7,56 +7,155 @@ document.addEventListener("DOMContentLoaded", () => {
     return "1024x1024";
   }
 
+  // helper to poll artwork until generation is ready, then update preview
+  async function fetchArtworkById(id) {
+  const res = await fetch(`${API_BASE}/artworks/${id}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token()}`
+    },
+    credentials: "include"
+  });
+
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || "Failed to fetch artwork");
+  return data.artwork;
+}
+
+function renderGeneratedImage(artwork) {
+  const stage = document.getElementById("previewStage");
+  if (!stage) return;
+
+  if (!artwork?.imageFileId) {
+    stage.innerHTML = "<span>Image ready, but file is missing.</span>";
+    return;
+  }
+
+  const img = document.createElement("img");
+  img.alt = "Generated artwork";
+  img.src = `${API_BASE}/api/images/${artwork.imageFileId}`;
+  img.style.width = "100%";
+  img.style.height = "100%";
+  img.style.objectFit = "contain";
+
+  stage.innerHTML = "";
+  stage.appendChild(img);
+}
+
+async function pollArtworkUntilReady(id, maxAttempts = 60, intervalMs = 2000) {
+  const stage = document.getElementById("previewStage");
+
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    const artwork = await fetchArtworkById(id);
+    const status = artwork?.status;
+
+    if (status === "queued") {
+      if (stage) stage.innerHTML = "<span>Queued…</span>";
+    } else if (status === "generating") {
+      if (stage) stage.innerHTML = "<span>Generating…</span>";
+    } else if (status === "generated") {
+      renderGeneratedImage(artwork);
+      return artwork;
+    } else if (status === "failed") {
+      throw new Error(artwork.generationError || "Image generation failed");
+    }
+
+    await new Promise(resolve => setTimeout(resolve, intervalMs));
+  }
+
+  throw new Error("Generation timed out. Please refresh and check artwork status.");
+}
+
+  // GENERATE IMAGE FROM PROMPT
   async function generateImageFromPrompt() {
-    const output = document.getElementById("output")?.value || "square";
-    const prompt = document.getElementById("compiledPrompt")?.value?.trim() ||
-                 document.getElementById("description")?.value?.trim();
+  const output = document.getElementById("output")?.value || "square";
+  const prompt =
+    document.getElementById("compiledPrompt")?.value?.trim() ||
+    document.getElementById("description")?.value?.trim();
 
   if (!prompt || prompt.length < 10) {
     throw new Error("Compile a prompt before generating.");
   }
 
-  // Optional: UI state
   const stage = document.getElementById("previewStage");
   stage.innerHTML = "<span>Generating…</span>";
 
-    // make sure draft exists first
-    const id = await createDraftIfNeeded();
-    console.log("CLIENT DEBUG artworkId =", id);
+  const id = await createDraftIfNeeded();
+  console.log("CLIENT DEBUG artworkId =", id);
+
+  const res = await fetch(`${API_BASE}/api/images/generate`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token()}`
+    },
+    credentials: "include",
+    body: JSON.stringify({
+      artworkId: id,
+      prompt,
+      size: sizeFromOutput(output),
+      format: "png"
+    })
+  });
+
+  const data = await res.json();
+  if (!res.ok) throw new Error(data?.error || "Generation failed");
+
+  stage.innerHTML = "<span>Queued…</span>";
+
+  await pollArtworkUntilReady(id);
+}
+
+  // async function generateImageFromPrompt() {
+  //   const output = document.getElementById("output")?.value || "square";
+  //   const prompt = document.getElementById("compiledPrompt")?.value?.trim() ||
+  //                document.getElementById("description")?.value?.trim();
+
+  // if (!prompt || prompt.length < 10) {
+  //   throw new Error("Compile a prompt before generating.");
+  // }
+
+  // // Optional: UI state
+  // const stage = document.getElementById("previewStage");
+  // stage.innerHTML = "<span>Generating…</span>";
+
+  //   // make sure draft exists first
+  //   const id = await createDraftIfNeeded();
+  //   console.log("CLIENT DEBUG artworkId =", id);
 
 
-    const res = await fetch(`${API_BASE}/api/images/generate`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token()}`
-      },
-      credentials: "include",
-      body: JSON.stringify({
-        artworkId: id,
-        prompt,
-        size: sizeFromOutput(output),
-        format: "png"
-      })
-    });
+  //   const res = await fetch(`${API_BASE}/api/images/generate`, {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Authorization: `Bearer ${token()}`
+  //     },
+  //     credentials: "include",
+  //     body: JSON.stringify({
+  //       artworkId: id,
+  //       prompt,
+  //       size: sizeFromOutput(output),
+  //       format: "png"
+  //     })
+  //   });
 
 
 
-    const data = await res.json();
-    if (!res.ok) throw new Error(data?.error || "Generation failed");
+  //   const data = await res.json();
+  //   if (!res.ok) throw new Error(data?.error || "Generation failed");
 
-    // const stage = document.getElementById("previewStage");
-    stage.innerHTML = "";
+  //   // const stage = document.getElementById("previewStage");
+  //   stage.innerHTML = "";
 
-    const img = document.createElement("img");
-    img.alt = "Generated artwork";
-    img.src = `data:${data.mimeType};base64,${data.base64}`;
-    img.style.width = "100%";
-    img.style.height = "100%";
-    img.style.objectFit = "contain";
+  //   const img = document.createElement("img");
+  //   img.alt = "Generated artwork";
+  //   img.src = `data:${data.mimeType};base64,${data.base64}`;
+  //   img.style.width = "100%";
+  //   img.style.height = "100%";
+  //   img.style.objectFit = "contain";
 
-    stage.appendChild(img);
-  }
+  //   stage.appendChild(img);
+  // }
 
   document.getElementById("generateBtn")?.addEventListener("click", () => {
     generateImageFromPrompt().catch(err => {
