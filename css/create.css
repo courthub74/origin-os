@@ -117,3 +117,39 @@ textarea.compiled.show {
   opacity: 1;
   transform: translateY(0);
 }
+
+
+/* Status Indicators */
+.preview-status-block {
+  padding: 10px 12px 12px;
+}
+
+.generation-status {
+  font-size: 14px;
+  line-height: 1.4;
+  color: #b4cf6a;
+  letter-spacing: 0.01em;
+  font-weight: 500;
+  min-height: 20px;
+  margin-bottom: 8px;
+  opacity: 0.96;
+}
+
+.progress-wrap {
+  width: 100%;
+  height: 8px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(180, 207, 106, 0.12);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02);
+}
+
+.progress-bar {
+  width: 0%;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #93b84f 0%, #b4cf6a 55%, #d7ee96 100%);
+  box-shadow: 0 0 12px rgba(180, 207, 106, 0.28);
+  transition: width 0.35s ease;
+}
