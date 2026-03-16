@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 
+// Model for an artwork created by a user. This can be used for both AI-generated and human-created artworks, and can be extended with additional fields as needed. The "status" field tracks the lifecycle of the artwork, from draft to published, and can be used to manage the generation process for AI artworks.
 const artworkSchema = new mongoose.Schema(
   {
     userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true, index: true },

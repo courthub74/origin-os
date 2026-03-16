@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 
+// Model for a user of the platform. This includes authentication fields (email, passwordHash) as well as profile and onboarding information. The "rolePrimary" and "roles" fields allow for flexible role management, while the "links" field can store various social media and portfolio links. The "onboardingComplete" field can be used to track whether the user has completed the onboarding process.
 const userSchema = new mongoose.Schema(
   {
     // Auth
