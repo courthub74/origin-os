@@ -161,6 +161,11 @@ async function pollArtworkUntilReady(id, maxAttempts = 60, intervalMs = 2000) {
   stage.innerHTML = "";
   updateGenerationStatus("queued");
 
+   stage?.scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
+
   const id = await createDraftIfNeeded();
   console.log("CLIENT DEBUG artworkId =", id);
 
@@ -184,56 +189,6 @@ async function pollArtworkUntilReady(id, maxAttempts = 60, intervalMs = 2000) {
 
   await pollArtworkUntilReady(id);
 }
-  // async function generateImageFromPrompt() {
-  //   const output = document.getElementById("output")?.value || "square";
-  //   const prompt = document.getElementById("compiledPrompt")?.value?.trim() ||
-  //                document.getElementById("description")?.value?.trim();
-
-  // if (!prompt || prompt.length < 10) {
-  //   throw new Error("Compile a prompt before generating.");
-  // }
-
-  // // Optional: UI state
-  // const stage = document.getElementById("previewStage");
-  // stage.innerHTML = "<span>Generating…</span>";
-
-  //   // make sure draft exists first
-  //   const id = await createDraftIfNeeded();
-  //   console.log("CLIENT DEBUG artworkId =", id);
-
-
-  //   const res = await fetch(`${API_BASE}/api/images/generate`, {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Authorization: `Bearer ${token()}`
-  //     },
-  //     credentials: "include",
-  //     body: JSON.stringify({
-  //       artworkId: id,
-  //       prompt,
-  //       size: sizeFromOutput(output),
-  //       format: "png"
-  //     })
-  //   });
-
-
-
-  //   const data = await res.json();
-  //   if (!res.ok) throw new Error(data?.error || "Generation failed");
-
-  //   // const stage = document.getElementById("previewStage");
-  //   stage.innerHTML = "";
-
-  //   const img = document.createElement("img");
-  //   img.alt = "Generated artwork";
-  //   img.src = `data:${data.mimeType};base64,${data.base64}`;
-  //   img.style.width = "100%";
-  //   img.style.height = "100%";
-  //   img.style.objectFit = "contain";
-
-  //   stage.appendChild(img);
-  // }
 
   document.getElementById("generateBtn")?.addEventListener("click", () => {
     generateImageFromPrompt().catch(err => {
