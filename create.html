@@ -253,7 +253,7 @@
                 </div>
 
                 <!-- GENERATING (hidden until Generate) -->
-                <div id="artworkGenerating" class="gen hidden">
+                <!-- <div id="artworkGenerating" class="gen hidden">
                   <div class="genTop">
                     <div>
                       <div class="genTitle">Generating artwork</div>
@@ -270,7 +270,7 @@
                     <span class="mutedMono" id="genHint">Preparing canvas…</span>
                     <button class="btn" type="button" onclick="cancelGenerate()">Cancel</button>
                   </div>
-                </div>
+                </div> -->
 
                 <!-- REVIEW (hidden until generation completes) -->
                 <div id="artworkReview" class="review hidden">
@@ -302,10 +302,16 @@
           </section>
 
           <!-- Artwork Preview -->
-          <section class="panel">
+          <section class="panel" id="previewPanel">
             <div class="head"><h2>Artwork Preview</h2><span class="pill">PNG / JPG / MP4</span></div>
             <div class="stage" id="previewStage">
               <span id="stageLabel">Drop artwork here</span>
+            </div>
+
+            <!-- Generation Status -->
+            <div id="generationStatus" class="generation-status"></div>
+            <div class="progress-wrap">
+              <div id="generationProgressBar" class="progress-bar"></div>
             </div>
           </section>
 

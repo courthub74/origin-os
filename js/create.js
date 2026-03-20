@@ -7,59 +7,200 @@ document.addEventListener("DOMContentLoaded", () => {
     return "1024x1024";
   }
 
+  // helper to poll artwork until generation is ready, then update preview
+  async function fetchArtworkById(id) {
+  const res = await fetch(`${API_BASE}/artworks/${id}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token()}`
+    },
+    credentials: "include"
+  });
+
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || "Failed to fetch artwork");
+  return data.artwork;
+}
+
+let progressTimer = null;
+let simulatedProgress = 0;
+
+function startSimulatedProgress() {
+  stopSimulatedProgress();
+  simulatedProgress = 18;
+
+  const barEl = document.getElementById("generationProgressBar");
+  if (barEl) barEl.style.width = `${simulatedProgress}%`;
+
+  progressTimer = setInterval(() => {
+    const bar = document.getElementById("generationProgressBar");
+    if (!bar) return;
+
+    // creep upward slowly, but never complete on its own
+    if (simulatedProgress < 88) {
+      simulatedProgress += Math.random() * 4;
+      if (simulatedProgress > 88) simulatedProgress = 88;
+      bar.style.width = `${simulatedProgress}%`;
+    }
+  }, 700);
+}
+
+function stopSimulatedProgress() {
+  if (progressTimer) {
+    clearInterval(progressTimer);
+    progressTimer = null;
+  }
+}
+
+// Updates the generation status text and progress bar based on the current status of the artwork generation process.
+function updateGenerationStatus(status) {
+  const statusEl = document.getElementById("generationStatus");
+  const barEl = document.getElementById("generationProgressBar");
+  if (!statusEl || !barEl) return;
+
+  if (status === "queued") {
+    stopSimulatedProgress();
+    simulatedProgress = 12;
+    statusEl.textContent = "Queued…";
+    barEl.style.width = "12%";
+  } else if (status === "generating") {
+    statusEl.textContent = "Generating…";
+    if (!progressTimer) startSimulatedProgress();
+  } else if (status === "generated") {
+    stopSimulatedProgress();
+    simulatedProgress = 100;
+    statusEl.textContent = "Image created";
+    barEl.style.width = "100%";
+  } else if (status === "failed") {
+    stopSimulatedProgress();
+    simulatedProgress = 100;
+    statusEl.textContent = "Generation failed";
+    barEl.style.width = "100%";
+  } else {
+    stopSimulatedProgress();
+    simulatedProgress = 0;
+    statusEl.textContent = "";
+    barEl.style.width = "0%";
+  }
+}
+
+// RENDER GENERATED IMAGE IN PREVIEW
+async function renderGeneratedImage(artwork) {
+  const stage = document.getElementById("previewStage");
+  if (!stage) return;
+
+  if (!artwork?.imageFileId) {
+    stage.innerHTML = "<span>Image ready, but file is missing.</span>";
+    return;
+  }
+
+  stage.innerHTML = "<span>Loading image…</span>";
+
+  const res = await fetch(`${API_BASE}/api/images/${artwork.imageFileId}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token()}`
+    },
+    credentials: "include"
+  });
+
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}));
+    throw new Error(data.error || "Failed to load generated image");
+  }
+
+  const blob = await res.blob();
+  const imageUrl = URL.createObjectURL(blob);
+
+  const img = document.createElement("img");
+  img.alt = "Generated artwork";
+  img.src = imageUrl;
+  img.style.width = "100%";
+  img.style.height = "100%";
+  img.style.objectFit = "contain";
+
+  stage.innerHTML = "";
+  stage.appendChild(img);
+}
+
+// Polls the artwork status until it's generated or failed, then updates the preview. Times out after a certain number of attempts to avoid infinite polling.
+async function pollArtworkUntilReady(id, maxAttempts = 60, intervalMs = 2000) {
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    const artwork = await fetchArtworkById(id);
+    const status = artwork?.status;
+
+    updateGenerationStatus(status);
+
+    if (status === "generated") {
+      await renderGeneratedImage(artwork);
+      return artwork;
+    }
+
+    if (status === "failed") {
+      throw new Error(artwork.generationError || "Image generation failed");
+    }
+
+    await new Promise(resolve => setTimeout(resolve, intervalMs));
+  }
+
+  throw new Error("Generation timed out.");
+}
+
+  // GENERATE IMAGE FROM PROMPT
   async function generateImageFromPrompt() {
-    const output = document.getElementById("output")?.value || "square";
-    const prompt = document.getElementById("compiledPrompt")?.value?.trim() ||
-                 document.getElementById("description")?.value?.trim();
+  const output = document.getElementById("output")?.value || "square";
+  const prompt =
+    document.getElementById("compiledPrompt")?.value?.trim() ||
+    document.getElementById("description")?.value?.trim();
 
   if (!prompt || prompt.length < 10) {
     throw new Error("Compile a prompt before generating.");
   }
 
-  // Optional: UI state
   const stage = document.getElementById("previewStage");
-  stage.innerHTML = "<span>Generating…</span>";
+  stage.innerHTML = "";
+  updateGenerationStatus("queued");
 
-    // make sure draft exists first
-    const id = await createDraftIfNeeded();
-    console.log("CLIENT DEBUG artworkId =", id);
+   stage?.scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
 
+  const id = await createDraftIfNeeded();
+  console.log("CLIENT DEBUG artworkId =", id);
 
-    const res = await fetch(`${API_BASE}/api/images/generate`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token()}`
-      },
-      credentials: "include",
-      body: JSON.stringify({
-        artworkId: id,
-        prompt,
-        size: sizeFromOutput(output),
-        format: "png"
-      })
-    });
+  const res = await fetch(`${API_BASE}/api/images/generate`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token()}`
+    },
+    credentials: "include",
+    body: JSON.stringify({
+      artworkId: id,
+      prompt,
+      size: sizeFromOutput(output),
+      format: "png"
+    })
+  });
 
+  const data = await res.json();
+  if (!res.ok) throw new Error(data?.error || "Generation failed");
 
-
-    const data = await res.json();
-    if (!res.ok) throw new Error(data?.error || "Generation failed");
-
-    // const stage = document.getElementById("previewStage");
-    stage.innerHTML = "";
-
-    const img = document.createElement("img");
-    img.alt = "Generated artwork";
-    img.src = `data:${data.mimeType};base64,${data.base64}`;
-    img.style.width = "100%";
-    img.style.height = "100%";
-    img.style.objectFit = "contain";
-
-    stage.appendChild(img);
-  }
+  await pollArtworkUntilReady(id);
+}
 
   document.getElementById("generateBtn")?.addEventListener("click", () => {
     generateImageFromPrompt().catch(err => {
+
+      // Check for common auth issues no token, expired token, etc. and handle by redirecting to login
+      const t = token();
+      if (!t) {
+        alert("Session expired. Please log in again.");
+        window.location.href = "/login.html"; // or your route
+        return;
+      }
+      
       console.error(err);
       alert(err.message);
     });
@@ -308,6 +449,10 @@ document.getElementById("copyPromptBtn")?.addEventListener("click", async () => 
   await navigator.clipboard.writeText(text);
 });
 
-
+// SCROLL TO PREVIEW ON GENERATE
+document.getElementById("previewPanel")?.scrollIntoView({
+  behavior: "smooth",
+  block: "start"
+});
 
 

@@ -1,40 +1,56 @@
 <div style="display: flex; align-items: center; justify-content: center; gap: 12px;">
   <img src="./img/origin-os.png" width="100" alt="Origin OS logo">
-  <h1 style="margin: 0;">Origin OS — START.md</h1>
+
+# Origin OS — START.md
+
+![Last Commit](https://img.shields.io/github/last-commit/courthub74/origin-os?color=3a9df7)
+![Commit Activity](https://img.shields.io/github/commit-activity/m/courthub74/origin-os?color=3a9df7)
+![Stack](https://img.shields.io/badge/stack-Node.js%20%7C%20Express%20%7C%20MongoDB-2c3e50)
+![Issues](https://img.shields.io/github/issues/courthub74/origin-os?color=3a9df7)
+
 </div>
 
 This file is the **single source of truth** for booting, running, and understanding the Origin OS development environment.
 
-If Origin OS feels like a machine, this is the ignition manual.
+See the [CHANGELOG](CHANGELOG.md) for release history.
 
 ---
 
 ## 🧭 What Is Origin OS?
 
-Origin OS is a modular creative operating system built for artists, technologists, and autonomous brands.
+## What is Origin OS?
 
-- **Frontend:** Static HTML / CSS / JavaScript (Origin OS Shell)
-- **Backend:** Node.js + Express API with MongoDB
-- **Auth:** JWT + HTTP-only cookies
-- **Current Mode:** Local development (non-Docker, Docker-ready)
+Origin OS is a modular platform for creating, managing, and publishing digital artwork through a structured creative pipeline.
+
+It combines a **dashboard-based creative interface**, a **Node.js + MongoDB backend**, and an **AI-powered generation system** to help creators produce and distribute digital work from a single environment.
+
+Origin OS is designed to function as a **creative operating system** rather than a single-purpose application.
 
 ---
 
-## ⚙️ Core Systems
+## ⚙️ Core Capabilities
 
-Origin OS currently operates on several foundational systems:
+Origin OS currently provides several foundational systems:
 
-- **JWT Authentication**  
-  Secure session handling using access + refresh tokens with HTTP-only cookies.
+### JWT Authentication
 
-- **Persistent Drafts**  
-  Artwork creation automatically maintains draft state across sessions.
+Secure session handling using access and refresh tokens with HTTP-only cookies.
 
-- **Media Storage Pipeline**  
-  Image generation, storage, and retrieval managed through the API and database layer.
+### Persistent Draft System
 
-- **Dynamic Dashboard Rendering**  
-  User dashboards hydrate from live backend data rather than static placeholders.
+Artwork creation automatically saves draft state so creative sessions can continue across logins.
+
+### AI Generation Pipeline
+
+Images are generated through the backend API and stored through the media pipeline.
+
+### Dynamic Dashboard
+
+User dashboards hydrate from live backend data rather than static placeholders.
+
+### Modular Creative Tools
+
+Origin OS is designed to support multiple creator workflows including artwork generation, collections, publishing, and branding.
 
 ---
 
@@ -65,179 +81,173 @@ origin_os/
 
 ---
 
-## System Architecture
+# 🏗 System Architecture
 
-User Dashboard (HTML / JS)
-        |
-        v
-Origin OS API (Node.js / Express)
-        |
-        v
-MongoDB Database
-        |
-        v
-AI Generation + Asset Pipeline
+Origin OS follows a layered architecture designed to keep the system modular, inspectable, and evolvable.
 
----
-
-## 🔧 Requirements
-
-Make sure these are installed **before starting**:
-
-- **Node.js** (v18+ recommended)
-- **npm** (comes with Node)
-- **MongoDB** (local service or MongoDB Compass)
-- **VS Code** (recommended)
-- **Live Server extension** (VS Code)
-
----
-
-## 🧠 Backend — API Startup
-
-The backend powers:
-
-- Authentication
-- User accounts
-- Artworks
-- Stats
-- Protected routes
-
-### 1. Navigate to the API folder
-
-```bash
-cd origin-os-api
-```
-
-### 2. Install dependencies (first time or after pulling)
-
-```bash
-npm install
-```
-
-### 3. Configure environment variables
-
-Ensure `origin-os-api/.env` exists:
-
-```env
-PORT=4000
-MONGO_URI=mongodb://127.0.0.1:27017/origin_os
-JWT_ACCESS_SECRET=your_secret_here
-JWT_REFRESH_SECRET=your_refresh_secret_here
-```
-
-### 4. Start the API server
-
-```bash
-npm run dev
-```
-
-Expected output:
-
-```
-✅ API running on http://localhost:4000
-✅ MongoDB connected
-```
-
-Leave this terminal running.
+            ┌──────────────────────────┐
+            │        Frontend          │
+            │  Origin OS Shell (HTML)  │
+            │  CSS + JavaScript UI     │
+            └────────────┬─────────────┘
+                         │
+                         │ HTTP Requests
+                         ▼
+            ┌──────────────────────────┐
+            │       Express API        │
+            │   origin-os-api server   │
+            │                          │
+            │  Auth Routes             │
+            │  Artwork Routes          │
+            │  Image Routes            │
+            │  Stats Routes            │
+            └────────────┬─────────────┘
+                         │
+                         │ Middleware Layer
+                         ▼
+            ┌──────────────────────────┐
+            │     Auth Middleware      │
+            │ JWT verification         │
+            │ Cookie handling          │
+            │ Request guards           │
+            └────────────┬─────────────┘
+                         │
+                         ▼
+            ┌──────────────────────────┐
+            │        Data Layer        │
+            │                          │
+            │ MongoDB Database         │
+            │ Artwork documents        │
+            │ User accounts            │
+            │ Media file references    │
+            └────────────┬─────────────┘
+                         │
+                         ▼
+            ┌──────────────────────────┐
+            │       Media Storage      │
+            │ Generated images         │
+            │ Stored assets            │
+            └──────────────────────────┘
 
 ---
 
-## 🖥️ Frontend — Origin OS Shell
-
-The frontend is **static HTML/CSS/JS**.
-No build step. No bundler (yet).
-
-### Recommended Method: VS Code Live Server
-
-1. Open the **origin_os root folder** in VS Code
-2. Locate `index.html`
-3. Right-click → **Open with Live Server**
-
-The app opens at:
-
-```
-http://127.0.0.1:5500/
-```
-
-✔ Loads all CSS + JS correctly
-✔ Communicates with backend at `localhost:4000`
-✔ Supports auth cookies
-
----
-
-## 🔁 Normal Development Workflow
-
-**Terminal 1 — Backend**
-
-```bash
-cd origin-os-api
-npm run dev
-```
+## Technology Stack
 
 **Frontend**
 
-- Live Server → `index.html`
-- Refresh browser as needed
+- HTML
+- CSS
+- JavaScript
+- Live Server (development)
 
-Backend auto-restarts on change.
-Frontend reloads on save.
+**Backend**
+
+- Node.js
+- Express
+
+**Database**
+
+- MongoDB
+
+**Authentication**
+
+- JWT
+- HTTP-only cookies
+
+**Future Platform**
+
+- React / Vite
+- Cloudflare Pages
+- Docker deployment
 
 ---
 
-## 🔐 Authentication Notes
+# 🎨 Image Generation Pipeline
 
-- Auth uses **HTTP-only cookies**
-- Tokens are issued by `/auth/login`
-- Protected pages rely on:
-  - `auth-guard.js`
-  - `/auth/me` validation
+Origin OS uses an asynchronous workflow for image generation and retrieval.
 
-⚠️ Always run frontend on a server (Live Server).
-Opening files directly (`file://`) will break auth.
+### Generation Flow
 
----
+1. User requests image generation from the frontend
+2. API creates or updates a draft artwork record
+3. Image generation service produces the image
+4. Image is stored in the media layer
+5. Artwork record is updated with the image reference
+6. Frontend retrieves the image through the protected media API
 
-## ⚠️ Common Pitfalls
+Example retrieval:
 
-### ❌ CSS Not Loading
+```javascript
+const imgRes = await fetch(`${API_BASE}/api/images/${imageFileId}`, {
+  headers: { Authorization: `Bearer ${token()}` },
+  credentials: "include",
+});
 
-- Live Server started inside `/html` or another subfolder
-- Fix: Start Live Server from **project root**
-
-### ❌ MongoDB Connection Error
-
-```text
-ECONNREFUSED 127.0.0.1:27017
+const blob = await imgRes.blob();
+img.src = URL.createObjectURL(blob);
 ```
 
-Fix:
+---
 
-- Start MongoDB service
-- Or open MongoDB Compass → Connect
+## 🌐 Website Content Management
 
-### ❌ Auth Not Persisting
+Origin OS functions as a **headless CMS** and **publishing engine** for creators like Dream Agent.
 
-- Frontend not served via HTTP
-- Cookies blocked
+This means Dream Agent website content can be updated through Origin OS without directly editing the website codebase itself.
+
+### What this includes
+
+- Artwork publishing
+- Collection updates
+- Release descriptions
+- Website content updates
+- Future creative asset management
+
+### Technical role
+
+Origin OS serves as the **content management layer** between internal creator workflows and the external Dream Agent website.
+
+## Documentation
+
+Project documentation is organized as follows:
+
+| File                | Purpose                                 |
+| ------------------- | --------------------------------------- |
+| **README.md**       | Project overview                        |
+| **DEVELOPMENT.md**  | Local development setup                 |
+| **ARCHITECTURE.md** | System architecture and internal design |
 
 ---
 
-## 🐳 Docker (Optional / Later Phase)
+## Current Development Focus
 
-Docker is **present but optional**.
-Not required for daily development.
+Active development is currently focused on:
 
-When ready:
+• asynchronous AI artwork generation  
+• modular dashboard systems  
+• persistent creative workflows  
+• scalable media pipelines
 
-```bash
-docker compose up --build
-```
+---
 
-Use Docker when:
+## Roadmap
 
-- Onboarding collaborators
-- Standardizing environments
-- Preparing production builds
+Upcoming evolutions include:
+
+- React / Vite frontend
+- Async generation worker pipeline
+- Plugin-style module architecture
+- Cloud deployment
+- creator publishing workflows
+- collection systems
+
+---
+
+## Repository
+
+GitHub
+
+https://github.com/courthub74/origin-os
 
 ---
 
@@ -249,23 +259,41 @@ Origin OS is intentionally:
 - Inspectable
 - Evolvable
 
-No magic.
-No locked doors.
-Every system is legible.
+---
+
+## 🧭 Project Status
+
+Origin OS is currently in **active development**.
+
+Core authentication, image generation workflows, and modular dashboard architecture are functional.  
+Future iterations will expand the platform toward a full creative operating system for digital creators.
 
 ---
 
-## 🚀 Next Planned Evolutions
+## 🚀 Planned Evolutions
+
+Origin OS is designed as a modular system and will continue evolving.  
+Upcoming architecture improvements include:
 
 - React / Vite frontend
-- Cloudflare Pages hosting
-- API versioning
+- Cloudflare Pages deployment
+- API versioning strategy
 - Role-based dashboards
-- Plugin-style modules
+- Plugin-style module system
 
 ---
 
-If something breaks, **read this file first**.
-If something grows, **update this file**.
+## 📜 Project Contract
 
-This is the contract.
+If something breaks → **start with this README.**  
+If something grows → **update this README.**
+
+This file defines the current architecture and development expectations for Origin OS.
+
+---
+
+## 🧠 Powered By
+
+<p>
+  <img src="./img/neo_logo_white.png" width="120" alt="CourDevelops logo">
+</p>
