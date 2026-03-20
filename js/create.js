@@ -449,6 +449,10 @@ document.getElementById("copyPromptBtn")?.addEventListener("click", async () => 
   await navigator.clipboard.writeText(text);
 });
 
-
+// SCROLL TO PREVIEW ON GENERATE
+document.getElementById("previewPanel")?.scrollIntoView({
+  behavior: "smooth",
+  block: "start"
+});
 
 
