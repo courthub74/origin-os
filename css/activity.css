@@ -1,0 +1,197 @@
+.activity-layout {
+  display: grid;
+  gap: 18px;
+}
+
+.activity-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.filter-btn.active {
+  outline: 1px solid rgba(180, 207, 106, 0.5);
+}
+
+.activity-month {
+  margin-bottom: 22px;
+}
+
+.activity-month-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.activity-month-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: white;
+}
+
+.activity-month-count {
+  font-size: 0.82rem;
+  opacity: 0.75;
+}
+
+.activity-list {
+  display: grid;
+  gap: 10px;
+  color: white;
+}
+
+.activity-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  background: rgba(255,255,255,0.02);
+}
+
+.activity-thumb-link {
+  width: 58px;
+  height: 58px;
+  border-radius: 12px;
+  overflow: hidden;
+  flex-shrink: 0;
+  display: block;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.04);
+}
+
+.activity-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.activity-meta {
+  min-width: 0;
+  flex: 1;
+}
+
+.activity-title {
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.activity-sub {
+  font-size: 0.92rem;
+  opacity: 0.75;
+  margin-bottom: 3px;
+}
+
+.activity-date {
+  font-size: 0.8rem;
+  opacity: 0.6;
+}
+
+.activity-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.activity-empty {
+  padding: 26px 10px;
+  text-align: center;
+  opacity: 0.78;
+}
+
+.activity-empty-title {
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.activity-empty-sub {
+  font-size: 0.92rem;
+}
+
+@media (max-width: 760px) {
+  .activity-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .activity-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+/* Real Activity Buttons */
+.activity-list {
+  display: grid;
+  gap: 10px;
+}
+
+.activity-row-button {
+  width: 100%;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  padding: 14px 16px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.18s ease, background 0.18s ease, transform 0.18s ease;
+}
+
+.activity-row-button:hover {
+  border-color: rgba(255,255,255,0.14);
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.015));
+  transform: translateY(-1px);
+}
+
+.activity-row-button:focus-visible {
+  outline: 1px solid rgba(180, 207, 106, 0.65);
+  outline-offset: 2px;
+}
+
+.activity-meta {
+  min-width: 0;
+  flex: 1;
+}
+
+.activity-title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: white;
+}
+
+.activity-sub {
+  font-size: 0.92rem;
+  opacity: 0.78;
+  margin-bottom: 6px;
+  color: gray;
+}
+
+.activity-date {
+  font-size: 0.84rem;
+  opacity: 0.58;
+  color: gray;
+}
+
+.activity-pill-wrap {
+  flex-shrink: 0;
+  align-self: flex-start;
+}
+
+.activity-pill-wrap .pill {
+  text-transform: lowercase;
+}
+
+@media (max-width: 760px) {
+  .activity-row-button {
+    gap: 12px;
+  }
+}
