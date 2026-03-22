@@ -167,6 +167,7 @@ function renderContinue(items = []) {
   }
 }
 
+// Renders the Recent Activity list, which is a simple feed of recent work edits with no required order or actions
 function renderRecent(items = []) {
   const list = document.getElementById("recentActivityList");
   if (!list) return;
@@ -186,16 +187,65 @@ function renderRecent(items = []) {
     return;
   }
 
-  for (const it of items) {
+  const recentThree = [...items]
+    .sort((a, b) => new Date(b.createdAt || b.updatedAt || 0) - new Date(a.createdAt || a.updatedAt || 0))
+    .slice(0, 3);
+
+  for (const it of recentThree) {
     const row = document.createElement("div");
     row.className = "item";
-    row.innerHTML = `
-      <div class="meta">
-        <div class="name">“${it.title || "Untitled"}”</div>
-        <div class="sub">${it.subtitle || ""}</div>
-      </div>
-      <div class="tag">${it.type || ""}</div>
-    `;
+
+    const title = it.title || "Untitled";
+    const subtitle = it.subtitle || "";
+    const type = it.type || "";
+    const imageUrl = it.imageUrl || it.previewUrl || it.url || "";
+    const workId = it.workId || "";
+
+    const isImageActivity =
+      type.toLowerCase() === "image" ||
+      type.toLowerCase() === "generated" ||
+      !!imageUrl;
+
+    if (isImageActivity && imageUrl) {
+      row.innerHTML = `
+        <a
+          href="${imageUrl}"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="recent-thumb-link"
+          aria-label="Open image for ${title}"
+        >
+          <img src="${imageUrl}" alt="${title}" class="recent-thumb" />
+        </a>
+
+        <div class="meta">
+          <div class="name">“${title}”</div>
+          <div class="sub">${subtitle}</div>
+        </div>
+
+        <div class="wm-right">
+          <div class="tag">${type}</div>
+          <button class="btn" type="button">Open</button>
+        </div>
+      `;
+
+      row.querySelector("button")?.addEventListener("click", () => {
+        if (workId) {
+          navTo("create.html", workId);
+        } else {
+          window.open(imageUrl, "_blank", "noopener,noreferrer");
+        }
+      });
+    } else {
+      row.innerHTML = `
+        <div class="meta">
+          <div class="name">“${title}”</div>
+          <div class="sub">${subtitle}</div>
+        </div>
+        <div class="tag">${type}</div>
+      `;
+    }
+
     list.appendChild(row);
   }
 }

@@ -12,6 +12,12 @@
 
 \* ~Database for Users and Images~
 
+### For Home Page/Dashboard
+
+\* Make Images in recent activity clickable for viewing/edits etc.
+
+\* Add see all button for the recent activity section
+
 ### For Image Creation
 
 \* ~Start AI Integration for Image generation~
@@ -20,7 +26,7 @@
 
 \* ~Compile Prompt button needs to output to the compiled prompt field~
 
-\* Async await in the loading screen so image shows after meter loads
+\* ~Async await in the loading screen so image shows after meter loads~
 
 \* Vector Database to learn the user
 
@@ -37,7 +43,3 @@
 ### For Website Updates
 
 \* Content update on Website page needs a website connection function
-
-## Problem Checklist
-
-\* ~Fix Login Bug~
