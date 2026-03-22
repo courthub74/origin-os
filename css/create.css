@@ -154,7 +154,6 @@ textarea.compiled.show {
   transition: width 0.35s ease;
 }
 
-/* Dropdown Styling */
 /* Dropdown styling */
 select {
   background: #111;              /* match your dark UI */
