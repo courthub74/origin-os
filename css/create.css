@@ -153,3 +153,38 @@ textarea.compiled.show {
   box-shadow: 0 0 12px rgba(180, 207, 106, 0.28);
   transition: width 0.35s ease;
 }
+
+/* Dropdown Styling */
+/* Dropdown styling */
+select {
+  background: #111;              /* match your dark UI */
+  color: #e6e6e6;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 0.95rem;
+  appearance: none;             /* removes default OS styling */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+/* Optional: hover/focus glow */
+select:focus {
+  outline: none;
+  border-color: #b4cf6a;        /* your Origin OS green */
+  box-shadow: 0 0 0 1px rgba(180, 207, 106, 0.4);
+}
+
+/* Dropdown options (limited browser support but still useful) */
+select option {
+  background: #111;
+  color: #e6e6e6;
+}
+
+.field select {
+  background-image: url("data:image/svg+xml;utf8,<svg fill='%23b4cf6a' height='20' viewBox='0 0 24 24' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 16px;
+  padding-right: 35px;
+}
