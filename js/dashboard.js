@@ -238,21 +238,6 @@ function renderRecent(items = []) {
     return localStorage.getItem("origin_access");
   }
 
-  // REPLACE BELOW WITH REAL FETCH DASHBOARD STATS CALL
-  // async function fetchStats(){
-  //   const token = getAccessToken();
-  //   if (!token) throw new Error("Missing token");
-
-  //   const res = await fetch(`${API_BASE}/stats`, {
-  //     headers: { Authorization: `Bearer ${token}` },
-  //     credentials: "include"
-  //   });
-
-  //   const data = await res.json();
-  //   if (!res.ok) throw new Error(data.error || "Failed to load stats");
-  //   return data.stats;
-  // }
-
   async function fetchDashboard(){
     const token = getAccessToken();
     if (!token) throw new Error("Missing token");
