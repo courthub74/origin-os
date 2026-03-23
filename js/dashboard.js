@@ -187,69 +187,39 @@ function renderRecent(items = []) {
     return;
   }
 
-  const recentThree = [...items]
-    .sort((a, b) => new Date(b.createdAt || b.updatedAt || 0) - new Date(a.createdAt || a.updatedAt || 0))
-    .slice(0, 3);
-
-  for (const it of recentThree) {
+  for (const it of items.slice(0, 3)) {
     const row = document.createElement("div");
-    row.className = "item";
+    const typeText = (it.type || "").toLowerCase();
+    const isGenerated = typeText === "generated";
 
-    const title = it.title || "Untitled";
-    const subtitle = it.subtitle || "";
-    const type = it.type || "";
-    const imageUrl = it.imageUrl || it.previewUrl || it.url || "";
-    const workId = it.workId || "";
+    row.className = `item${isGenerated ? " is-clickable" : ""}`;
+    row.innerHTML = `
+      <div class="meta">
+        <div class="name">“${it.title || "Untitled"}”</div>
+        <div class="sub">${it.subtitle || ""}</div>
+      </div>
+      <div class="tag">${it.type || ""}</div>
+    `;
 
-    const isImageActivity =
-      type.toLowerCase() === "image" ||
-      type.toLowerCase() === "generated" ||
-      !!imageUrl;
+    if (isGenerated) {
+      row.setAttribute("tabindex", "0");
+      row.setAttribute("role", "button");
+      row.setAttribute("aria-label", `Preview ${it.title || "artwork"}`);
 
-    if (isImageActivity && imageUrl) {
-      row.innerHTML = `
-        <a
-          href="${imageUrl}"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="recent-thumb-link"
-          aria-label="Open image for ${title}"
-        >
-          <img src="${imageUrl}" alt="${title}" class="recent-thumb" />
-        </a>
+      const openPreview = () => openActivityModal(it);
 
-        <div class="meta">
-          <div class="name">“${title}”</div>
-          <div class="sub">${subtitle}</div>
-        </div>
-
-        <div class="wm-right">
-          <div class="tag">${type}</div>
-          <button class="btn" type="button">Open</button>
-        </div>
-      `;
-
-      row.querySelector("button")?.addEventListener("click", () => {
-        if (workId) {
-          navTo("create.html", workId);
-        } else {
-          window.open(imageUrl, "_blank", "noopener,noreferrer");
+      row.addEventListener("click", openPreview);
+      row.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          openPreview();
         }
       });
-    } else {
-      row.innerHTML = `
-        <div class="meta">
-          <div class="name">“${title}”</div>
-          <div class="sub">${subtitle}</div>
-        </div>
-        <div class="tag">${type}</div>
-      `;
     }
 
     list.appendChild(row);
   }
 }
-
 
   const quickActionsPanel = document.getElementById("quickActionsPanel");
   const recentActivityPanel = document.getElementById("recentActivityPanel");
@@ -398,5 +368,90 @@ function renderRecent(items = []) {
     try { renderAttention(dash.attention); } catch(e){ console.warn("renderAttention failed:", e); }
     try { renderContinue(dash.continue); } catch(e){ console.warn("renderContinue failed:", e); }
     try { renderRecent(dash.recent); } catch(e){ console.warn("renderRecent failed:", e); }
+
+    // Modal setup for Recent Activity items with type "Generated" - shows a preview and option to edit
+    const activityModal = document.getElementById("activityModal");
+    const activityModalBackdrop = document.getElementById("activityModalBackdrop");
+    const activityModalClose = document.getElementById("activityModalClose");
+    const activityModalCancel = document.getElementById("activityModalCancel");
+    const activityModalEdit = document.getElementById("activityModalEdit");
+    const activityModalMedia = document.getElementById("activityModalMedia");
+    const activityModalTitle = document.getElementById("activityModalTitle");
+    const activityModalSubtitle = document.getElementById("activityModalSubtitle");
+    const activityModalPill = document.getElementById("activityModalPill");
+
+    let activeRecentWork = null;
+
+    function getRecentImageSrc(item) {
+      return (
+        item.imageUrl ||
+        item.image ||
+        item.previewUrl ||
+        item.thumbnailUrl ||
+        item.artworkUrl ||
+        null
+      );
+    }
+
+    function openActivityModal(item) {
+      if (!activityModal) return;
+
+      activeRecentWork = item;
+
+      const imageSrc = getRecentImageSrc(item);
+
+      if (activityModalTitle) {
+        activityModalTitle.textContent = item.title ? `“${item.title}”` : "Artwork Preview";
+      }
+
+      if (activityModalSubtitle) {
+        activityModalSubtitle.textContent = item.subtitle || "Recently generated artwork.";
+      }
+
+      if (activityModalPill) {
+        activityModalPill.textContent = item.type || "Generated";
+      }
+
+      if (activityModalMedia) {
+        if (imageSrc) {
+          activityModalMedia.innerHTML = `
+            <img src="${imageSrc}" alt="${item.title || "Artwork preview"}" />
+          `;
+        } else {
+          activityModalMedia.innerHTML = `
+            <span class="activity-modal-placeholder">No preview image available for this activity yet.</span>
+          `;
+        }
+      }
+
+      if (activityModalEdit) {
+        activityModalEdit.onclick = () => {
+          if (!activeRecentWork) return;
+          navTo("create.html", activeRecentWork.workId || activeRecentWork.id);
+        };
+      }
+
+      activityModal.classList.remove("hidden");
+      activityModal.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeActivityModal() {
+      if (!activityModal) return;
+      activityModal.classList.add("hidden");
+      activityModal.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
+      activeRecentWork = null;
+    }
+
+    activityModalBackdrop?.addEventListener("click", closeActivityModal);
+    activityModalClose?.addEventListener("click", closeActivityModal);
+    activityModalCancel?.addEventListener("click", closeActivityModal);
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && activityModal && !activityModal.classList.contains("hidden")) {
+        closeActivityModal();
+      }
+    });
 
 });

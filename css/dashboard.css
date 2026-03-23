@@ -649,3 +649,114 @@
   gap: 10px;
 }
 
+/* POP UP PREVIEW MODAL */
+.activity-modal.hidden {
+  display: none;
+}
+
+.activity-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+}
+
+.activity-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(5, 8, 20, 0.78);
+  backdrop-filter: blur(8px);
+}
+
+.activity-modal-card {
+  position: relative;
+  width: min(920px, calc(100vw - 32px));
+  max-height: calc(100vh - 48px);
+  margin: 24px auto;
+  background: #0d1324;
+  border: 1px solid rgba(180, 207, 106, 0.16);
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+}
+
+.activity-modal-media {
+  min-height: 420px;
+  background: #08101d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+}
+
+.activity-modal-media img {
+  width: 100%;
+  max-height: 72vh;
+  object-fit: contain;
+  border-radius: 16px;
+  display: block;
+}
+
+.activity-modal-placeholder {
+  color: rgba(255,255,255,0.56);
+  font-size: 0.95rem;
+}
+
+.activity-modal-info {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.activity-modal-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.activity-modal-top h3 {
+  margin: 0;
+}
+
+.activity-modal-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.activity-modal-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 38px;
+  height: 38px;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 999px;
+  background: rgba(9, 14, 27, 0.86);
+  color: #fff;
+  cursor: pointer;
+  z-index: 2;
+}
+
+#recentActivityList .item.is-clickable {
+  cursor: pointer;
+  transition: transform 0.16s ease, border-color 0.16s ease, background 0.16s ease;
+}
+
+#recentActivityList .item.is-clickable:hover {
+  transform: translateY(-1px);
+}
+
+@media (max-width: 840px) {
+  .activity-modal-card {
+    grid-template-columns: 1fr;
+  }
+
+  .activity-modal-media {
+    min-height: 280px;
+  }
+}
