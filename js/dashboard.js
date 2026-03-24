@@ -168,58 +168,44 @@ function renderContinue(items = []) {
 }
 
 // Renders the Recent Activity list, which is a simple feed of recent work edits with no required order or actions
-function renderRecent(items = []) {
-  const list = document.getElementById("recentActivityList");
-  if (!list) return;
+// function renderRecent(items = []) {
+//   const list = document.getElementById("recentActivityList");
+//   if (!list) return;
 
-  list.innerHTML = "";
+//   list.innerHTML = "";
 
-  if (!items.length) {
-    list.innerHTML = `
-      <div class="item">
-        <div class="meta">
-          <div class="name">No activity yet</div>
-          <div class="sub">Create or edit a work to see history here.</div>
-        </div>
-        <div class="tag">—</div>
-      </div>
-    `;
-    return;
-  }
+//   if (!items.length) {
+//     list.innerHTML = `
+//       <div class="item">
+//         <div class="meta">
+//           <div class="name">No activity yet</div>
+//           <div class="sub">Create or edit a work to see history here.</div>
+//         </div>
+//         <div class="tag">—</div>
+//       </div>
+//     `;
+//     return;
+//   }
 
-  for (const it of items.slice(0, 3)) {
-    const row = document.createElement("div");
-    const typeText = (it.type || "").toLowerCase();
-    const isGenerated = typeText === "generated";
+//   for (const it of items) {
+//     const row = document.createElement("div");
+//     row.className = "item";
+//     row.dataset.workId = it.workId || "";
+//     row.dataset.imageFileId = it.imageFileId || "";
+//     row.dataset.thumbUrl = it.thumbUrl || "";
+//     row.dataset.originalUrl = it.originalUrl || "";
 
-    row.className = `item${isGenerated ? " is-clickable" : ""}`;
-    row.innerHTML = `
-      <div class="meta">
-        <div class="name">“${it.title || "Untitled"}”</div>
-        <div class="sub">${it.subtitle || ""}</div>
-      </div>
-      <div class="tag">${it.type || ""}</div>
-    `;
+//     row.innerHTML = `
+//       <div class="meta">
+//         <div class="name">“${it.title || "Untitled"}”</div>
+//         <div class="sub">${it.subtitle || ""}</div>
+//       </div>
+//       <div class="tag">${it.type || ""}</div>
+//     `;
 
-    if (isGenerated) {
-      row.setAttribute("tabindex", "0");
-      row.setAttribute("role", "button");
-      row.setAttribute("aria-label", `Preview ${it.title || "artwork"}`);
-
-      const openPreview = () => openActivityModal(it);
-
-      row.addEventListener("click", openPreview);
-      row.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          openPreview();
-        }
-      });
-    }
-
-    list.appendChild(row);
-  }
-}
+//     list.appendChild(row);
+//   }
+// }
 
   const quickActionsPanel = document.getElementById("quickActionsPanel");
   const recentActivityPanel = document.getElementById("recentActivityPanel");
@@ -296,30 +282,6 @@ function renderRecent(items = []) {
     });
   }
 
-  // function showState(worksCount){
-  //   const showEmpty = worksCount === 0;
-
-  //   // Debug logs to trace state changes
-  //   console.log("[Dashboard] showState called with:", worksCount);
-
-  //   // Toggle the two states
-  //   emptyWorks.toggleAttribute("hidden", !showEmpty);
-  //   activeWorks.toggleAttribute("hidden", showEmpty);
-
-  //   // Keep Quick Actions visible in both, hide Recent Activity when empty
-  //   if (quickActionsPanel) quickActionsPanel.toggleAttribute("hidden", false);
-  //   if (recentActivityPanel) recentActivityPanel.toggleAttribute("hidden", showEmpty);
-
-  //   // Move Quick Actions into empty right column when empty
-  //   if (showEmpty && quickActionsPanel && emptyQuickActionsSlot) {
-  //     emptyQuickActionsSlot.appendChild(quickActionsPanel);
-  //   } else {
-  //     const grid = document.querySelector(".content .grid");
-  //     if (grid && quickActionsPanel) grid.appendChild(quickActionsPanel);
-  //   }
-
-  //   console.log("[Dashboard] worksCount:", worksCount, "showEmpty:", showEmpty);
-  // }
     let dash;
 
     try {
@@ -354,12 +316,26 @@ function renderRecent(items = []) {
     try { renderContinue(dash.continue); } catch(e){ console.warn("renderContinue failed:", e); }
     try { renderRecent(dash.recent); } catch(e){ console.warn("renderRecent failed:", e); }
 
-    // Modal setup for Recent Activity items with type "Generated" - shows a preview and option to edit
+   
+
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////MODAL SETUP FOR RECENT ACTIVITY ITEMS - shows a preview and option to edit when clicking on a recent item with type "Generated" (indicating it was created via AI and may need user edits before publishing)
+    /////////////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////////
+    /* =========================
+      Recent Activity Modal
+    ========================= */
+
     const activityModal = document.getElementById("activityModal");
     const activityModalBackdrop = document.getElementById("activityModalBackdrop");
     const activityModalClose = document.getElementById("activityModalClose");
     const activityModalCancel = document.getElementById("activityModalCancel");
     const activityModalEdit = document.getElementById("activityModalEdit");
+
     const activityModalMedia = document.getElementById("activityModalMedia");
     const activityModalTitle = document.getElementById("activityModalTitle");
     const activityModalSubtitle = document.getElementById("activityModalSubtitle");
@@ -367,8 +343,19 @@ function renderRecent(items = []) {
 
     let activeRecentWork = null;
 
+
+    /* =========================
+      Helpers
+    ========================= */
+
     function getRecentImageSrc(item) {
+      if (item.imageFileId) {
+        return `${API_BASE}/api/images/${item.imageFileId}`;
+      }
+
       return (
+        item.thumbUrl ||
+        item.originalUrl ||
         item.imageUrl ||
         item.image ||
         item.previewUrl ||
@@ -378,65 +365,143 @@ function renderRecent(items = []) {
       );
     }
 
-    function openActivityModal(item) {
+
+    /* =========================
+      Actions
+    ========================= */
+
+    function closeActivityModal() {
+      if (!activityModal) return;
+
+      activityModal.classList.add("hidden");
+      activityModal.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
+    }
+
+    async function openActivityModal(item) {
       if (!activityModal) return;
 
       activeRecentWork = item;
 
-      const imageSrc = getRecentImageSrc(item);
-
+      // Title
       if (activityModalTitle) {
-        activityModalTitle.textContent = item.title ? `“${item.title}”` : "Artwork Preview";
+        activityModalTitle.textContent = item.title || "Artwork Preview";
       }
 
+      // Subtitle
       if (activityModalSubtitle) {
-        activityModalSubtitle.textContent = item.subtitle || "Recently generated artwork.";
+        activityModalSubtitle.textContent =
+          item.subtitle || "Recently generated artwork.";
       }
 
+      // Status pill
       if (activityModalPill) {
         activityModalPill.textContent = item.type || "Generated";
       }
 
+      // Image
       if (activityModalMedia) {
+        const imageSrc = getRecentImageSrc(item);
+
         if (imageSrc) {
           activityModalMedia.innerHTML = `
-            <img src="${imageSrc}" alt="${item.title || "Artwork preview"}" />
+            <img
+              src="${imageSrc}"
+              alt="${item.title || "Artwork preview"}"
+              class="activity-preview-image"
+            />
           `;
         } else {
           activityModalMedia.innerHTML = `
-            <span class="activity-modal-placeholder">No preview image available for this activity yet.</span>
+            <span class="activity-modal-placeholder">
+              No preview image available for this activity yet.
+            </span>
           `;
         }
       }
 
-      if (activityModalEdit) {
-        activityModalEdit.onclick = () => {
-          if (!activeRecentWork) return;
-          navTo("create.html", activeRecentWork.workId || activeRecentWork.id);
-        };
-      }
-
+      // Open modal
       activityModal.classList.remove("hidden");
       activityModal.setAttribute("aria-hidden", "false");
       document.body.style.overflow = "hidden";
     }
 
-    function closeActivityModal() {
-      if (!activityModal) return;
-      activityModal.classList.add("hidden");
-      activityModal.setAttribute("aria-hidden", "true");
-      document.body.style.overflow = "";
-      activeRecentWork = null;
+
+    /* =========================
+      Init Modal
+    ========================= */
+
+    function initActivityModal() {
+      // Close buttons
+      activityModalClose?.addEventListener("click", closeActivityModal);
+      activityModalCancel?.addEventListener("click", closeActivityModal);
+      activityModalBackdrop?.addEventListener("click", closeActivityModal);
+
+      // ESC key
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && activityModal && !activityModal.classList.contains("hidden")) {
+          closeActivityModal();
+        }
+      });
+
+      // CLICK HANDLER (THIS WAS MISSING 🔥)
+      document.getElementById("recentActivityList")?.addEventListener("click", (e) => {
+        const row = e.target.closest(".item");
+        if (!row) return;
+
+        const item = {
+          workId: row.dataset.workId || "",
+          imageFileId: row.dataset.imageFileId || "",
+          thumbUrl: row.dataset.thumbUrl || "",
+          originalUrl: row.dataset.originalUrl || "",
+          title: row.querySelector(".name")?.textContent?.replace(/[“”"]/g, "") || "Untitled",
+          subtitle: row.querySelector(".sub")?.textContent || "",
+          type: row.querySelector(".tag")?.textContent || "Generated"
+        };
+
+        openActivityModal(item);
+      });
+
+      // Edit button
+      activityModalEdit?.addEventListener("click", () => {
+        if (!activeRecentWork?.workId) return;
+
+        window.location.href = `create.html?id=${encodeURIComponent(activeRecentWork.workId)}`;
+      });
     }
 
-    activityModalBackdrop?.addEventListener("click", closeActivityModal);
-    activityModalClose?.addEventListener("click", closeActivityModal);
-    activityModalCancel?.addEventListener("click", closeActivityModal);
 
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && activityModal && !activityModal.classList.contains("hidden")) {
-        closeActivityModal();
+    /* =========================
+      Render Recent Activity
+    ========================= */
+
+    function renderRecent(items = []) {
+      const list = document.getElementById("recentActivityList");
+      if (!list) return;
+
+      list.innerHTML = "";
+
+      for (const it of items) {
+        const row = document.createElement("div");
+        row.className = "item";
+
+        // 🔥 DATA PIPELINE (critical)
+        row.dataset.workId = it.workId || "";
+        row.dataset.imageFileId = it.imageFileId || "";
+        row.dataset.thumbUrl = it.thumbUrl || "";
+        row.dataset.originalUrl = it.originalUrl || "";
+
+        row.innerHTML = `
+          <div class="meta">
+            <div class="name">“${it.title || "Untitled"}”</div>
+            <div class="sub">${it.subtitle || ""}</div>
+          </div>
+          <div class="tag">${it.type || ""}</div>
+        `;
+
+        list.appendChild(row);
       }
-    });
+    }
 
+     initActivityModal();
 });

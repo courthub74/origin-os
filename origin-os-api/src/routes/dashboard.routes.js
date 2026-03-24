@@ -42,21 +42,21 @@ router.get("/", requireAuth, async (req, res) => {
   const recent = await Artwork.find({ userId })
     .sort({ updatedAt: -1 })
     .limit(7)
-    .select("_id title status updatedAt createdAt collectionName");
+    .select("_id title status updatedAt createdAt collection imageFileId thumbUrl originalUrl");
 
   const cont = await Artwork.find({ userId, status: "draft" })
     .sort({ updatedAt: -1 })
     .limit(4)
-    .select("_id title updatedAt status collectionName");
+    .select("_id title updatedAt status collection");
 
   const attentionRaw = await Artwork.find({ userId })
     .sort({ updatedAt: -1 })
     .limit(25)
-    .select("_id title status updatedAt collectionName");
+    .select("_id title status updatedAt collection");
 
   const attention = [];
   for (const a of attentionRaw) {
-    if ((a.status === "draft" || !a.status) && !a.collectionName) {
+    if ((a.status === "draft" || !a.status) && !a.collection) {
       attention.push({
         workId: a._id,
         title: a.title || "Untitled",
@@ -73,21 +73,25 @@ router.get("/", requireAuth, async (req, res) => {
         type: "continue",
         workId: cont[0]._id,
         title: cont[0].title || "Untitled",
-        subtitle: cont[0].collectionName
+        subtitle: cont[0].collection
           ? `Draft edited ${timeAgo(cont[0].updatedAt)}.`
           : `Draft edited ${timeAgo(cont[0].updatedAt)}. Assign to a collection to unlock publishing.`,
         primaryCta: { label: "Continue", go: "create.html" },
-        secondaryCta: cont[0].collectionName
+        secondaryCta: cont[0].collection
           ? { label: "View Collections", go: "collections.html" }
           : { label: "Assign Collection", go: "collections.html" }
       }
     : null;
 
-  const recentItems = recent.map((a) => ({
-    type: a.status || "Draft",
-    title: a.title || "Untitled",
-    subtitle: `${a.status || "Draft"} updated · ${timeAgo(a.updatedAt || a.createdAt)}`
-  }));
+    const recentItems = recent.map((a) => ({
+      workId: a._id,
+      type: a.status || "Draft",
+      title: a.title || "Untitled",
+      subtitle: `${a.status || "Draft"} updated · ${timeAgo(a.updatedAt || a.createdAt)}`,
+      imageFileId: a.imageFileId || null,
+      thumbUrl: a.thumbUrl || "",
+      originalUrl: a.originalUrl || ""
+    }));
 
   const continueItems = cont.map((a) => ({
     workId: a._id,

@@ -436,39 +436,36 @@
 
         </div>
       </section>
+    </main>
+  </div>
 
-     
-       <!-- Recent Activity Clickable Preview Modal -->
-      <div class="activity-modal hidden" id="activityModal" aria-hidden="true">
-        <div class="activity-modal-backdrop" id="activityModalBackdrop"></div>
+   <!-- Activity Modal -->
+    <div id="activityModal" class="activity-modal hidden" aria-hidden="true">
+    <div id="activityModalBackdrop" class="activity-modal-backdrop"></div>
 
-        <div class="activity-modal-card" role="dialog" aria-modal="true" aria-labelledby="activityModalTitle">
-          <button class="activity-modal-close" id="activityModalClose" type="button" aria-label="Close preview">
-            ✕
-          </button>
+    <div class="activity-modal-card" role="dialog" aria-modal="true" aria-labelledby="activityModalTitle">
+      <button id="activityModalClose" class="activity-modal-close" type="button" aria-label="Close preview">×</button>
 
-          <div class="activity-modal-media" id="activityModalMedia">
-            <span class="activity-modal-placeholder">No preview available</span>
-          </div>
+      <div id="activityModalMedia" class="activity-modal-media">
+        <span class="activity-modal-placeholder">
+          No preview image available
+        </span>
+      </div>
 
-          <div class="activity-modal-info">
-            <div class="activity-modal-top">
-              <h3 id="activityModalTitle">Artwork Preview</h3>
-              <span class="pill" id="activityModalPill">Generated</span>
-            </div>
+      <div class="activity-modal-info">
+        <div class="activity-modal-top">
+          <h3 id="activityModalTitle">Artwork Preview</h3>
+          <span id="activityModalPill" class="pill">Generated</span>
+        </div>
 
-            <p id="activityModalSubtitle">Preview your recently generated artwork.</p>
+        <p id="activityModalSubtitle"></p>
 
-            <div class="activity-modal-actions">
-              <button class="btn" type="button" id="activityModalCancel">Close</button>
-              <button class="btn primary" type="button" id="activityModalEdit">
-                <span class="dot"></span>Edit
-              </button>
-            </div>
-          </div>
+        <div class="activity-modal-actions">
+          <button id="activityModalCancel" class="btn" type="button">Close</button>
+          <button id="activityModalEdit" class="btn primary" type="button">Edit</button>
         </div>
       </div>
-    </main>
+    </div>
   </div>
 
   <!-- JS -->
