@@ -128,6 +128,35 @@
     </main>
   </div>
 
+  <!-- Modal for activity details -->
+     <div id="activityModal" class="activity-modal hidden" aria-hidden="true">
+    <div id="activityModalBackdrop" class="activity-modal-backdrop"></div>
+
+    <div class="activity-modal-card" role="dialog" aria-modal="true" aria-labelledby="activityModalTitle">
+      <button id="activityModalClose" class="activity-modal-close" type="button" aria-label="Close preview">×</button>
+
+      <div id="activityModalMedia" class="activity-modal-media">
+        <span class="activity-modal-placeholder">
+          No preview image available
+        </span>
+      </div>
+
+      <div class="activity-modal-info">
+        <div class="activity-modal-top">
+          <h3 id="activityModalTitle">Artwork Preview</h3>
+          <span id="activityModalPill" class="pill">Generated</span>
+        </div>
+
+        <p id="activityModalSubtitle"></p>
+
+        <div class="activity-modal-actions">
+          <button id="activityModalCancel" class="btn" type="button">Close</button>
+          <button id="activityModalEdit" class="btn primary" type="button">Edit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script src="/js/dreamos-shell.js"></script>
   <script src="/js/profile-menu.js"></script>
   <script src="/js/auth-guard.js"></script>
