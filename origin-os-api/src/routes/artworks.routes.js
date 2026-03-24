@@ -25,7 +25,7 @@ router.post("/", requireAuth, async (req, res) => {
       description = "",
       year = "",
       output = "square",
-      collection = "",
+      collectionName = "",
       notes = "",
       tags = []
     } = req.body || {};
@@ -36,7 +36,7 @@ router.post("/", requireAuth, async (req, res) => {
       description,
       year,
       output,
-      collection,
+      collectionName,
       notes,
       tags,
       status: "draft"
@@ -54,7 +54,7 @@ router.patch("/:id", requireAuth, async (req, res) => {
     const userId = getUserObjectId(req);
     const { id } = req.params;
 
-    const allowed = ["title", "description", "year", "output", "collection", "notes", "tags", "status"];
+    const allowed = ["title", "description", "year", "output", "collectionName", "notes", "tags", "status"];
     const update = {};
 
     for (const k of allowed) {

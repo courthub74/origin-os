@@ -42,21 +42,21 @@ router.get("/", requireAuth, async (req, res) => {
   const recent = await Artwork.find({ userId })
     .sort({ updatedAt: -1 })
     .limit(7)
-    .select("_id title status updatedAt createdAt collection");
+    .select("_id title status updatedAt createdAt collectionName");
 
   const cont = await Artwork.find({ userId, status: "draft" })
     .sort({ updatedAt: -1 })
     .limit(4)
-    .select("_id title updatedAt status collection");
+    .select("_id title updatedAt status collectionName");
 
   const attentionRaw = await Artwork.find({ userId })
     .sort({ updatedAt: -1 })
     .limit(25)
-    .select("_id title status updatedAt collection");
+    .select("_id title status updatedAt collectionName");
 
   const attention = [];
   for (const a of attentionRaw) {
-    if ((a.status === "draft" || !a.status) && !a.collection) {
+    if ((a.status === "draft" || !a.status) && !a.collectionName) {
       attention.push({
         workId: a._id,
         title: a.title || "Untitled",
@@ -73,11 +73,11 @@ router.get("/", requireAuth, async (req, res) => {
         type: "continue",
         workId: cont[0]._id,
         title: cont[0].title || "Untitled",
-        subtitle: cont[0].collection
+        subtitle: cont[0].collectionName
           ? `Draft edited ${timeAgo(cont[0].updatedAt)}.`
           : `Draft edited ${timeAgo(cont[0].updatedAt)}. Assign to a collection to unlock publishing.`,
         primaryCta: { label: "Continue", go: "create.html" },
-        secondaryCta: cont[0].collection
+        secondaryCta: cont[0].collectionName
           ? { label: "View Collections", go: "collections.html" }
           : { label: "Assign Collection", go: "collections.html" }
       }

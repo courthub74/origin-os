@@ -233,7 +233,7 @@ async function pollArtworkUntilReady(id, maxAttempts = 60, intervalMs = 2000) {
       description: document.getElementById("description")?.value || "",
       title: document.getElementById("title")?.value || "",
       year: document.getElementById("year")?.value || "",
-      collection: document.getElementById("collection")?.value || "",
+      collectionName: document.getElementById("collection")?.value || "",
       notes: document.getElementById("notes")?.value || "",
       tags
     };
