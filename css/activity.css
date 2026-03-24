@@ -195,3 +195,131 @@
     gap: 12px;
   }
 }
+
+.hidden {
+  display: none !important;
+}
+
+
+/* Activity Modal */
+.activity-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+}
+
+.activity-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(3, 8, 20, 0.72);
+  backdrop-filter: blur(8px);
+}
+
+.activity-modal-card {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  transform: translate(-50%, -50%);
+  width: min(920px, calc(100vw - 32px));
+  min-height: 520px;
+  display: grid;
+  grid-template-columns: 1.35fr 0.9fr;
+  overflow: hidden;
+  border-radius: 28px;
+  border: 1px solid rgba(180, 207, 106, 0.18);
+  background:
+    linear-gradient(180deg, rgba(7, 17, 43, 0.92), rgba(8, 18, 48, 0.96));
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+}
+
+.activity-modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.04);
+  color: white;
+  font-size: 1.25rem;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.activity-modal-media {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  background:
+    radial-gradient(circle at top, rgba(58,157,247,0.12), transparent 34%),
+    rgba(3, 10, 28, 0.92);
+}
+
+.activity-preview-image {
+  width: 100%;
+  height: 100%;
+  max-height: 510px;
+  object-fit: cover;
+  border-radius: 18px;
+  display: block;
+}
+
+.activity-modal-placeholder {
+  color: rgba(255,255,255,0.7);
+  font-size: 0.95rem;
+}
+
+.activity-modal-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 28px 24px 24px;
+  color: white;
+}
+
+.activity-modal-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.activity-modal-top h3 {
+  margin: 0;
+  font-size: 1.8rem;
+  line-height: 1.1;
+}
+
+#activityModalSubtitle {
+  margin: 20px 0 auto;
+  color: rgba(255,255,255,0.72);
+  font-size: 1rem;
+}
+
+.activity-modal-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.activity-modal-actions .btn.primary {
+  border-color: rgba(180, 207, 106, 0.5);
+}
+
+@media (max-width: 900px) {
+  .activity-modal-card {
+    grid-template-columns: 1fr;
+    min-height: auto;
+    max-height: calc(100vh - 32px);
+    overflow-y: auto;
+  }
+
+  .activity-modal-media {
+    min-height: 280px;
+  }
+
+  .activity-preview-image {
+    max-height: 360px;
+  }
+}
