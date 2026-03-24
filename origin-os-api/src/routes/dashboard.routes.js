@@ -42,7 +42,7 @@ router.get("/", requireAuth, async (req, res) => {
   const recent = await Artwork.find({ userId })
     .sort({ updatedAt: -1 })
     .limit(7)
-    .select("_id title status updatedAt createdAt collection");
+    .select("_id title status updatedAt createdAt collection imageFileId thumbUrl originalUrl");
 
   const cont = await Artwork.find({ userId, status: "draft" })
     .sort({ updatedAt: -1 })
@@ -83,11 +83,15 @@ router.get("/", requireAuth, async (req, res) => {
       }
     : null;
 
-  const recentItems = recent.map((a) => ({
-    type: a.status || "Draft",
-    title: a.title || "Untitled",
-    subtitle: `${a.status || "Draft"} updated · ${timeAgo(a.updatedAt || a.createdAt)}`
-  }));
+    const recentItems = recent.map((a) => ({
+      workId: a._id,
+      type: a.status || "Draft",
+      title: a.title || "Untitled",
+      subtitle: `${a.status || "Draft"} updated · ${timeAgo(a.updatedAt || a.createdAt)}`,
+      imageFileId: a.imageFileId || null,
+      thumbUrl: a.thumbUrl || "",
+      originalUrl: a.originalUrl || ""
+    }));
 
   const continueItems = cont.map((a) => ({
     workId: a._id,

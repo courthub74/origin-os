@@ -1,5 +1,8 @@
 import mongoose from "mongoose";
 
+// Artwork model for the Origin OS platform. This schema defines the structure of artwork documents in the MongoDB database, including fields for user association, metadata, generation status, and image information. The model can be extended with additional fields as needed to support new features or requirements.
+console.log("Artwork model loaded");
+
 // Model for an artwork created by a user. This can be used for both AI-generated and human-created artworks, and can be extended with additional fields as needed. The "status" field tracks the lifecycle of the artwork, from draft to published, and can be used to manage the generation process for AI artworks.
 const artworkSchema = new mongoose.Schema(
   {
@@ -10,7 +13,7 @@ const artworkSchema = new mongoose.Schema(
     year: { type: String, default: "" },
 
     output: { type: String, enum: ["square", "portrait", "landscape"], default: "square" },
-    collection: { type: String, default: "" },
+    collectionName: { type: String, default: "" },
 
     notes: { type: String, default: "" },
     tags: { type: [String], default: [] },
