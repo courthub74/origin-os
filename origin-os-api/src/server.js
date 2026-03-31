@@ -12,7 +12,8 @@ import { connectDB } from "./db.js";
 // Routes (ESM imports)
 import authRoutes from "./routes/auth.routes.js";
 import statsRoutes from "./routes/stats.routes.js";
-import artworksRoutes from "./routes/artworks.routes.js";
+// import artworksRoutes from "./modules/artworks/artworks.routes.js";
+import artworksRoutes from ".modules/artworks/artworks.routes.js"; // <-- This line seems duplicated, ensure to remove one of them
 import usersRoutes from "./routes/users.routes.js";
 import imagesRoutes from "./routes/images.routes.js";
 
