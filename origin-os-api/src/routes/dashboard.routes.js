@@ -1,6 +1,6 @@
 import express from "express";
 import mongoose from "mongoose";
-import { requireAuth } from "../middleware/auth.js";
+import { requireAuth } from "../core/middleware/auth.js";
 import Artwork from "../models/Artwork.js";
 
 const router = express.Router();

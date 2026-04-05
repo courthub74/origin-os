@@ -7,13 +7,15 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 
-import { connectDB } from "./db.js";
+// DB connection
+import { connectDB } from "./core/db/db.js";
 
 // Routes (ESM imports)
+import artworksRoutes from "./modules/artworks/artworks.routes.js";
+
+// Refactor these later
 import authRoutes from "./routes/auth.routes.js";
 import statsRoutes from "./routes/stats.routes.js";
-// import artworksRoutes from "./modules/artworks/artworks.routes.js";
-import artworksRoutes from ".modules/artworks/artworks.routes.js"; // <-- This line seems duplicated, ensure to remove one of them
 import usersRoutes from "./routes/users.routes.js";
 import imagesRoutes from "./routes/images.routes.js";
 

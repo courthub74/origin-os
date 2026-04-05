@@ -2,7 +2,7 @@ import express from "express";
 import multer from "multer";
 
 import User from "../models/User.js";
-import { requireAuth } from "../middleware/auth.js";
+import { requireAuth } from "../core/middleware/auth.js";
 
 const router = express.Router();
 

@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 import { GridFSBucket } from "mongodb";
 
 import Artwork from "../models/Artwork.js";
-import { requireAuth } from "../middleware/auth.js";
+import { requireAuth } from "../core/middleware/auth.js";
 
 const router = express.Router();
 
