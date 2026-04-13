@@ -86,7 +86,7 @@ router.post("/refresh", async (req, res) => {
   if (!token) return res.status(401).json({ error: "Missing refresh token" });
 
   try {
-    const decoded = verifyRefresh(token);
+    const decoded = verifyRefreshToken(token);
     const accessToken = signAccessToken({ sub: decoded.sub });
     return res.json({ ok: true, accessToken });
   } catch {
