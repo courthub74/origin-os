@@ -2,9 +2,9 @@ import express from "express";
 import bcrypt from "bcrypt";
 
 import User from "../models/User.js";
-import { signAccessToken, signRefreshToken, verifyRefresh } from "../Utils/jwt.js";
-import { cookieOptions } from "../Utils/cookies.js";
-import { requireAuth } from "../middleware/auth.js";
+import { signAccessToken, signRefreshToken, verifyRefreshToken } from "../core/Utils/jwt.js";
+import { setRefreshCookie, clearRefreshCookie, cookieOptions } from "../core/Utils/cookies.js";
+import { requireAuth } from "../core/middleware/auth.js";
 
 const router = express.Router();
 
