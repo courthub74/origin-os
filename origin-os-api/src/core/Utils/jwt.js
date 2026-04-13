@@ -12,6 +12,6 @@ export function verifyAccess(token) {
   return jwt.verify(token, process.env.JWT_ACCESS_SECRET);
 }
 
-export function verifyRefresh(token) {
+export function verifyRefreshToken(token) {
   return jwt.verify(token, process.env.JWT_REFRESH_SECRET);
 }
