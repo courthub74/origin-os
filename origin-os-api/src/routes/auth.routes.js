@@ -6,6 +6,7 @@ import { signAccessToken, signRefreshToken, verifyRefreshToken } from "../core/U
 import { setRefreshCookie, clearRefreshCookie, cookieOptions } from "../core/Utils/cookies.js";
 import { requireAuth } from "../core/middleware/auth.js";
 
+//
 const router = express.Router();
 
 // GET /auth/me
@@ -41,6 +42,9 @@ router.post("/register", async (req, res) => {
   });
 });
 
+// Number ONE: Login, Refresh, Logout routes below. Access token is returned in response body, refresh token is set as HttpOnly cookie.
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // POST /auth/login
 router.post("/login", async (req, res) => {
   const { email, password } = req.body || {};

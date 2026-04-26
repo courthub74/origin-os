@@ -1,10 +1,17 @@
   // LOGIN LOGIC
 
+  // Test Print
+  console.log("Login script loaded.");
+
   // /js/login.js
   document.addEventListener("DOMContentLoaded", () => {
     const API_BASE = "http://localhost:4000";
 
     const signInBtn = document.getElementById("signInBtn");
+
+    // Diagnostic log to verify button selection (remove in production)
+    console.log("signInBtn:", signInBtn);
+
     const emailEl = document.getElementById("email");
     const passwordEl = document.getElementById("password");
 
@@ -99,9 +106,11 @@
       }, 900);
     }
 
-    // SIGN IN
+    // SIGN IN CLICK HANDLER
     if (signInBtn){
       signInBtn.addEventListener("click", async () => {
+        // Test Print
+        console.log("Sign In button clicked.");
         const email = (emailEl?.value || "").trim();
         const password = passwordEl?.value || "";
 
@@ -113,6 +122,8 @@
         startSequence(stepsSignIn);
 
         try {
+          // Diagnostic log to verify before API call (remove in production)
+          console.log("About to call /auth/login");
           const res = await fetch(`${API_BASE}/auth/login`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
