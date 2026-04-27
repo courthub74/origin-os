@@ -3,6 +3,7 @@
 window.__DASH_LOADED = true;
 
 document.addEventListener("DOMContentLoaded", async () => {
+  
   // Dashboard load test
   // console.log("✅ dashboard DOMContentLoaded fired");
   // console.log(
@@ -22,15 +23,27 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
-  let user;
+  // Try parsing user, but don't auto-logout if it fails. Let the auth-guard and apiFetch handle session verification and potential refresh.
+  let user = null;
   try {
-    user = JSON.parse(userRaw);
+    user = userRaw ? JSON.parse(userRaw) : null;
   } catch {
-    localStorage.removeItem("origin_user");
-    localStorage.removeItem("origin_access");
-    window.location.href = "login.html";
-    return;
+    console.warn("Invalid origin_user in localStorage");
+    user = null;
   }
+  // Do NOT auto-logout just because origin_user is bad.
+  // Let auth-guard / apiFetch verify the session with refresh.
+
+  // Older User try/catch
+  // let user;
+  // try {
+  //   user = JSON.parse(userRaw);
+  // } catch {
+  //   localStorage.removeItem("origin_user");
+  //   localStorage.removeItem("origin_access");
+  //   window.location.href = "login.html";
+  //   return;
+  // }
 
   // Onboarding gate
   if (user.onboardingComplete === false) {
