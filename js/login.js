@@ -119,6 +119,10 @@
           return;
         }
 
+        // Test the email and password entered
+        console.log("email:", email);
+        console.log("password length:", password.length);
+
         startSequence(stepsSignIn);
 
         try {
