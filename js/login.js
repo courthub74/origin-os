@@ -5,6 +5,7 @@
 
   // /js/login.js
   document.addEventListener("DOMContentLoaded", () => {
+    //BAKING API INTO THE BASE
     const API_BASE = "http://localhost:4000";
 
     const signInBtn = document.getElementById("signInBtn");

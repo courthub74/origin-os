@@ -89,11 +89,23 @@ router.post("/refresh", async (req, res) => {
   const token = req.cookies.refreshToken;
   if (!token) return res.status(401).json({ error: "Missing refresh token" });
 
+  // TEST IF REFRESH COOKIE IS PRESENT
+  console.log("REFRESH COOKIE PRESENT:", !!token);
+
   try {
     const decoded = verifyRefreshToken(token);
-    const accessToken = signAccessToken({ sub: decoded.sub });
+
+    const user = await User.findById(decoded.sub).select("_id email displayName");
+    if (!user) return res.status(401).json({ error: "User not found" });
+
+    const accessToken = signAccessToken({
+      sub: user._id.toString(),
+      email: user.email
+    });
+
     return res.json({ ok: true, accessToken });
-  } catch {
+  } catch (err) {
+    console.log("REFRESH ERROR:", err.message);
     return res.status(401).json({ error: "Invalid refresh token" });
   }
 });

@@ -27,7 +27,8 @@ async function refreshAccessToken() {
     credentials: "include"
   });
 
-  const data = await res.json();
+  const data = await res.json().catch(() => ({}));
+
   if (!res.ok) throw new Error(data.error || "Refresh failed");
   if (!data.accessToken) throw new Error("Missing access token from refresh");
   setAccessToken(data.accessToken);
@@ -81,6 +82,9 @@ async function requireSessionOrRedirect() {
 
     return token;
   } catch (err) {
+    console.error("AUTH GUARD FAILED:", err);
+    alert("Auth guard failed: " + err.message);
+
     clearAuth();
     window.location.href = "index.html";
   }
