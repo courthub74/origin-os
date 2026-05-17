@@ -185,7 +185,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   if (!emptyWorks || !activeWorks) return;
 
-  const API_BASE = "http://localhost:4000";
+  // API base should match the one used in login.js and auth-guard.js
+  const API_BASE = "http://127.0.0.1:4000";
 
   function getAccessToken() {
     return localStorage.getItem("origin_access");

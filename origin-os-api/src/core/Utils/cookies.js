@@ -7,7 +7,8 @@ export function cookieOptions() {
     httpOnly: true,
     secure: false, // false for local http dev
     sameSite: "lax",
-    path: "/"
+    path: "/",
+    domain: "127.0.0.1" // adjust for production domain 
   };
 }
 
@@ -22,3 +23,4 @@ export function setRefreshCookie(res, token) {
 export function clearRefreshCookie(res) {
   res.clearCookie("refreshToken", cookieOptions());
 }
+

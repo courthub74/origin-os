@@ -1,5 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const API_BASE = "http://localhost:4000";
+  //BAKING API INTO THE BASE
+  // Using the actual localhost address to avoid CORS issues during development. 
+  // In production, this should be the real API URL or relative path.
+  const API_BASE = "http://127.0.0.1:4000";
 
   // Helper function to perform authenticated fetch requests, with automatic token refresh on 401 responses. It first tries the request with the current access token, and if it receives a 401 Unauthorized response, it attempts to refresh the token using the refresh endpoint. If the refresh is successful, it retries the original request with the new access token. If the refresh fails, it clears the stored tokens and redirects to the login page.
   async function authFetch(url, options = {}) {

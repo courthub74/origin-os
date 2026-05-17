@@ -6,7 +6,12 @@
   // /js/login.js
   document.addEventListener("DOMContentLoaded", () => {
     //BAKING API INTO THE BASE
-    const API_BASE = "http://localhost:4000";
+    // Using the actual localhost address to avoid CORS issues during development. 
+    // In production, this should be the real API URL or relative path.
+    const API_BASE = "http://127.0.0.1:4000";
+    //////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////
 
     const signInBtn = document.getElementById("signInBtn");
 

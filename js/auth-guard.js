@@ -1,4 +1,10 @@
-const API_BASE = "http://localhost:4000";
+// /js/auth-guard.js
+
+// This script is included on any page that requires authentication. It checks for a valid session and redirects to login if not authenticated. It also populates user info in the UI if available.
+
+// The API base URL should match the one used in login.js and the backend server. 
+// Adjust as needed for development vs production.
+const API_BASE = "http://127.0.0.1:4000";
 
 function getAccessToken() {
   return localStorage.getItem("origin_access");
