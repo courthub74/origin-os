@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (res.status !== 401) return res;
 
   // Try refresh
-  const refreshRes = await fetch(`${API_BASE}/api/auth/refresh`, {
+  const refreshRes = await fetch(`${API_BASE}/auth/refresh`, {
     method: "POST",
     credentials: "include"
   });
