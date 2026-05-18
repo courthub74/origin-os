@@ -6,6 +6,7 @@ import { signAccessToken, signRefreshToken, verifyRefreshToken } from "../core/U
 import { setRefreshCookie, clearRefreshCookie, cookieOptions } from "../core/Utils/cookies.js";
 import { requireAuth } from "../core/middleware/auth.js";
 
+//
 const router = express.Router();
 
 // GET /auth/me
@@ -41,6 +42,9 @@ router.post("/register", async (req, res) => {
   });
 });
 
+// Number ONE: Login, Refresh, Logout routes below. Access token is returned in response body, refresh token is set as HttpOnly cookie.
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // POST /auth/login
 router.post("/login", async (req, res) => {
   const { email, password } = req.body || {};
@@ -85,11 +89,23 @@ router.post("/refresh", async (req, res) => {
   const token = req.cookies.refreshToken;
   if (!token) return res.status(401).json({ error: "Missing refresh token" });
 
+  // TEST IF REFRESH COOKIE IS PRESENT
+  console.log("REFRESH COOKIE PRESENT:", !!token);
+
   try {
-    const decoded = verifyRefresh(token);
-    const accessToken = signAccessToken({ sub: decoded.sub });
+    const decoded = verifyRefreshToken(token);
+
+    const user = await User.findById(decoded.sub).select("_id email displayName");
+    if (!user) return res.status(401).json({ error: "User not found" });
+
+    const accessToken = signAccessToken({
+      sub: user._id.toString(),
+      email: user.email
+    });
+
     return res.json({ ok: true, accessToken });
-  } catch {
+  } catch (err) {
+    console.log("REFRESH ERROR:", err.message);
     return res.status(401).json({ error: "Invalid refresh token" });
   }
 });

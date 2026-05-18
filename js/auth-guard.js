@@ -1,4 +1,10 @@
-const API_BASE = "http://localhost:4000";
+// /js/auth-guard.js
+
+// This script is included on any page that requires authentication. It checks for a valid session and redirects to login if not authenticated. It also populates user info in the UI if available.
+
+// The API base URL should match the one used in login.js and the backend server. 
+// Adjust as needed for development vs production.
+const API_BASE = "http://127.0.0.1:4000";
 
 function getAccessToken() {
   return localStorage.getItem("origin_access");
@@ -27,7 +33,8 @@ async function refreshAccessToken() {
     credentials: "include"
   });
 
-  const data = await res.json();
+  const data = await res.json().catch(() => ({}));
+
   if (!res.ok) throw new Error(data.error || "Refresh failed");
   if (!data.accessToken) throw new Error("Missing access token from refresh");
   setAccessToken(data.accessToken);
@@ -81,6 +88,9 @@ async function requireSessionOrRedirect() {
 
     return token;
   } catch (err) {
+    console.error("AUTH GUARD FAILED:", err);
+    alert("Auth guard failed: " + err.message);
+
     clearAuth();
     window.location.href = "index.html";
   }

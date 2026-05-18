@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const accountMenu = accountFooter.querySelector("#accountMenu");
   if (!accountBtn || !accountMenu) return;
 
-  const API_BASE = "http://localhost:4000";
+  const API_BASE = "http://127.0.0.1:4000";
 
    
   // ✅ IMPORTANT: scoped selectors (only inside the account button)
@@ -23,10 +23,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (!token) return;
 
       // Fetch fresh user data from server to get latest avatarUrl
-      const res = await fetch(`${API_BASE}/users/me`, {
-        headers: { Authorization: `Bearer ${token}` },
-        credentials: "include"
-      });
+      const res = await apiFetch("/users/me");
 
       if (!res.ok) throw new Error("Failed to fetch user data");
 

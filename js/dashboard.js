@@ -1,16 +1,18 @@
 // page checks for auth on load, then fetches dashboard data and renders the appropriate sections and states based on the response
-console.log("✅ dashboard.js LOADED", new Date().toISOString());
+// console.log("✅ dashboard.js LOADED", new Date().toISOString());
 window.__DASH_LOADED = true;
 
 document.addEventListener("DOMContentLoaded", async () => {
-  console.log("✅ dashboard DOMContentLoaded fired");
-  console.log(
-    "token?",
-    !!localStorage.getItem("origin_access"),
-    "userRaw?",
-    !!localStorage.getItem("origin_user")
-  );
-  console.log("[Dashboard] DOMContentLoaded, initializing dashboard...");
+  
+  // Dashboard load test
+  // console.log("✅ dashboard DOMContentLoaded fired");
+  // console.log(
+  //   "token?",
+  //   !!localStorage.getItem("origin_access"),
+  //   "userRaw?",
+  //   !!localStorage.getItem("origin_user")
+  // );
+  // console.log("[Dashboard] DOMContentLoaded, initializing dashboard...");
 
   const userRaw = localStorage.getItem("origin_user");
   const token = localStorage.getItem("origin_access");
@@ -21,15 +23,27 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
-  let user;
+  // Try parsing user, but don't auto-logout if it fails. Let the auth-guard and apiFetch handle session verification and potential refresh.
+  let user = null;
   try {
-    user = JSON.parse(userRaw);
+    user = userRaw ? JSON.parse(userRaw) : null;
   } catch {
-    localStorage.removeItem("origin_user");
-    localStorage.removeItem("origin_access");
-    window.location.href = "login.html";
-    return;
+    console.warn("Invalid origin_user in localStorage");
+    user = null;
   }
+  // Do NOT auto-logout just because origin_user is bad.
+  // Let auth-guard / apiFetch verify the session with refresh.
+
+  // Older User try/catch
+  // let user;
+  // try {
+  //   user = JSON.parse(userRaw);
+  // } catch {
+  //   localStorage.removeItem("origin_user");
+  //   localStorage.removeItem("origin_access");
+  //   window.location.href = "login.html";
+  //   return;
+  // }
 
   // Onboarding gate
   if (user.onboardingComplete === false) {
@@ -167,11 +181,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   const recentActivityPanel = document.getElementById("recentActivityPanel");
   const emptyQuickActionsSlot = document.getElementById("emptyQuickActionsSlot");
 
-  console.log("[Dashboard] emptyWorks?", !!emptyWorks, "activeWorks?", !!activeWorks);
+  // console.log("[Dashboard] emptyWorks?", !!emptyWorks, "activeWorks?", !!activeWorks);
 
   if (!emptyWorks || !activeWorks) return;
 
-  const API_BASE = "http://localhost:4000";
+  // API base should match the one used in login.js and auth-guard.js
+  const API_BASE = "http://127.0.0.1:4000";
 
   function getAccessToken() {
     return localStorage.getItem("origin_access");
@@ -206,7 +221,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   function showState(worksCount) {
     const showEmpty = Number(worksCount) === 0;
 
-    console.log("[showState] worksCount =", worksCount, "showEmpty =", showEmpty);
+    // Test for counted works
+    // console.log("[showState] worksCount =", worksCount, "showEmpty =", showEmpty);
 
     if (showEmpty) {
       emptyWorks.removeAttribute("hidden");
@@ -223,10 +239,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       else recentActivityPanel.removeAttribute("hidden");
     }
 
-    console.log("[showState] after:", {
-      emptyHidden: emptyWorks.hasAttribute("hidden"),
-      activeHidden: activeWorks.hasAttribute("hidden")
-    });
+    // Empty or Active Dashboard
+    // console.log("[showState] after:", {
+    //   emptyHidden: emptyWorks.hasAttribute("hidden"),
+    //   activeHidden: activeWorks.hasAttribute("hidden")
+    // });
   }
 
   let dash;
@@ -245,14 +262,16 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const stats = dash.stats || { works: 0, collections: 0, drops: 0 };
 
-  console.log("[Dashboard] stats =", stats);
+  // Test Dashboard stats
+  // console.log("[Dashboard] stats =", stats);
 
   setKpiValue("Works", stats.works ?? 0);
   setKpiValue("Collections", stats.collections ?? 0);
   setKpiValue("Drops", stats.drops ?? 0);
   showState(stats.works ?? 0);
 
-  console.log("[Dashboard] stats.works =", stats.works);
+  // Test Dashboard works amount
+  // console.log("[Dashboard] stats.works =", stats.works);
 
   try {
     renderNextAction(dash.nextAction);

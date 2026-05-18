@@ -1,5 +1,52 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const API_BASE = "http://localhost:4000";
+  //BAKING API INTO THE BASE
+  // Using the actual localhost address to avoid CORS issues during development. 
+  // In production, this should be the real API URL or relative path.
+  const API_BASE = "http://127.0.0.1:4000";
+
+  // Helper function to perform authenticated fetch requests, with automatic token refresh on 401 responses. It first tries the request with the current access token, and if it receives a 401 Unauthorized response, it attempts to refresh the token using the refresh endpoint. If the refresh is successful, it retries the original request with the new access token. If the refresh fails, it clears the stored tokens and redirects to the login page.
+  async function authFetch(url, options = {}) {
+  const access = token();
+
+  let res = await fetch(url, {
+    ...options,
+    headers: {
+      ...(options.headers || {}),
+      Authorization: `Bearer ${access}`
+    },
+    credentials: "include"
+  });
+
+  if (res.status !== 401) return res;
+
+  // Try refresh
+  const refreshRes = await fetch(`${API_BASE}/auth/refresh`, {
+    method: "POST",
+    credentials: "include"
+  });
+
+  if (!refreshRes.ok) {
+    localStorage.removeItem("origin_access");
+    localStorage.removeItem("origin_user");
+    window.location.href = "/index.html";
+    return res;
+  }
+
+  const data = await refreshRes.json();
+  localStorage.setItem("origin_access", data.accessToken);
+
+  // Retry original request
+  res = await fetch(url, {
+    ...options,
+    headers: {
+      ...(options.headers || {}),
+      Authorization: `Bearer ${data.accessToken}`
+    },
+    credentials: "include"
+  });
+
+  return res;
+}
 
   function sizeFromOutput(output) {
     if (output === "portrait") return "1024x1536";
@@ -9,7 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // helper to poll artwork until generation is ready, then update preview
   async function fetchArtworkById(id) {
-  const res = await fetch(`${API_BASE}/artworks/${id}`, {
+  const res = await authFetch(`${API_BASE}/artworks/${id}`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token()}`
@@ -96,7 +143,7 @@ async function renderGeneratedImage(artwork) {
 
   stage.innerHTML = "<span>Loading image…</span>";
 
-  const res = await fetch(`${API_BASE}/api/images/${artwork.imageFileId}`, {
+  const res = await authFetch(`${API_BASE}/api/images/${artwork.imageFileId}`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token()}`
@@ -169,7 +216,7 @@ async function pollArtworkUntilReady(id, maxAttempts = 60, intervalMs = 2000) {
   const id = await createDraftIfNeeded();
   console.log("CLIENT DEBUG artworkId =", id);
 
-  const res = await fetch(`${API_BASE}/api/images/generate`, {
+  const res = await authFetch(`${API_BASE}/api/images/generate`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -195,11 +242,11 @@ async function pollArtworkUntilReady(id, maxAttempts = 60, intervalMs = 2000) {
 
       // Check for common auth issues no token, expired token, etc. and handle by redirecting to login
       const t = token();
-      if (!t) {
-        alert("Session expired. Please log in again.");
-        window.location.href = "/login.html"; // or your route
-        return;
-      }
+      // if (!t) {
+      //   alert("Session expired. Please log in again.");
+      //   window.location.href = "/login.html"; // or your route
+      //   return;
+      // }
       
       console.error(err);
       alert(err.message);
@@ -247,7 +294,7 @@ async function pollArtworkUntilReady(id, maxAttempts = 60, intervalMs = 2000) {
     // If we have an artworkId cached, verify it belongs to THIS logged-in user
     if (artworkId) {
       try {
-        const check = await fetch(`${API_BASE}/artworks/${artworkId}`, {
+        const check = await authFetch(`${API_BASE}/artworks/${artworkId}`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token()}`
@@ -268,7 +315,7 @@ async function pollArtworkUntilReady(id, maxAttempts = 60, intervalMs = 2000) {
     }
 
     // Create a new draft
-    const res = await fetch(`${API_BASE}/artworks`, {
+    const res = await authFetch(`${API_BASE}/artworks`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -298,7 +345,7 @@ async function pollArtworkUntilReady(id, maxAttempts = 60, intervalMs = 2000) {
 
     const id = await createDraftIfNeeded();
 
-    const res = await fetch(`${API_BASE}/artworks/${id}`, {
+    const res = await authFetch(`${API_BASE}/artworks/${id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",

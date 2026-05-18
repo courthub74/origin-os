@@ -20,10 +20,10 @@ import usersRoutes from "./routes/users.routes.js";
 import imagesRoutes from "./routes/images.routes.js";
 
 // Diagnostic log (keep temporarily)
-console.log("ENV CHECK:", {
-  cwd: process.cwd(),
-  hasKey: !!process.env.OPENAI_API_KEY
-});
+// console.log("ENV CHECK:", {
+//   cwd: process.cwd(),
+//   hasKey: !!process.env.OPENAI_API_KEY
+// });
 
 const app = express();
 
@@ -41,6 +41,7 @@ app.use(cors({
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
+// GET REQUEST FOR HEALTH
 app.get("/health", (req, res) => res.json({ ok: true }));
 
 // Mount routes
@@ -56,9 +57,10 @@ import dashboardRoutes from "./routes/dashboard.routes.js";
 app.use("/dashboard", dashboardRoutes);
 
 
-
+// Set the port for 4000
 const port = process.env.PORT || 4000;
 
+// Connect to the DB, then listen for the port with error handling
 connectDB()
   .then(() => {
     app.listen(port, () => console.log(`✅ API running on http://localhost:${port}`));
