@@ -136,3 +136,21 @@
       border-color: rgba(180,207,106,0.45);
       background: rgba(180,207,106,0.08);
     }
+
+    /* Refined primary button - mature system interface */
+    .btn.primary{
+      /* border-color: rgba(180,207,106,0.25);
+      background: rgba(180,207,106,0.12); */
+      background: rgba(180, 207, 106, 0.07);
+      border-color: rgba(180, 207, 106, 0.28);
+    }
+
+    .btn.primary:hover{
+      border-color: rgba(180,207,106,0.45);
+      background: rgba(180,207,106,0.08);
+      box-shadow: 0 0 0 1px rgba(180,207,106,0.20);
+    }
+
+    .dot{
+      box-shadow: 0 0 0 3px rgba(180,207,106,0.08);
+    }
