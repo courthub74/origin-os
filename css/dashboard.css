@@ -5,25 +5,14 @@
   gap: 14px;
 }
 
+.grid:has(#activeState:not([hidden])) {
+  grid-template-columns: 1fr;
+}
+
 @media (max-width: 980px) {
   .grid {
     grid-template-columns: 1fr;
   }
-}
-
-#emptyState:not([hidden]) #quickActionsPanel,
-.grid:has(#emptyState:not([hidden])) > #quickActionsPanel {
-  display: none !important;
-}
-
-#emptyState:not([hidden]) {
-  grid-column: 1 / -1;
-  width: 100%;
-}
-
-#emptyState:not([hidden]) .empty-grid {
-  width: min(760px, 100%);
-  margin-inline: auto;
 }
 
 .tiles {
@@ -179,6 +168,12 @@
   display: contents;
 }
 
+.grid:has(#activeState:not([hidden])) .active-left {
+  grid-column: 1 / -1;
+  width: min(960px, 100%);
+  margin-inline: auto;
+}
+
 .active-left {
   display: flex;
   flex-direction: column;
@@ -258,7 +253,6 @@
   min-width: 220px;
 }
 
-/* ===== Quick Actions ===== */
 /* ===== Recent Activity ===== */
 /* ===== Activity modal ===== */
 /* ===== Responsive rules ===== */
