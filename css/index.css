@@ -52,10 +52,6 @@ body {
 }
 
 .field {
-  border: 1px solid rgba(255, 255, 255, 0.10);
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 16px;
-  padding: 12px;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -118,7 +114,6 @@ input {
 
 .onePanel {
   width: 100%;
-  min-height: 560px;
 }
 
 .registerPrompt {
@@ -126,20 +121,31 @@ input {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 8px;
+  flex-wrap: wrap;
   color: var(--muted);
   font-size: 14px;
 }
 
+.registerText {
+  color: var(--muted);
+}
+
 .btn.ghost {
   background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: rgba(255, 255, 255, 0.85);
+  border: none;
+  box-shadow: none;
+  width: auto;
+  padding: 0;
+  color: rgba(180, 207, 106, 0.92);
+  text-decoration: underline;
+  text-underline-offset: 4px;
 }
 
 .btn.ghost:hover {
-  border-color: rgba(180, 207, 106, 0.45);
-  background: rgba(180, 207, 106, 0.08);
+  border-color: transparent;
+  background: transparent;
+  color: rgba(180, 207, 106, 1);
 }
 
 .btn.primary {
