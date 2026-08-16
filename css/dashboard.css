@@ -11,6 +11,21 @@
   }
 }
 
+#emptyState:not([hidden]) #quickActionsPanel,
+.grid:has(#emptyState:not([hidden])) > #quickActionsPanel {
+  display: none !important;
+}
+
+#emptyState:not([hidden]) {
+  grid-column: 1 / -1;
+  width: 100%;
+}
+
+#emptyState:not([hidden]) .empty-grid {
+  width: min(760px, 100%);
+  margin-inline: auto;
+}
+
 .tiles {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

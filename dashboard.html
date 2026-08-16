@@ -99,77 +99,23 @@
             <!-- EMPTY STATE (when no works exist) -->
         <div class="empty-state" id="emptyState" hidden>
           <div class="empty-grid">
-            <!-- LEFT: KPIs + No works panel -->
-            <div>
-              <div class="kpis">
-                <div class="panel kpi reveal d2">
-                  <div class="kpi-top">
-                    <div class="kpi-icon" aria-hidden="true">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                        <path d="M4 5h16v14H4V5z" stroke="currentColor" stroke-width="1.6"/>
-                        <path d="M8 9h8M8 13h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-                      </svg>
-                    </div>
-                    <div class="dot" aria-hidden="true"></div>
+            <div class="panel work-panel reveal d5">
+              <div class="work-inner">
+                <div>
+                  <div class="empty-icon" aria-hidden="true">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                      <path d="M4 5h16v14H4V5z" stroke="currentColor" stroke-width="1.6"/>
+                      <path d="M7 15l3-3 3 3 4-5 3 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
                   </div>
-                  <div class="kpi-value">0</div>
-                  <div class="kpi-label">Works</div>
+                  <h2>No works yet</h2>
+                  <p>Begin your first creation. Every masterpiece starts with a single prompt.</p>
+                  <button class="cta" type="button" onclick="window.location.href='create.html'">
+                    Create First Work <span class="arrow">↗</span>
+                  </button>
                 </div>
-
-                <div class="panel kpi reveal d3">
-                  <div class="kpi-top">
-                    <div class="kpi-icon" aria-hidden="true">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                        <path d="M4 7h7l2 2h7v10H4V7z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
-                      </svg>
-                    </div>
-                    <div class="dot" aria-hidden="true"></div>
-                  </div>
-                  <div class="kpi-value">0</div>
-                  <div class="kpi-label">Collections</div>
-                </div>
-
-                <div class="panel kpi reveal d4">
-                  <div class="kpi-top">
-                    <div class="kpi-icon" aria-hidden="true">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                        <path d="M12 3l7 4v10l-7 4-7-4V7l7-4z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
-                        <path d="M12 7v14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-                      </svg>
-                    </div>
-                    <div class="dot" aria-hidden="true"></div>
-                  </div>
-                  <div class="kpi-value">0</div>
-                  <div class="kpi-label">Drops</div>
-                </div>
-              </div>
-
-              <div class="panel work-panel reveal d5">
-                <div class="work-inner">
-                  <div>
-                    <div class="empty-icon" aria-hidden="true">
-                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                        <path d="M4 5h16v14H4V5z" stroke="currentColor" stroke-width="1.6"/>
-                        <path d="M7 15l3-3 3 3 4-5 3 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                      </svg>
-                    </div>
-                    <h2>No works yet</h2>
-                    <p>Begin your first creation. Every masterpiece starts with a single prompt.</p>
-                    <button class="cta" type="button" onclick="window.location.href='create.html'">
-                      Create First Work <span class="arrow">↗</span>
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <div class="status reveal d6">
-                <span class="led" aria-hidden="true"></span>
-                <span>System operational</span>
               </div>
             </div>
-
-            <!-- RIGHT: Quick Actions -->
-            <div id="emptyQuickActionsSlot"></div>
           </div>
         </div>
         <!-- END EMPTY STATE -->
