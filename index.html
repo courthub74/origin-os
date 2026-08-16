@@ -1,40 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Origin OS — Login</title>
-  <link rel="stylesheet" href="dreamos.css">
-  <link rel="stylesheet" href="./css/index.css">
-</head>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Origin OS — Login</title>
+    <link rel="stylesheet" href="dreamos.css" />
+    <link rel="stylesheet" href="./css/index.css" />
+  </head>
 
-<body>
-  <!-- <div class="wrap"> -->
+  <body>
     <div class="wrap single">
       <section class="loginPanel onePanel">
         <div class="topBrand">
           <div class="brandBlock">
             <div class="dreamos-logo md">
-            <!-- SVG here -->
               <svg width="120" height="138" viewBox="0 0 120 138" xmlns="http://www.w3.org/2000/svg">
-              <!-- Hex container -->
-              <polygon
-                points="60,2 114,34 114,104 60,136 6,104 6,34"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              />
+                <polygon
+                  points="60,2 114,34 114,104 60,136 6,104 6,34"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                />
 
-              <!-- Engine blades -->
-              <g transform="translate(60 69)">
-                <polygon points="0,-28 6,-12 0,-6 -6,-12" fill="currentColor"/>
-                <polygon points="28,0 12,6 6,0 12,-6" fill="currentColor"/>
-                <polygon points="0,28 -6,12 0,6 6,12" fill="currentColor"/>
-                <polygon points="-28,0 -12,-6 -6,0 -12,6" fill="currentColor"/>
-              </g>
-            </svg>
-          </div>
-            <!-- <div class="orbBig"></div> -->
+                <g transform="translate(60 69)">
+                  <polygon points="0,-28 6,-12 0,-6 -6,-12" fill="currentColor" />
+                  <polygon points="28,0 12,6 6,0 12,-6" fill="currentColor" />
+                  <polygon points="0,28 -6,12 0,6 6,12" fill="currentColor" />
+                  <polygon points="-28,0 -12,-6 -6,0 -12,6" fill="currentColor" />
+                </g>
+              </svg>
+            </div>
+
             <div class="brandText2">
               <strong>Origin OS</strong>
               <span>Create. Shape. Release.</span>
@@ -50,17 +46,17 @@
 
           <div class="field">
             <div class="label">Email</div>
-            <input type="email" placeholder="you@studio.com" />
+            <input id="email" name="email" type="email" placeholder="you@studio.com" autocomplete="email" />
           </div>
 
           <div class="field">
             <div class="label">Password</div>
-            <input type="password" placeholder="••••••••" />
+            <input id="password" name="password" type="password" placeholder="••••••••" autocomplete="current-password" />
           </div>
 
           <div class="mini">
             <label class="remember">
-              <input type="checkbox" id="rememberMe" />
+              <input type="checkbox" id="rememberMe" name="rememberMe" />
               <span class="box" aria-hidden="true"></span>
               <span class="rememberText">Remember me</span>
             </label>
@@ -68,27 +64,32 @@
             <a href="#" onclick="alert('Hook to reset flow.'); return false;">Forgot Password</a>
           </div>
 
-
           <div class="login-actions">
-            <button class="btn primary" onclick="alert('Hook to auth. Then route to dashboard.');">
+            <button id="signInBtn" class="btn primary" type="button" onclick="alert('Hook to auth. Then route to dashboard.');">
               <span class="dot"></span>Sign In
             </button>
 
-            <button class="btn" onclick="window.location.href='dashboard.html';">
+            <button class="btn" type="button" onclick="window.location.href='dashboard.html';">
               Continue in Demo Mode
             </button>
           </div>
 
           <div class="registerPrompt">
-            <!-- <span>New here?</span> -->
-            <button class="btn ghost" onclick="window.location.href='registration.html';">
+            <button class="btn ghost" type="button" onclick="window.location.href='registration.html';">
               Create an account
             </button>
           </div>
-
-
         </div>
       </section>
     </div>
-</body>
+
+    <div id="authLoading" class="authLoading" role="status" aria-live="polite" aria-busy="true">
+      <div class="authLoadingContent">
+        <span id="authLoadingText" class="authLoadingText">Authenticating...</span>
+        <div class="authLoadingTrack" aria-hidden="true">
+          <span id="authLoadingBar" class="authLoadingBar"></span>
+        </div>
+      </div>
+    </div>
+  </body>
 </html>
