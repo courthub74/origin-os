@@ -29,6 +29,7 @@
 
 *{ box-sizing:border-box; }
 
+
 html{
   min-height: 100%;
   background:
@@ -1099,5 +1100,4 @@ textarea.notes{ min-height: 110px; }
 [hidden] { 
   display: none !important; 
 }
-
 
