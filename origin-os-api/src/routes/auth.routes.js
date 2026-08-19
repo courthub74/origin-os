@@ -53,13 +53,26 @@ router.post("/login", async (req, res) => {
   // Diagnostic log to verify request body (remove in production)
   console.log("LOGIN BODY:", req.body);
 
-  // Find user or lookup 
+  // // Find user or lookup 
+  // const user = await User.findOne({ email: email.toLowerCase() });
+  // if (!user) return res.status(401).json({ error: "Invalid credentials" });
+
+  // // Verify password
+  // const ok = await bcrypt.compare(password, user.passwordHash);
+  // if (!ok) return res.status(401).json({ error: "Invalid credentials" });
+
+  // DIAGNOSTIC LOGGING FOR DEBUGGING PURPOSES
   const user = await User.findOne({ email: email.toLowerCase() });
+
+  console.log("USER FOUND:", !!user);
+
   if (!user) return res.status(401).json({ error: "Invalid credentials" });
 
-  // Verify password
   const ok = await bcrypt.compare(password, user.passwordHash);
-  if (!ok) return res.status(401).json({ error: "Invalid credentials" });
+
+  console.log("PASSWORD MATCH:", ok);
+
+if (!ok) return res.status(401).json({ error: "Invalid credentials" });
 
   const accessToken = signAccessToken({ sub: user._id.toString(), email: user.email });
   const refreshToken = signRefreshToken({ sub: user._id.toString() });
@@ -115,5 +128,7 @@ router.post("/logout", async (req, res) => {
   res.clearCookie("refreshToken", cookieOptions());
   return res.json({ ok: true });
 });
+
+
 
 export default router;
