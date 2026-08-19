@@ -297,3 +297,10 @@ This file defines the current architecture and development expectations for Orig
 <p>
   <img src="./img/neo_logo_white.png" width="120" alt="CourDevelops logo">
 </p>
+
+---
+
+© 2026 Courtney Jacobs / CourDevelops. All rights reserved.
+
+Source code is publicly available for portfolio and demonstration purposes.
+This project is not open source.
