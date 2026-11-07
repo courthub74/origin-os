@@ -31,15 +31,19 @@ const app = express();
 app.use(express.json({ limit: "2mb" }));
 app.use(cookieParser());
 
-app.use(cors({
-  origin: [
-    "http://127.0.0.1:5500",
-    "http://localhost:5500"
-  ],
-  credentials: true,
-  methods: ["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"]
-}));
+app.use(
+  cors({
+    origin: [
+      "http://127.0.0.1:5500",
+      "http://localhost:5500",
+      "http://127.0.0.1:5501",
+      "http://localhost:5501",
+    ],
+    credentials: true,
+    methods: ["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  }),
+);
 
 // GET REQUEST FOR HEALTH
 app.get("/health", (req, res) => res.json({ ok: true }));
@@ -56,14 +60,15 @@ import dashboardRoutes from "./routes/dashboard.routes.js";
 
 app.use("/dashboard", dashboardRoutes);
 
-
 // Set the port for 4000
 const port = process.env.PORT || 4000;
 
 // Connect to the DB, then listen for the port with error handling
 connectDB()
   .then(() => {
-    app.listen(port, () => console.log(`✅ API running on http://localhost:${port}`));
+    app.listen(port, () =>
+      console.log(`✅ API running on http://localhost:${port}`),
+    );
   })
   .catch((err) => {
     console.error("❌ DB connection failed:", err.message);
