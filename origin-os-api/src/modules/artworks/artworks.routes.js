@@ -27,7 +27,9 @@ router.post("/", requireAuth, async (req, res) => {
       output = "square",
       collectionName = "",
       notes = "",
-      tags = []
+      tags = [],
+      promptCompiled = "",
+      promptBuilder = {},
     } = req.body || {};
 
     const artwork = await Artwork.create({
@@ -39,12 +41,16 @@ router.post("/", requireAuth, async (req, res) => {
       collectionName,
       notes,
       tags,
-      status: "draft"
+      promptCompiled,
+      promptBuilder,
+      status: "draft",
     });
 
     return res.status(201).json({ ok: true, artwork });
   } catch (e) {
-    return res.status(e.status || 500).json({ error: e.message || "Server error" });
+    return res
+      .status(e.status || 500)
+      .json({ error: e.message || "Server error" });
   }
 });
 
@@ -54,7 +60,18 @@ router.patch("/:id", requireAuth, async (req, res) => {
     const userId = getUserObjectId(req);
     const { id } = req.params;
 
-    const allowed = ["title", "description", "year", "output", "collectionName", "notes", "tags", "status"];
+    const allowed = [
+      "title",
+      "description",
+      "year",
+      "output",
+      "collectionName",
+      "notes",
+      "tags",
+      "promptCompiled",
+      "promptBuilder",
+      "status",
+    ];
     const update = {};
 
     for (const k of allowed) {
@@ -68,14 +85,16 @@ router.patch("/:id", requireAuth, async (req, res) => {
     const artwork = await Artwork.findOneAndUpdate(
       { _id: id, userId },
       { $set: update },
-      { new: true }
+      { new: true },
     );
 
     if (!artwork) return res.status(404).json({ error: "Artwork not found" });
 
     return res.json({ ok: true, artwork });
   } catch (e) {
-    return res.status(e.status || 500).json({ error: e.message || "Server error" });
+    return res
+      .status(e.status || 500)
+      .json({ error: e.message || "Server error" });
   }
 });
 
@@ -92,7 +111,9 @@ router.get("/recent", requireAuth, async (req, res) => {
 
     return res.json({ ok: true, items });
   } catch (e) {
-    return res.status(e.status || 500).json({ error: e.message || "Server error" });
+    return res
+      .status(e.status || 500)
+      .json({ error: e.message || "Server error" });
   }
 });
 
@@ -107,7 +128,9 @@ router.get("/:id", requireAuth, async (req, res) => {
 
     return res.json({ ok: true, artwork });
   } catch (e) {
-    return res.status(e.status || 500).json({ error: e.message || "Server error" });
+    return res
+      .status(e.status || 500)
+      .json({ error: e.message || "Server error" });
   }
 });
 

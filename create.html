@@ -1,123 +1,176 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Origin OS — New Artwork</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Origin OS — New Artwork</title>
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="/img/favicon/origin-logo.png">
-  <link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/img/favicon/origin-logo.png" />
+    <link rel="apple-touch-icon" href="/img/apple-touch-icon.png" />
 
-  <!-- CSS -->
-  <link rel="stylesheet" href="/css/dreamos.css">
-  <link rel="stylesheet" href="/css/create.css">
-</head>
+    <!-- CSS -->
+    <link rel="stylesheet" href="/css/dreamos.css" />
+    <link rel="stylesheet" href="/css/create.css" />
+  </head>
 
-<body>
-  <div class="scrim" id="scrim"></div>
+  <body>
+    <div class="scrim" id="scrim"></div>
 
-  <div class="app">
-    <aside class="sidebar" id="sidebar">
-      <a class="brand" href="#">
-        <div class="dreamos-logo md">
-          <!-- SVG here -->
-            <svg width="120" height="138" viewBox="0 0 120 138" xmlns="http://www.w3.org/2000/svg">
-            <!-- Hex container -->
-            <polygon
-              points="60,2 114,34 114,104 60,136 6,104 6,34"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            />
+    <div class="app">
+      <aside class="sidebar" id="sidebar">
+        <a class="brand" href="#">
+          <div class="dreamos-logo md">
+            <!-- SVG here -->
+            <svg
+              width="120"
+              height="138"
+              viewBox="0 0 120 138"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <!-- Hex container -->
+              <polygon
+                points="60,2 114,34 114,104 60,136 6,104 6,34"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              />
 
-            <!-- Engine blades -->
-            <g transform="translate(60 69)">
-              <polygon points="0,-28 6,-12 0,-6 -6,-12" fill="currentColor"/>
-              <polygon points="28,0 12,6 6,0 12,-6" fill="currentColor"/>
-              <polygon points="0,28 -6,12 0,6 6,12" fill="currentColor"/>
-              <polygon points="-28,0 -12,-6 -6,0 -12,6" fill="currentColor"/>
-            </g>
-          </svg>
+              <!-- Engine blades -->
+              <g transform="translate(60 69)">
+                <polygon points="0,-28 6,-12 0,-6 -6,-12" fill="currentColor" />
+                <polygon points="28,0 12,6 6,0 12,-6" fill="currentColor" />
+                <polygon points="0,28 -6,12 0,6 6,12" fill="currentColor" />
+                <polygon points="-28,0 -12,-6 -6,0 -12,6" fill="currentColor" />
+              </g>
+            </svg>
+          </div>
+          <!-- <div class="orb"></div> -->
+          <div class="brandText">
+            <strong>Origin OS</strong><span>Create. Shape. Release.</span>
+          </div>
+        </a>
+
+        <nav class="nav">
+          <a href="dashboard.html">Dashboard <small>⌘1</small></a>
+          <a class="active" href="create.html">Create<small>⌘2</small></a>
+          <a href="branding.html">Branding <small>⌘3</small></a>
+          <a href="collections.html">Collections <small>⌘4</small></a>
+          <a href="mint.html">Mint <small>⌘5</small></a>
+          <a href="drops.html">Drops <small>⌘6</small></a>
+          <a href="socials.html">Socials <small>⌘7</small></a>
+          <a href="website.html">Website <small>⌘8</small></a>
+          <!-- <a href="#">Settings <small>⌘9</small></a> -->
+        </nav>
+
+        <!-- ACCOUNT / PROFILE (sidebar footer) -->
+        <div class="sidebar-footer account-footer">
+          <button
+            class="account-btn"
+            id="accountBtn"
+            type="button"
+            aria-haspopup="menu"
+            aria-expanded="false"
+          >
+            <div class="account-avatar">
+              <img
+                src="../img/blue_user.png"
+                class="user_avatar"
+                alt="User Avatar"
+              />
+              <div class="account-meta">
+                <p class="account-name"></p>
+                <p class="account-role"></p>
+              </div>
+            </div>
+            <small class="account-chev" aria-hidden="true">⌄</small>
+          </button>
+
+          <!-- Account menu -->
+          <div
+            class="account-menu"
+            id="accountMenu"
+            role="menu"
+            aria-label="Account menu"
+          >
+            <button
+              class="menu-item"
+              role="menuitem"
+              type="button"
+              data-go="profile.html"
+            >
+              Profile Details
+            </button>
+            <button
+              class="menu-item"
+              role="menuitem"
+              type="button"
+              data-go="profile_settings.html"
+            >
+              Profile Settings
+            </button>
+            <button
+              class="menu-item"
+              role="menuitem"
+              type="button"
+              data-go="display_settings.html"
+            >
+              Display Settings
+            </button>
+            <div class="menu-sep" aria-hidden="true"></div>
+            <button
+              class="menu-item danger"
+              role="menuitem"
+              type="button"
+              data-action="logout"
+            >
+              Logout
+            </button>
+          </div>
         </div>
-        <!-- <div class="orb"></div> -->
-        <div class="brandText"><strong>Origin OS</strong><span>Create. Shape. Release.</span></div>
+      </aside>
 
-      </a>
-
-      <nav class="nav">
-        <a href="dashboard.html">Dashboard <small>⌘1</small></a>
-        <a class="active" href="create.html">Create<small>⌘2</small></a>
-        <a href="branding.html">Branding <small>⌘3</small></a>
-        <a href="collections.html">Collections <small>⌘4</small></a>
-        <a href="mint.html">Mint <small>⌘5</small></a>
-        <a href="drops.html">Drops <small>⌘6</small></a>
-        <a href="socials.html">Socials <small>⌘7</small></a>
-        <a href="website.html">Website <small>⌘8</small></a>
-        <!-- <a href="#">Settings <small>⌘9</small></a> -->
-      </nav>
-
-      <!-- ACCOUNT / PROFILE (sidebar footer) -->
-      <div class="sidebar-footer account-footer">
-        <button class="account-btn" id="accountBtn" type="button" aria-haspopup="menu" aria-expanded="false">
-          <div class="account-avatar">
-            <img src="../img/blue_user.png" class="user_avatar" alt="User Avatar" />
-            <div class="account-meta">
-              <p class="account-name"></p>
-              <p class="account-role"></p>
+      <main class="main">
+        <header class="topbar">
+          <div class="topLeft">
+            <button
+              class="burger"
+              id="burger"
+              aria-label="Open menu"
+              aria-expanded="false"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                <path d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+            <div class="crumbs">
+              <div class="kicker">Artwork</div>
+              <div class="title">New Artwork</div>
             </div>
           </div>
-          <small class="account-chev" aria-hidden="true">⌄</small>
-        </button>
 
-        <!-- Account menu -->
-        <div class="account-menu" id="accountMenu" role="menu" aria-label="Account menu">
-          <button class="menu-item" role="menuitem" type="button" data-go="profile.html">Profile Details</button>
-          <button class="menu-item" role="menuitem" type="button" data-go="profile_settings.html">Profile Settings</button>
-          <button class="menu-item" role="menuitem" type="button" data-go="display_settings.html">Display Settings</button>
-          <div class="menu-sep" aria-hidden="true"></div>
-          <button class="menu-item danger" role="menuitem" type="button" data-action="logout">
-            Logout
-          </button>
-        </div>
-      </div>
-    </aside>
-
-    <main class="main">
-      <header class="topbar">
-        <div class="topLeft">
-          <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false">
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
-          </button>
-          <div class="crumbs">
-            <div class="kicker">Artwork</div>
-            <div class="title">New Artwork</div>
+          <div class="topRight">
+            <!-- This will respond to draft status -->
+            <span class="pill">Draft · Unsaved</span>
+            <!-- <button class="btn" onclick="alert('Open help / shortcuts');">Help</button> -->
           </div>
-        </div>
+        </header>
 
-        <div class="topRight">
-          <!-- This will respond to draft status -->
-          <span class="pill">Draft · Unsaved</span>
-          <!-- <button class="btn" onclick="alert('Open help / shortcuts');">Help</button> -->
-        </div>
-
-      </header>
-
-      <section class="content">
-
-        
-        <div class="layout">
-          <!-- Metadata -->
-           <section class="panel">
-              <div class="head"><h2>Metadata</h2><span class="pill">Draft</span></div>
+        <section class="content">
+          <div class="layout">
+            <!-- Metadata -->
+            <section class="panel">
+              <div class="head">
+                <h2>Prompt Workspace</h2>
+                <span class="pill">Draft</span>
+              </div>
               <!-- ------------------------------------------------------------------ -->
               <!-- ------------------------------------------------------------------ -->
               <!-- ------------------------------------------------------------------ -->
               <!-- ------------------------------------------------------------------ -->
               <!-- ------------------------------------------------------------------ -->
               <!-- -------------UPDATED FIELDS FOR NEW GENERATION PAINTING----------- -->
-               <div class="body">
-
+              <div class="body">
                 <!-- DETAILS (visible by default) -->
                 <div id="artworkDetails">
                   <div class="field">
@@ -130,123 +183,215 @@
                   </div>
 
                   <!-- New Input Prompt fields -->
-                   <div class="field prompt-builder">
+                  <div class="field prompt-builder">
                     <div class="label">Prompt Builder</div>
+
+                    <div class="subfield prompt-subject">
+                      <div class="sublabel">Subject</div>
+                      <textarea
+                        id="p_subject"
+                        placeholder="Main scene, characters, objects, and action"
+                      ></textarea>
+                    </div>
 
                     <div class="grid2">
                       <div class="subfield">
-                        <div class="sublabel">Subject</div>
-                        <textarea id="p_subject" placeholder="Main scene / characters / objects"></textarea>
-                      </div>
-
-                      <div class="subfield">
                         <div class="sublabel">Mood</div>
-                        <input id="p_mood" placeholder="e.g., ceremonial, clinical, ominous, quiet" />
-                      </div>
-
-                      <div class="subfield">
-                        <div class="sublabel">Overall Hue / Palette</div>
-                        <input id="p_palette" placeholder="e.g., alabaster whites, deep blues, muted gold" />
+                        <input
+                          id="p_mood"
+                          placeholder="e.g., ceremonial, clinical, ominous, quiet"
+                        />
                       </div>
 
                       <div class="subfield">
                         <div class="sublabel">Medium / Style</div>
-                        <input id="p_style" placeholder="e.g., oil painting, museum-grade realism, surreal" />
+                        <input
+                          id="p_style"
+                          placeholder="e.g., oil painting, museum-grade realism, surreal"
+                        />
                       </div>
                     </div>
 
-                    <div class="grid2">
-                      <div class="subfield">
-                        <div class="sublabel">Left</div>
-                        <textarea id="p_left" placeholder="What exists on the left side"></textarea>
-                      </div>
-                      <div class="subfield">
-                        <div class="sublabel">Right</div>
-                        <textarea id="p_right" placeholder="What exists on the right side"></textarea>
-                      </div>
-                      <div class="subfield">
-                        <div class="sublabel">Top</div>
-                        <textarea id="p_top" placeholder="Sky / ceiling / top elements"></textarea>
-                      </div>
-                      <div class="subfield">
-                        <div class="sublabel">Bottom</div>
-                        <textarea id="p_bottom" placeholder="Ground / base / bottom elements"></textarea>
-                      </div>
-                    </div>
+                    <details class="advanced-prompt">
+                      <summary>
+                        <span>Advanced Composition</span>
+                        <small
+                          >Palette, placement, lighting, framing, and
+                          exclusions</small
+                        >
+                      </summary>
 
-                    <div class="grid2">
-                      <div class="subfield">
-                        <div class="sublabel">Lighting</div>
-                        <input id="p_lighting" placeholder="e.g., soft diffuse, rim light, studio glow" />
-                      </div>
-                      <div class="subfield">
-                        <div class="sublabel">Camera / Framing</div>
-                        <input id="p_camera" class="tech" placeholder="Centered wide shot, symmetrical" />
-                      </div>
-                    </div>
+                      <div class="advanced-prompt-content">
+                        <div class="subfield">
+                          <div class="sublabel">Overall Hue / Palette</div>
+                          <input
+                            id="p_palette"
+                            placeholder="e.g., alabaster whites, deep blues, muted gold"
+                          />
+                        </div>
 
-                    <div class="subfield">
-                      <div class="sublabel">Avoid (Negative prompt)</div>
-                      <input id="p_avoid" class="tech" placeholder="e.g., text, logos, blur, extra limbs, distortion" />
-                    </div>
+                        <div class="grid2">
+                          <div class="subfield">
+                            <div class="sublabel">Left</div>
+                            <textarea
+                              id="p_left"
+                              placeholder="What exists on the left side"
+                            ></textarea>
+                          </div>
+
+                          <div class="subfield">
+                            <div class="sublabel">Right</div>
+                            <textarea
+                              id="p_right"
+                              placeholder="What exists on the right side"
+                            ></textarea>
+                          </div>
+
+                          <div class="subfield">
+                            <div class="sublabel">Top</div>
+                            <textarea
+                              id="p_top"
+                              placeholder="Sky, ceiling, or top elements"
+                            ></textarea>
+                          </div>
+
+                          <div class="subfield">
+                            <div class="sublabel">Bottom</div>
+                            <textarea
+                              id="p_bottom"
+                              placeholder="Ground, base, or bottom elements"
+                            ></textarea>
+                          </div>
+                        </div>
+
+                        <div class="grid2">
+                          <div class="subfield">
+                            <div class="sublabel">Lighting</div>
+                            <input
+                              id="p_lighting"
+                              placeholder="e.g., soft diffuse, rim light, studio glow"
+                            />
+                          </div>
+
+                          <div class="subfield">
+                            <div class="sublabel">Camera / Framing</div>
+                            <input
+                              id="p_camera"
+                              class="tech"
+                              placeholder="Centered wide shot, symmetrical"
+                            />
+                          </div>
+                        </div>
+
+                        <div class="subfield">
+                          <div class="sublabel">Avoid</div>
+                          <input
+                            id="p_avoid"
+                            class="tech"
+                            placeholder="e.g., text, logos, blur, extra limbs, distortion"
+                          />
+                        </div>
+                      </div>
+                    </details>
 
                     <div class="meta-actions">
-                      <button class="btn" type="button" id="compileBtn">Compile Prompt</button>
-                      <button class="btn" type="button" id="copyPromptBtn">Copy</button>
+                      <button class="btn" type="button" id="compileBtn">
+                        Compile Prompt
+                      </button>
+
+                      <button class="btn" type="button" id="copyPromptBtn">
+                        Copy
+                      </button>
                     </div>
                   </div>
 
                   <!-- Optional: show compiled output -->
-                  <div class="field">
+                  <div class="field hidden" id="compiledPromptField">
                     <div class="label">Compiled Prompt</div>
-                    <textarea id="compiledPrompt" class="compiled" placeholder="Auto-generated from Prompt Builder"></textarea>
+                    <textarea
+                      id="compiledPrompt"
+                      class="compiled"
+                      placeholder="Auto-generated from Prompt Builder"
+                    ></textarea>
                   </div>
 
                   <!-- Enter Prompt Manually or paste previous compiled prompt -->
-                  <div class="field">
-                    <div class="label">Manual Prompt</div>
-                    <textarea id="description" placeholder="Describe the scene, the structure, or paste compiled prompt"></textarea>
-                  </div>
+                  <details class="advanced-prompt manual-prompt">
+                    <summary>
+                      <span>Write Prompt Manually</span>
+                      <small>Paste or write a complete prompt instead</small>
+                    </summary>
+
+                    <div class="manual-prompt-content">
+                      <textarea
+                        id="description"
+                        placeholder="Describe the scene, structure, style, and atmosphere"
+                      ></textarea>
+                    </div>
+                  </details>
 
                   <!-- LEAVE HERE BUT ALSO ADD TO NEXT STEP AS WELL -->
-                  <div class="field">
-                    <div class="label">Title</div>
-                    <input id="title" placeholder="Optional, can be created later" />
-                  </div>
+                  <details class="advanced-prompt artwork-details">
+                    <summary>
+                      <span>Artwork Details</span>
+                      <small
+                        >Title, year, collection, private notes, and tags</small
+                      >
+                    </summary>
 
-                  <!-- LEAVE HERE BUT ALSO ADD TO NEXT STEP AS WELL -->
-                  <div class="field">
-                    <div class="label">Year</div>
-                    <input id="year" placeholder="2026" />
-                  </div>
+                    <div class="artwork-details-content">
+                      <div class="field">
+                        <div class="label">Title</div>
+                        <input
+                          id="title"
+                          placeholder="Optional, can be created later"
+                        />
+                      </div>
 
-                  <!-- THIS WILL LATER BE ADDED TO STEP AFTER IMAGE IS CREATED -->
-                  <div class="field">
-                    <div class="label">Collection</div>
-                    <select id="collection">
-                      <option value="" selected>No Collection Yet</option>
-                      <option>The Dominion Archive</option>
-                      <option>War and Feast</option>
-                      <option>The Digital Unconscious</option>
-                      <option>Signals and Ascensions</option>
-                      <option>Industrial Myths</option>
-                      <option>Symbols in Motion</option>
-                    </select>
-                  </div>
+                      <div class="field">
+                        <div class="label">Year</div>
+                        <input id="year" placeholder="2026" />
+                      </div>
 
-                  <div class="field">
-                    <div class="label">Internal Notes</div>
-                    <textarea id="notes" class="notes" placeholder="Private notes: intent, variations, prompt fragments, pricing logic…"></textarea>
-                  </div>
+                      <div class="field">
+                        <div class="label">Collection</div>
+                        <select id="collection">
+                          <option value="" selected>No Collection Yet</option>
+                          <option>The Dominion Archive</option>
+                          <option>War and Feast</option>
+                          <option>The Digital Unconscious</option>
+                          <option>Signals and Ascensions</option>
+                          <option>Industrial Myths</option>
+                          <option>Symbols in Motion</option>
+                        </select>
+                      </div>
 
-                  <div class="field">
-                    <div class="label">Tags</div>
-                    <input id="tags" placeholder="e.g., crowned, archive, signal, ritual" />
-                  </div>
+                      <div class="field">
+                        <div class="label">Internal Notes</div>
+                        <textarea
+                          id="notes"
+                          class="notes"
+                          placeholder="Private notes: intent, variations, prompt fragments, pricing logic…"
+                        ></textarea>
+                      </div>
+
+                      <div class="field">
+                        <div class="label">Tags</div>
+                        <input
+                          id="tags"
+                          placeholder="e.g., crowned, archive, signal, ritual"
+                        />
+                      </div>
+                    </div>
+                  </details>
 
                   <div class="meta-actions">
-                    <button class="btn" type="button" id="saveDraftBtn">Save Draft</button>
-                    <button class="btn" type="button" id="previewBtn">Preview</button>
+                    <button class="btn" type="button" id="saveDraftBtn">
+                      Save Draft
+                    </button>
+                    <button class="btn" type="button" id="previewBtn">
+                      Preview
+                    </button>
                     <button class="btn primary" type="button" id="generateBtn">
                       <span class="dot"></span>Generate
                     </button>
@@ -278,21 +423,30 @@
                   <div class="reviewTop">
                     <div>
                       <div class="reviewTitle">Ready to review</div>
-                      <div class="reviewSub">Check the preview. You can regenerate or edit details before publishing.</div>
+                      <div class="reviewSub">
+                        Check the preview. You can regenerate or edit details
+                        before publishing.
+                      </div>
                     </div>
                     <span class="pill">Generated</span>
                   </div>
 
                   <div class="reviewActions">
-                    <button class="btn" type="button" onclick="editDetails()">Edit Details</button>
-                    <button class="btn" type="button" onclick="regenerate()">Regenerate</button>
-                    <button class="btn primary" type="button" onclick="alert('Hook: publish');">
+                    <button class="btn" type="button" onclick="editDetails()">
+                      Edit Details
+                    </button>
+                    <button class="btn" type="button" onclick="regenerate()">
+                      Regenerate
+                    </button>
+                    <button
+                      class="btn primary"
+                      type="button"
+                      onclick="alert('Hook: publish')"
+                    >
                       <span class="dot"></span>Publish
                     </button>
                   </div>
                 </div>
-
-
               </div>
 
               <!-- ------------------------------------------------------------------ -->
@@ -300,32 +454,33 @@
               <!-- ------------------------------------------------------------------ -->
               <!-- ------------------------------------------------------------------ -->
               <!-- ------------------------------------------------------------------ -->
-          </section>
+            </section>
 
-          <!-- Artwork Preview -->
-          <section class="panel" id="previewPanel">
-            <div class="head"><h2>Artwork Preview</h2><span class="pill">PNG / JPG / MP4</span></div>
-            <div class="stage" id="previewStage">
-              <span id="stageLabel">Drop artwork here</span>
-            </div>
+            <!-- Artwork Preview -->
+            <section class="panel" id="previewPanel">
+              <div class="head">
+                <h2>Artwork Preview</h2>
+                <span class="pill">PNG / JPG / MP4</span>
+              </div>
+              <div class="stage" id="previewStage">
+                <span id="stageLabel">Drop artwork here</span>
+              </div>
 
-            <!-- Generation Status -->
-            <div id="generationStatus" class="generation-status"></div>
-            <div class="progress-wrap">
-              <div id="generationProgressBar" class="progress-bar"></div>
-            </div>
-          </section>
+              <!-- Generation Status -->
+              <div id="generationStatus" class="generation-status"></div>
+              <div class="progress-wrap">
+                <div id="generationProgressBar" class="progress-bar"></div>
+              </div>
+            </section>
+          </div>
+        </section>
+      </main>
+    </div>
 
-        </div>
-      </section>
-    </main>
-  </div>
-
-  <!-- JS -->
-  <script src="/js/dreamos-shell.js"></script>
-  <script src="/js/auth-guard.js"></script>
-  <script src="/js/profile-menu.js"></script>
-  <script src="/js/create.js"></script>
-
-</body>
+    <!-- JS -->
+    <script src="/js/dreamos-shell.js"></script>
+    <script src="/js/auth-guard.js"></script>
+    <script src="/js/profile-menu.js"></script>
+    <script src="/js/create.js"></script>
+  </body>
 </html>

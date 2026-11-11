@@ -6,13 +6,22 @@ console.log("Artwork model loaded");
 // Model for an artwork created by a user. This can be used for both AI-generated and human-created artworks, and can be extended with additional fields as needed. The "status" field tracks the lifecycle of the artwork, from draft to published, and can be used to manage the generation process for AI artworks.
 const artworkSchema = new mongoose.Schema(
   {
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true, index: true },
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+      index: true,
+    },
 
     title: { type: String, default: "" },
     description: { type: String, default: "" },
     year: { type: String, default: "" },
 
-    output: { type: String, enum: ["square", "portrait", "landscape"], default: "square" },
+    output: {
+      type: String,
+      enum: ["square", "portrait", "landscape"],
+      default: "square",
+    },
     collectionName: { type: String, default: "" },
 
     notes: { type: String, default: "" },
@@ -21,8 +30,15 @@ const artworkSchema = new mongoose.Schema(
     // status: { type: String, enum: ["draft", "generated", "published", "failed"], default: "draft" },
     status: {
       type: String,
-      enum: ["draft", "queued", "generating", "generated", "published", "failed"],
-      default: "draft"
+      enum: [
+        "draft",
+        "queued",
+        "generating",
+        "generated",
+        "published",
+        "failed",
+      ],
+      default: "draft",
     },
 
     originalUrl: { type: String, default: "" },
@@ -33,14 +49,29 @@ const artworkSchema = new mongoose.Schema(
     imageFilename: { type: String, default: "" },
     promptCompiled: { type: String, default: "" },
 
+    // PROMPT BUILDER FIELDS
+    promptBuilder: {
+      subject: { type: String, default: "" },
+      mood: { type: String, default: "" },
+      palette: { type: String, default: "" },
+      style: { type: String, default: "" },
+      left: { type: String, default: "" },
+      right: { type: String, default: "" },
+      top: { type: String, default: "" },
+      bottom: { type: String, default: "" },
+      lighting: { type: String, default: "" },
+      camera: { type: String, default: "" },
+      avoid: { type: String, default: "" },
+    },
+
     generationStartedAt: { type: Date, default: null },
     generationCompletedAt: { type: Date, default: null },
     generationError: { type: String, default: "" },
 
     createdAt: { type: Date, default: Date.now },
-    updatedAt: { type: Date, default: Date.now }
+    updatedAt: { type: Date, default: Date.now },
   },
-  { versionKey: false }
+  { versionKey: false },
 );
 
 export default mongoose.model("Artwork", artworkSchema);
