@@ -1,29 +1,34 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Origin OS — Login</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Origin OS — Login</title>
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="./img/favicon/origin-logo.png?v2">
-  <!-- <link rel="icon" type="image/svg+xml" href="./img/favicon/origin-logo.png"> -->
-  <!-- <link rel="apple-touch-icon" href="/img/apple-touch-icon.png"> -->
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="./img/favicon/origin-logo.png?v2" />
+    <!-- <link rel="icon" type="image/svg+xml" href="./img/favicon/origin-logo.png"> -->
+    <link rel="apple-touch-icon" href="/img/origin_os_logo.webp" />
 
-  <!-- CSS -->
-  <link rel="stylesheet" href="/css/dreamos.css">
-  <link rel="stylesheet" href="/css/index.css">
-</head>
+    <!-- CSS -->
+    <link rel="stylesheet" href="/css/dreamos.css" />
+    <link rel="stylesheet" href="/css/index.css" />
+  </head>
 
-<body>
-  <!-- <div class="wrap"> -->
+  <body>
+    <!-- <div class="wrap"> -->
     <div class="wrap single">
       <section class="loginPanel onePanel">
         <div class="topBrand">
           <div class="brandBlock">
             <div class="dreamos-logo md">
-            <!-- SVG here -->
-              <svg width="120" height="138" viewBox="0 0 120 138" xmlns="http://www.w3.org/2000/svg">
+              <!-- SVG here -->
+              <svg
+                width="120"
+                height="138"
+                viewBox="0 0 120 138"
+                xmlns="http://www.w3.org/2000/svg"
+              >
                 <!-- Hex container -->
                 <polygon
                   points="60,2 114,34 114,104 60,136 6,104 6,34"
@@ -34,13 +39,19 @@
 
                 <!-- Engine blades -->
                 <g transform="translate(60 69)">
-                  <polygon points="0,-28 6,-12 0,-6 -6,-12" fill="currentColor"/>
-                  <polygon points="28,0 12,6 6,0 12,-6" fill="currentColor"/>
-                  <polygon points="0,28 -6,12 0,6 6,12" fill="currentColor"/>
-                  <polygon points="-28,0 -12,-6 -6,0 -12,6" fill="currentColor"/>
+                  <polygon
+                    points="0,-28 6,-12 0,-6 -6,-12"
+                    fill="currentColor"
+                  />
+                  <polygon points="28,0 12,6 6,0 12,-6" fill="currentColor" />
+                  <polygon points="0,28 -6,12 0,6 6,12" fill="currentColor" />
+                  <polygon
+                    points="-28,0 -12,-6 -6,0 -12,6"
+                    fill="currentColor"
+                  />
                 </g>
-            </svg>
-          </div>
+              </svg>
+            </div>
             <!-- <div class="orbBig"></div> -->
             <div class="brandText2">
               <strong>Origin OS</strong>
@@ -72,54 +83,57 @@
               <span class="rememberText">Remember me</span>
             </label>
 
-            <a href="#" onclick="alert('Hook to reset flow.'); return false;">Forgot Password?</a>
+            <a
+              href="#"
+              onclick="
+                alert('Hook to reset flow.');
+                return false;
+              "
+              >Forgot Password?</a
+            >
           </div>
-
 
           <div class="login-actions">
             <button class="btn primary" id="signInBtn" type="button">
               <span class="dot"></span>Sign In
             </button>
 
-
-            <button class="btn" onclick="window.location.href='dashboard.html';">
+            <button
+              class="btn"
+              onclick="window.location.href = 'dashboard.html'"
+            >
               Continue in Demo Mode
             </button>
           </div>
 
           <div class="registerPrompt">
             <!-- <span>New here?</span> -->
-            <button class="btn ghost" type="button">
-              Create an account
-            </button>
+            <button class="btn ghost" type="button">Create an account</button>
           </div>
-
-
         </div>
       </section>
     </div>
 
     <!-- Login Sequence -->
-       <!-- Loading Overlay -->
-  <div id="authLoading" class="authOverlay" aria-hidden="true">
-    <div class="authOverlayCard" role="status" aria-live="polite">
-      <div class="authOverlayTop">
-        <div class="authSpinner" aria-hidden="true"></div>
-        <div class="authOverlayTitle">Origin OS</div>
+    <!-- Loading Overlay -->
+    <div id="authLoading" class="authOverlay" aria-hidden="true">
+      <div class="authOverlayCard" role="status" aria-live="polite">
+        <div class="authOverlayTop">
+          <div class="authSpinner" aria-hidden="true"></div>
+          <div class="authOverlayTitle">Origin OS</div>
+        </div>
+
+        <div id="authLoadingText" class="authOverlayText">Initializing…</div>
+
+        <div class="authOverlayBar" aria-hidden="true">
+          <div id="authLoadingBar" class="authOverlayBarFill"></div>
+        </div>
+
+        <div class="authOverlayHint">Do not close this window.</div>
       </div>
-
-      <div id="authLoadingText" class="authOverlayText">Initializing…</div>
-
-      <div class="authOverlayBar" aria-hidden="true">
-        <div id="authLoadingBar" class="authOverlayBarFill"></div>
-      </div>
-
-      <div class="authOverlayHint">Do not close this window.</div>
     </div>
-  </div>
 
-
-  <!-- JS -->
-  <script src="/js/login.js"></script>
-</body>
+    <!-- JS -->
+    <script src="/js/login.js"></script>
+  </body>
 </html>
